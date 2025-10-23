@@ -1,0 +1,50 @@
+
+/* estilos.css */
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  margin: 0;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.spec {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  input, select {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  h1, h2 {
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  h1, h2 {
+    font-size: 1.2em;
+  }
+
+  input, select {
+    font-size: 14px;
+  }
+}
