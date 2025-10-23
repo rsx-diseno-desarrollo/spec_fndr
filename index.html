@@ -26,7 +26,7 @@
   fetch('specs.json')
     .then(response => response.json())
     .then(data => {
-      const specs = data.GENERAL;
+      const specs = data;
 
       const clienteSelect = document.getElementById("cliente");
       const nombreSelect = document.getElementById("nombre");
