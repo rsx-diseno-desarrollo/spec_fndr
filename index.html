@@ -24,60 +24,59 @@
 
   <script>
     fetch('specs.json')
-    .then(response => response.json())
-    .then(data => {
-      specs = data;
-      // Aquí puedes actualizar los selects y resultados
+  .then(response => response.json())
+  .then(data => {
+    specs = data.GENERAL; // ← Aquí está el cambio
+    // Ahora sí puedes usar specs.map(...)
+    
+    const clientes = [...new Set(specs.map(s => s.CLIENTE))];
+    const nombres = [...new Set(specs.map(s => s.NOMBRE))];
+    const clienteSelect = document.getElementById("cliente");
+    const nombreSelect = document.getElementById("nombre");
+
+    clientes.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c;
+      opt.textContent = c;
+      clienteSelect.appendChild(opt);
     });
 
-    // Poblar select de cliente y nombre
-
-const clientes = [...new Set(specs.map(s => s.cliente))];
-  const nombres = [...new Set(specs.map(s => s.nombre))];
-  const clienteSelect = document.getElementById("cliente");
-  const nombreSelect = document.getElementById("nombre");
-
-  clientes.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
-    clienteSelect.appendChild(opt);
-  });
-
-  nombres.forEach(n => {
-    const opt = document.createElement("option");
-    opt.value = n;
-    opt.textContent = n;
-    nombreSelect.appendChild(opt);
-  });
-
-  function buscar() {
-    const parte = document.getElementById("parte").value.toLowerCase();
-    const cliente = clienteSelect.value.toLowerCase();
-    const nombre = nombreSelect.value.toLowerCase();
-
-    const filtered = specs.filter(spec =>
-      (parte === "" || String(spec.numero_parte).toLowerCase().includes(parte)) &&
-      (cliente === "" || spec.cliente.toLowerCase() === cliente) &&
-      (nombre === "" || spec.nombre.toLowerCase() === nombre)
-    );
-
-    const resultsDiv = document.getElementById("results");
-    resultsDiv.innerHTML = "";
-    filtered.forEach(spec => {
-      resultsDiv.innerHTML += `
-        <div class="spec">
-          <strong>${spec.cliente}</strong><br>
-           No. de Parte: ${spec.numero_parte}<br>
-          Nombre: ${spec.nombre}<br>
-          Ver: <a href="${spec.link_rms}" target="_blank">Abrir RMS</a></div>
-      `;
+    nombres.forEach(n => {
+      const opt = document.createElement("option");
+      opt.value = n;
+      opt.textContent = n;
+      nombreSelect.appendChild(opt);
     });
-  }
 
-  document.getElementById("parte").addEventListener("input", buscar);
-  clienteSelect.addEventListener("change", buscar);
-  nombreSelect.addEventListener("change", buscar);
+    function buscar() {
+      const parte = document.getElementById("parte").value.toLowerCase();
+      const cliente = clienteSelect.value.toLowerCase();
+      const nombre = nombreSelect.value.toLowerCase();
+
+      const filtered = specs.filter(spec =>
+        (parte === "" || String(spec["NO. PARTE"]).toLowerCase().includes(parte)) &&
+        (cliente === "" || spec.CLIENTE.toLowerCase() === cliente) &&
+        (nombre === "" || spec.NOMBRE.toLowerCase() === nombre)
+      );
+
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+      filtered.forEach(spec => {
+        resultsDiv.innerHTML += `
+          <div class="spec">
+            <strong>${spec.CLIENTE}</strong><br>
+            No. de Parte: ${spec["NO. PARTE"]}<br>
+            Nombre: ${spec.NOMBRE}<br>
+            Ver: <a href="${spec.LIGA}" target="_blank">Abrir RMS</a>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById("parte").addEventListener("input", buscar);
+    clienteSelect.addEventListener("change", buscar);
+    nombreSelect.addEventListener("change", buscar);
+  });
 
   </script>
 </body>
