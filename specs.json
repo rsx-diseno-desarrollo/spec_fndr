@@ -1,4 +1,5 @@
-[
+{
+"GENERAL":[
  {
   "CLIENTE": "NISSAN",
   "SUBCARPETA": "H60A",
@@ -2821,3 +2822,4 @@
   "RMS": true
  }
 ]
+} 
