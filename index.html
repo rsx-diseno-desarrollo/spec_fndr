@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SpecFinder BETA</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, select { width: 300px; padding: 8px; margin-bottom: 10px; }
+    .spec { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+    a { color: blue; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>SpecFinder BETA: </h1>
+  <h2>Consulta de Especificaciones</h2>
+  <input type="text" id="parte" placeholder="Número de parte sin giones">
+  <select id="cliente">
+    <option value="">-- Selecciona cliente --</option>
+  </select>
+  <select id="nombre">
+    <option value="">-- Selecciona nombre --</option>
+  </select>
+  <div id="results"></div>
+
+  <script>
+    fetch('specs.json')
+    .then(response => response.json())
+    .then(data => {
+      specs = data;
+      // Aquí puedes actualizar los selects y resultados
+    });
+
+    // Poblar select de cliente y nombre
+
+const clientes = [...new Set(specs.map(s => s.cliente))];
+  const nombres = [...new Set(specs.map(s => s.nombre))];
+  const clienteSelect = document.getElementById("cliente");
+  const nombreSelect = document.getElementById("nombre");
+
+  clientes.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    clienteSelect.appendChild(opt);
+  });
+
+  nombres.forEach(n => {
+    const opt = document.createElement("option");
+    opt.value = n;
+    opt.textContent = n;
+    nombreSelect.appendChild(opt);
+  });
+
+  function buscar() {
+    const parte = document.getElementById("parte").value.toLowerCase();
+    const cliente = clienteSelect.value.toLowerCase();
+    const nombre = nombreSelect.value.toLowerCase();
+
+    const filtered = specs.filter(spec =>
+      (parte === "" || String(spec.numero_parte).toLowerCase().includes(parte)) &&
+      (cliente === "" || spec.cliente.toLowerCase() === cliente) &&
+      (nombre === "" || spec.nombre.toLowerCase() === nombre)
+    );
+
+    const resultsDiv = document.getElementById("results");
+    resultsDiv.innerHTML = "";
+    filtered.forEach(spec => {
+      resultsDiv.innerHTML += `
+        <div class="spec">
+          <strong>${spec.cliente}</strong><br>
+           No. de Parte: ${spec.numero_parte}<br>
+          Nombre: ${spec.nombre}<br>
+          Ver: <a href="${spec.link_rms}" target="_blank">Abrir RMS</a></div>
+      `;
+    });
+  }
+
+  document.getElementById("parte").addEventListener("input", buscar);
+  clienteSelect.addEventListener("change", buscar);
+  nombreSelect.addEventListener("change", buscar);
+
+  </script>
+</body>
+</html>
