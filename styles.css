@@ -67,23 +67,7 @@ a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 768px) {
-  .header img {
-    max-width: 150px;
-  }
-}
 
-@media (max-width: 480px) {
-  .header img {
-    max-width: 120px;
-  }
-}
-
-/* Responsivo para tabletas */
-@media (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
 
   h1, h2 {
     font-size: 2.5em;
@@ -104,3 +88,21 @@ a:hover {
     font-size: 14px;
   }
 }
+
+@media (max-width: 768px) {
+  .header img {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header img {
+    max-width: 120px;
+  }
+}
+
+/* Responsivo para tabletas */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
