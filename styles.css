@@ -53,6 +53,15 @@ input, select {
   transition: 0.3s;
 }
 
+
+.results-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+
 .spec:hover {
   background-color: var(--color-negro);
   color: var(--color-blanco); 
