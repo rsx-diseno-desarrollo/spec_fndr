@@ -54,7 +54,7 @@ input, select {
 }
 
 
-.results-container {
+#results {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
