@@ -1,0 +1,106 @@
+
+/* estilos.css - Paleta Rassini minimalista y responsivo */
+:root {
+  --color-naranja: #f57c00;
+  --color-gris-claro: #F2F2F2;
+  --color-gris-oscuro: #424242;
+  --color-blanco: #ffffff;
+  --color-negro: #000000;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-blanco);
+  color: var(--color-negro);
+  margin: 0;
+  padding: 20px;
+}
+
+.header img {
+  max-width: 400px; /* Ajusta el tamaño máximo */
+  width: 100%;      /* Se adapta al contenedor */
+  height: auto;     /* Mantiene proporción */
+  display: block;
+  margin: 0 auto;   /* Centra la imagen */
+  border-radius: 10px;
+}
+
+  h2 {
+  color: var(--color-naranja);
+  margin-bottom: 10px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--color-gris-oscuro);
+  border-radius: 4px;
+  background-color: var(--color-blanco);
+  color: var(--color-negro);
+  box-sizing: border-box;
+}
+
+.spec {
+  background-color: var(--color-gris-claro);
+  padding: 15px;
+  border-radius: 10px 40px 40px 10px;
+  margin-bottom: 15px;
+  border-left: 10px solid var(--color-naranja);
+  transition: 0.3s;
+}
+
+.spec:hover {
+  background-color: var(--color-negro);
+  color: var(--color-blanco); 
+  text-decoration: none;
+  
+}
+
+a {
+  color: var(--color-naranja);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .header img {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header img {
+    max-width: 120px;
+  }
+}
+
+/* Responsivo para tabletas */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  h1, h2 {
+    font-size: 2.5em;
+  }
+
+  input, select {
+    font-size: 16px;
+  }
+}
+
+/* Responsivo para celulares */
+@media (max-width: 480px) {
+  h1, h2 {
+    font-size: 1.2em;
+  }
+
+  input, select {
+    font-size: 14px;
+  }
+}
