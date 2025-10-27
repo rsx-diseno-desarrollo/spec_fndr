@@ -41,11 +41,6 @@ input, select {
   box-sizing: border-box;
 }
 
-.buscador {
-    width: 90%;
-    margin: 0 auto;
-}
-
 
 .spec {
   background-color: var(--color-gris-claro);
