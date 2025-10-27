@@ -17,9 +17,9 @@ body {
 }
 
 .header img {
-  max-width: 500px; /* Ajusta el tamaño máximo */
+  max-width: 500px; /* Ajusta el tamaÃ±o mÃ¡ximo */
   width: 100%;      /* Se adapta al contenedor */
-  height: auto;     /* Mantiene proporción */
+  height: auto;     /* Mantiene proporciÃ³n */
   display: block;
   margin: 0 auto;   /* Centra la imagen */
   border-radius: 10px;
@@ -41,10 +41,9 @@ input, select {
   box-sizing: border-box;
 }
 
-
 .spec {
   background-color: var(--color-gris-claro);
-  flex: 1 1 250px; /* Mantiene proporción mínima */
+  flex: 1 1 250px; /* Mantiene proporciÃ³n mÃ­nima */
   min-width: 250px; /* Evita que se encoja demasiado */
   max-width: 100%; /* No se pasa del contenedor */
   padding: 15px;
@@ -73,7 +72,7 @@ a:hover {
 
 
 
-  h1, h2 {
+  h2 {
     font-size: 2.5em;
   }
 
@@ -84,7 +83,7 @@ a:hover {
 
 
 /* ============================
-   Diseño Responsivo
+   DiseÃ±o Responsivo
 ============================ */
 
 /* Smartphones (hasta 480px) */
@@ -93,13 +92,12 @@ a:hover {
     padding: 10px;
   }
 
-  h1, h2 {
+  h2 {
     font-size: 1.5em;
   }
 
   input, select {
-    font-size: 18px;      /* Texto más grande */
-    padding: 14px;        /* Más espacio interno */
+    font-size: 14px;
   }
 
   .header img {
@@ -110,12 +108,6 @@ a:hover {
     border-radius: 10px;
     padding: 10px;
   }
-  .spec:only-child {
-    min-width: 100%;      /* Ocupa todo el ancho */
-    font-size: 18px;      /* Texto más grande */
-    padding: 20px;        /* Más espacio interno */
-    margin: 10px auto;    /* Centrado */
- }
 }
 
 /* Tablets (hasta 768px) */
@@ -124,7 +116,7 @@ a:hover {
     padding: 15px;
   }
 
-  h1, h2 {
+  h2 {
     font-size: 2em;
   }
 
