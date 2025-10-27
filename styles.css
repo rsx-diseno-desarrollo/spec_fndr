@@ -30,6 +30,13 @@ body {
   margin-bottom: 10px;
 }
 
+.resultados {
+    min-height: 300px; /* Ajusta según tu diseño */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* o center si quieres centrar */
+}
+
 input, select {
   width: 100%;
   padding: 10px;
@@ -40,6 +47,12 @@ input, select {
   color: var(--color-negro);
   box-sizing: border-box;
 }
+
+.buscador {
+    width: 90%;
+    margin: 0 auto;
+}
+
 
 .spec {
   background-color: var(--color-gris-claro);
