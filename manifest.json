@@ -1,6 +1,6 @@
 {
-  "name": "Specs Finder",
-  "short_name": "Specs",
+  "name": "Spec Finder",
+  "short_name": "Spec Finder",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
