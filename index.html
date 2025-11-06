@@ -79,10 +79,11 @@
         filtered.forEach(spec => {
           resultsDiv.innerHTML += `
             <div class="spec">
-              <strong>${spec["CLIENTE"]}</strong><br>
-              No. de Parte: ${spec["NO. PARTE"]}<br>
-              Código: ${spec["CODIGO"]}<br>
-              Nombre: ${spec["NOMBRE"]}<br>
+              <strong>${spec["CLIENTE"]}</strong>
+              ${spec[" - SUBCARPETA"]}<br>
+              No. de Parte: ${spec[" NO. PARTE"]}<br>
+              Código: ${spec[" CODIGO"]}<br>
+              Nombre: ${spec[" NOMBRE"]}<br>
               Ver: <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
             </div>
           `;
