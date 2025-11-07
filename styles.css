@@ -23,7 +23,8 @@ body {
   display: block;
   margin: 0 auto;   /* Centra la imagen */
   border-radius: 10px;
-  padding-top: 20%;
+  padding-top: clamp(10px, 5vh, 40px);
+/* Mínimo 10px, preferido 5vh, máximo 40px */
 }
 
   h2 {
@@ -46,7 +47,7 @@ input, select {
 
 .spec {
   background-color: var(--color-gris-claro);
-  font-size: 1em;
+  font-size: 0.8em;
   padding: 15px;
   border-radius: 10px 40px 40px 10px;
   margin-bottom: 15px;
