@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'specs-cache-v2';
+const CACHE_NAME = 'specs-cache-v3';
 const STATIC_FILES = [
   '/',
   '/index.html',
@@ -10,6 +10,7 @@ const STATIC_FILES = [
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting(); // Activa el nuevo SW inmediatamente
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(STATIC_FILES);
