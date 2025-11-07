@@ -41,7 +41,7 @@ input, select {
   background-color: var(--color-blanco);
   color: var(--color-negro);
   box-sizing: border-box;
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 
 .spec {
