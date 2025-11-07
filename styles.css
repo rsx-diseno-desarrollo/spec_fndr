@@ -41,12 +41,12 @@ input, select {
   background-color: var(--color-blanco);
   color: var(--color-negro);
   box-sizing: border-box;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 .spec {
   background-color: var(--color-gris-claro);
-  font-size: 2.5em;
+  font-size: 4em;
   padding: 15px;
   border-radius: 10px 40px 40px 10px;
   margin-bottom: 15px;
