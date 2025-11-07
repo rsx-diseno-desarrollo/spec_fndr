@@ -46,7 +46,7 @@ input, select {
 
 .spec {
   background-color: var(--color-gris-claro);
-  font-size: 0.5rem;
+  font-size: 1rem;
   padding: 15px;
   border-radius: 10px 40px 40px 10px;
   margin-bottom: 15px;
