@@ -25,9 +25,9 @@
   <button class="boton-menu">☰ Specs</button>
 <nav class="menu">
   <ul>
-    <li>Producto</li>
-    <li>Componentes</li>
-    <li>Empaque</li>
+    <li><a href="#" data-section="seccion-producto">Producto</a></li>
+    <li><a href="#" data-section="seccion-empaque">Empaque</a></li>
+    <li><a href="#" data-section="seccion-componentes">Componentes</a></li>
   </ul>
 </nav>
 </header>
@@ -41,9 +41,13 @@
 </script>
 <body>
   <div class="header">
-  <img src="img/spec-finder-logo.jpg" />
+  <img src="img/spec-finder-logo.jpg"/>
   <h2>Consulta de Especificaciones</h2>
   </div>
+
+  <div id="seccion-producto" class="seccion activa">
+  <h2>Especificaciones de producto</h2>
+  <!-- Aquí van tus selectores y contenido actual -->
   <div class="buscador">
   <input type="text" id="parte" placeholder="No. de parte sin guiones">
   <select id="cliente">
@@ -53,7 +57,19 @@
     <option value="">-- Selecciona nombre --</option>
   </select>
   </div>
-  <div id="results"></div>
+  </div>
+
+<div id="seccion-empaque" class="seccion">
+  <h2>Specs de Empaque</h2>
+  <!-- Contenido específico para empaque -->
+  <p>Aquí podrás buscar specs de empaque.</p>
+</div>
+
+<div id="seccion-componentes" class="seccion">
+  <h2>Specs de Componentes</h2>
+  <!-- Contenido específico para componentes -->
+  <p>Aquí podrás buscar specs de componentes.</p>
+</div>
 
   <script>
   fetch('specs.json')
@@ -118,6 +134,16 @@
     menuToggle.addEventListener('click', () => {
     navLinks.classList.toggle('show');
 });
+
+    
+document.querySelectorAll('.menu a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = link.getAttribute('data-seccion');
+      document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
+      document.getElementById(target).classList.add('activa');
+    });
+  });
 </script>
 </body>
 </html>
