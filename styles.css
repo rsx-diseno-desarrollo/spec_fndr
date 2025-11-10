@@ -71,3 +71,58 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* MENÚ */
+.menu {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Oculto fuera de la pantalla */
+  width: 250px;
+  height: 100%;
+  background-color: var(--color-gris-oscuro);
+  color: var(--color-blanco);
+  transition: left 0.3s ease-in-out;
+  padding-top: 60px;
+  z-index: 1000;
+}
+
+.menu.abierto {
+  left: 0; /* Se desliza hacia dentro */
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  padding-top: 10px;
+  margin: 0;
+}
+
+.menu ul li {
+  padding: 15px;
+  border-bottom: 1px solid var(--color-gris-claro);
+  transition: 0.3s;
+}
+
+.menu ul li:hover {
+  background-color: var(--color-naranja);
+  transition: background-color 0.3s ease;
+}
+
+.boton-menu {
+  background-color: var(--color-naranja);
+  color: var(--color-blanco);
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px 40px 40px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1100;
+  transition: transform 0.3s ease;
+}
+
+.boton-menu:hover {
+  transform: scale(1.1);
+}
