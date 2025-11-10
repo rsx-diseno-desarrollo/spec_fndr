@@ -126,3 +126,12 @@ a:hover {
 .boton-menu:hover {
   transform: scale(1.1);
 }
+/* SECCIONES */
+.seccion {
+  display: none;
+  padding: 20px;
+}
+
+.seccion.activa {
+  display: block;
+}
