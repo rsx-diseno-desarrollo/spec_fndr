@@ -22,6 +22,24 @@
 </script>
   
 </head>
+<header>
+  <button class="boton-menu">☰ Specs</button>
+<nav class="menu">
+  <ul>
+    <li>Producto</li>
+    <li>Componentes</li>
+    <li>Empaque</li>
+  </ul>
+</nav>
+</header>
+<script>
+  const botonMenu = document.querySelector('.boton-menu');
+  const menu = document.querySelector('.menu');
+
+  botonMenu.addEventListener('click', () => {
+    menu.classList.toggle('abierto');
+  });
+</script>
 <body>
   <div class="header">
   <img src="img/spec-finder-logo.jpg" />
@@ -94,6 +112,13 @@
       clienteSelect.addEventListener("change", buscar);
       nombreSelect.addEventListener("change", buscar);
     });
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+});
 </script>
 </body>
 </html>
