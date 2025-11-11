@@ -34,9 +34,9 @@ body {
 }
 
 h3 {
-  color: var(--color-naranja);
+  color: var(--color-gris-oscuro);
   margin-bottom: 10px;
-  font-size: 1em;
+  font-size: 1.3em;
   text-align: center;
 }
 
@@ -113,10 +113,6 @@ a:hover {
 .menu ul li:hover {
   background-color: var(--color-gris-claro);
   transition: background-color 0.3s ease;
-}
-
-.menu ul li a { 
-  text-decoration: none;
 }
 
 .boton-menu {
