@@ -45,7 +45,7 @@
   <h2>Consulta de Especificaciones</h2>
   </div>
 
-  <div id="seccion-producto" class="seccion activa">
+  <div id="seccion-producto" class="seccion-activa">
   <h2>Especificaciones de producto</h2>
   <!-- Aquí van tus selectores y contenido actual -->
   <div class="buscador">
@@ -133,8 +133,8 @@ document.querySelectorAll('.menu a').forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
       const target = link.getAttribute('data-seccion');
-      document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
-      document.getElementById(target).classList.add('activa');
+      document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('-activa'));
+      document.getElementById(target).classList.add('-activa');
     });
   });
 </script>
