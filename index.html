@@ -135,6 +135,9 @@ document.querySelectorAll('.menu a').forEach(link => {
       const target = link.dataset.section;
       document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
       document.getElementById(target).classList.add('activa');
+    // Cerrar el menú
+    document.querySelector('.menu').classList.remove('abierto');
+
     });
   });
 
