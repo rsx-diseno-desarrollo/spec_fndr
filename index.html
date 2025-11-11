@@ -130,13 +130,14 @@
     });
     
 document.querySelectorAll('.menu a').forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const target = link.getAttribute('data-seccion');
-    document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
-    document.getElementById(target).classList.add('activa');
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = link.dataset.section;
+      document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
+      document.getElementById(target).classList.add('activa');
+    });
   });
-});
+
 </script>
 </body>
 </html>
