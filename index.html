@@ -57,6 +57,7 @@
     <option value="">-- Selecciona nombre --</option>
   </select>
   </div>
+    <div id="results"></div>
   </div>
 
 <div id="seccion-empaque" class="seccion">
@@ -70,8 +71,6 @@
   <!-- Contenido específico para componentes -->
   <p>Aquí podrás buscar specs de componentes.</p>
 </div>
-
-<div id="results"></div>
 
   <script>
   fetch('specs.json')
@@ -130,17 +129,26 @@
       nombreSelect.addEventListener("change", buscar);
     });
     
-document.querySelectorAll('.menu a').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const target = link.dataset.section;
-      document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
-      document.getElementById(target).classList.add('activa');
-    // Cerrar el menú
-    document.querySelector('.menu').classList.remove('abierto');
-
-    });
+  document.querySelectorAll('.menu a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = link.dataset.section;
+    document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
+    document.getElementById(target).classList.add('activa');
+    localStorage.setItem('seccionActiva', target); // Guardar sección
+    menu.classList.remove('abierto'); // Cerrar menú
   });
+});
+
+  // Restaurar sección activa al cargar
+  window.addEventListener('load', () => {
+  const ultimaSeccion = localStorage.getItem('seccionActiva');
+  if (ultimaSeccion) {
+    document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
+    document.getElementById(ultimaSeccion).classList.add('activa');
+  }
+});
+
 </script>
 </body>
 </html>
