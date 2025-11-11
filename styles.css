@@ -132,6 +132,6 @@ a:hover {
   padding: 5px;
 }
 
-.seccion activa {
+.seccion.activa {
   display: block;
 }
