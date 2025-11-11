@@ -115,8 +115,7 @@ a:hover {
   transition: background-color 0.3s ease;
 }
 
-.menu ul li a {
-  color: var(--color-blanco); 
+.menu ul li a { 
   text-decoration: none;
 }
 
