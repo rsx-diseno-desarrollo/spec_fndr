@@ -116,8 +116,8 @@ a:hover {
 }
 
 .menu ul li a:hover {
-  background-color: var(--color-blanco);
-  transition: background-color 0.3s ease;
+  color: var(--color-blanco); 
+  text-decoration: none;
 }
 
 .boton-menu {
