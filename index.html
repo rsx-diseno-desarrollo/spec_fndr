@@ -128,14 +128,6 @@
       clienteSelect.addEventListener("change", buscar);
       nombreSelect.addEventListener("change", buscar);
     });
-
-    const menuToggle = document.getElementById('menu-toggle');
-    const navLinks = document.getElementById('nav-links');
-
-    menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('show');
-});
-
     
 document.querySelectorAll('.menu a').forEach(link => {
     link.addEventListener('click', e => {
