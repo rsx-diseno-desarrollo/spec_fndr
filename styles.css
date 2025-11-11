@@ -129,7 +129,7 @@ a:hover {
 /* SECCIONES */
 .seccion {
   display: none;
-  padding: 20px;
+  padding: 5px;
 }
 
 .seccion.activa {
