@@ -114,6 +114,12 @@ a:hover {
   transition: background-color 0.3s ease;
 }
 
+.menu ul li a {
+  display: block;       /* Ocupa todo el espacio del li */
+  width: 100%;          /* Se extiende al ancho completo */
+  padding: 15px;        /* Igual que el li */
+}
+
 .boton-menu {
   background-color: var(--color-naranja);
   color: var(--color-blanco);
