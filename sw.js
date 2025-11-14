@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'specs-cache-v3';
+const CACHE_NAME = 'specs-cache-v5';
 const STATIC_FILES = [
   '/',
   '/index.html',
