@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'specs-cache-v3';
+const CACHE_NAME = 'specs-cache-v4'; // Cambia versión
 const STATIC_FILES = [
   '/',
   '/index.html',
@@ -10,46 +10,26 @@ const STATIC_FILES = [
 ];
 
 self.addEventListener('install', event => {
-  self.skipWaiting(); // Activa el nuevo SW inmediatamente
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(STATIC_FILES);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_FILES))
   );
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-      );
-    })
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+    ))
   );
 });
 
 self.addEventListener('fetch', event => {
-  const requestUrl = new URL(event.request.url);
-
-  // Estrategia network-first para specs.json
-  if (requestUrl.pathname.endsWith('/specs.json')) {
+  const url = new URL(event.request.url);
+  if (STATIC_FILES.includes(url.pathname)) {
     event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          return caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, response.clone());
-            return response;
-          });
-        })
-        .catch(() => caches.match(event.request))
+      caches.match(event.request).then(response => response || fetch(event.request))
     );
-    return;
   }
-
-  // Estrategia cache-first para archivos estáticos
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
+  // specs.json no se cachea, siempre va a la red
 });
