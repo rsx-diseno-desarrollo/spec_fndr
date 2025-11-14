@@ -1,13 +1,11 @@
 
-const CACHE_NAME = 'specs-cache-v3';
+
+const CACHE_NAME = 'specs-cache-v4';
 const STATIC_FILES = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  './', './index.html', './styles.css', './manifest.json',
+  './img/icon-192.png', './img/icon-512.png'
 ];
+
 
 self.addEventListener('install', event => {
   self.skipWaiting(); // Activa el nuevo SW inmediatamente
