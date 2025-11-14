@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SpecFinder BETA</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="img/favicon.ico">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker registrado'))
+        .catch(err => console.log('Error al registrar el Service Worker:', err));
+    });
+  }
+</script>
+</head>
+<header>
+  <button class="boton-menu"><img src="img/menu-icon.png"/></button>
+<nav class="menu">
+  <ul>
+    <li><a href="#" data-section="seccion-producto">Producto</a></li>
+    <li><a href="#" data-section="seccion-empaque">Empaque</a></li>
+    <li><a href="#" data-section="seccion-componentes">Componentes</a></li>
+  </ul>
+</nav>
+</header>
+<script>
+  const botonMenu = document.querySelector('.boton-menu');
+  const menu = document.querySelector('.menu');
+
+  botonMenu.addEventListener('click', () => {
+    menu.classList.toggle('abierto');
+  });
+</script>
+<body>
+  <div class="header">
+  <img src="img/spec-finder-logo.jpg"/>
+  <h2>CONSULTA DE ESPECIFICACIONES</h2><br>
+  </div>
+
+  <div id="seccion-producto" class="seccion activa">
+  <h3>Especificaciones de producto</h3>
+  <!-- Aquí van tus selectores y contenido actual -->
+  <div class="buscador">
+  <input type="text" id="parte" placeholder="No. de parte sin guiones">
+  <select id="cliente">
+    <option value="">-- Selecciona cliente --</option>
+  </select>
+  <select id="nombre">
+    <option value="">-- Selecciona nombre --</option>
+  </select>
+  </div>
+    <div id="results"></div>
+  </div>
+
+<div id="seccion-empaque" class="seccion">
+  <h3>Especificaciones de Empaque</h3>
+  <!-- Contenido específico para empaque -->
+  <p>Aquí podrás buscar specs de empaque :D</p>
+</div>
+
+<div id="seccion-componentes" class="seccion">
+  <h3>Especificaciones de Componentes</h3>
+  <!-- Contenido específico para componentes -->
+  <p>Aquí podrás buscar specs de componentes :D</p>
+</div>
+
+  <script>
+  fetch('specs.json')
+    .then(response => response.json())
+    .then(data => {
+      const specs = data;
+
+      const clienteSelect = document.getElementById("cliente");
+      const nombreSelect = document.getElementById("nombre");
+
+      const clientes = [...new Set(specs.map(s => s["CLIENTE"]))];
+      const nombres = [...new Set(specs.map(s => s["NOMBRE"]))];
+
+      clientes.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c;
+        opt.textContent = c;
+        clienteSelect.appendChild(opt);
+      });
+
+      nombres.forEach(n => {
+        const opt = document.createElement("option");
+        opt.value = n;
+        opt.textContent = n;
+        nombreSelect.appendChild(opt);
+      });
+
+      function buscar() {
+        const parte = document.getElementById("parte").value.toLowerCase();
+        const cliente = clienteSelect.value.toLowerCase();
+        const nombre = nombreSelect.value.toLowerCase();
+
+        const filtered = specs.filter(spec =>
+          (parte === "" || String(spec["NO. PARTE"]).toLowerCase().includes(parte)) &&
+          (cliente === "" || spec["CLIENTE"].toLowerCase() === cliente) &&
+          (nombre === "" || spec["NOMBRE"].toLowerCase() === nombre)
+        );
+
+        const resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = "";
+        filtered.forEach(spec => {
+          resultsDiv.innerHTML += `
+            <div class="spec">
+              <strong>${spec["CLIENTE"]}</strong><br>
+              No. de Parte: ${spec["NO. PARTE"]}<br>
+              Código: ${spec["CODIGO"]}<br>
+              Nombre: ${spec["NOMBRE"]}<br>
+              Ver: <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
+            </div>
+          `;
+        });
+      }
+
+      document.getElementById("parte").addEventListener("input", buscar);
+      clienteSelect.addEventListener("change", buscar);
+      nombreSelect.addEventListener("change", buscar);
+    });
+    
+  document.querySelectorAll('.menu a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = link.dataset.section;
+    document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
+    document.getElementById(target).classList.add('activa');
+    localStorage.setItem('seccionActiva', target); // Guardar sección
+    menu.classList.remove('abierto'); // Cerrar menú
+  });
+});
+
+  // Restaurar sección activa al cargar
+  window.addEventListener('load', () => {
+  const ultimaSeccion = localStorage.getItem('seccionActiva');
+  if (ultimaSeccion) {
+    document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
+    document.getElementById(ultimaSeccion).classList.add('activa');
+  }
+});
+
+</script>
+</body>
+</html>
