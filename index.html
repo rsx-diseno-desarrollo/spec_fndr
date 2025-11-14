@@ -73,9 +73,9 @@
 </div>
 
   <script>
-  fetch('specs.json')
-    .then(response => response.json())
-    .then(data => {
+  fetch('specs.json?' + Date.now())
+  .then(response => response.json())
+  .then(data => {
       const specs = data;
 
       const clienteSelect = document.getElementById("cliente");
