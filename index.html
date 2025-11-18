@@ -57,7 +57,7 @@
     <option value="">-- Selecciona nombre --</option>
   </select>
   </div>
-    <div id="results"></div>
+    <div id="results-prod"></div>
   </div>
 
 <div id="seccion-empaque" class="seccion">
@@ -73,7 +73,7 @@
 </div>
 
   <script>
-  fetch('specs-pro.json')
+  fetch('specs-prod.json')
     .then(response => response.json())
     .then(data => {
       const specs = data;
@@ -109,7 +109,7 @@
           (nombre === "" || spec["NOMBRE"].toLowerCase() === nombre)
         );
 
-        const resultsDiv = document.getElementById("results");
+        const productoDiv = document.getElementById("results-prod");
         resultsDiv.innerHTML = "";
         filtered.forEach(spec => {
           resultsDiv.innerHTML += `
