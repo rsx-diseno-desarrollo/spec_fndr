@@ -109,7 +109,7 @@
           (nombre === "" || spec["NOMBRE"].toLowerCase() === nombre)
         );
 
-        const productoDiv = document.getElementById("results-prod");
+        const resultsDiv = document.getElementById("results-prod");
         resultsDiv.innerHTML = "";
         filtered.forEach(spec => {
           resultsDiv.innerHTML += `
