@@ -9,7 +9,7 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  
 <!-- Service Worker -->
 <script>
   if ('serviceWorker' in navigator) {
@@ -21,6 +21,7 @@
   }
 </script>
 </head>
+<body>
 <header>
   <button class="boton-menu"><img src="img/menu-icon.png"/></button>
 <nav class="menu">
@@ -31,6 +32,7 @@
   </ul>
 </nav>
 </header>
+<!-- MENU -->
 <script>
   const botonMenu = document.querySelector('.boton-menu');
   const menu = document.querySelector('.menu');
@@ -39,7 +41,9 @@
     menu.classList.toggle('abierto');
   });
 </script>
-<body>
+<!-- SheetJS -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  
   <div class="header">
   <img src="img/spec-finder-logo.jpg"/>
   <h2>CONSULTA DE ESPECIFICACIONES</h2><br>
@@ -71,63 +75,83 @@
   <!-- Contenido específico para componentes -->
   <p>Aquí podrás buscar specs de componentes :D</p>
 </div>
-
+<!-- Cargar excel -->
   <script>
-  fetch('specs-prod.json')
-    .then(response => response.json())
-    .then(data => {
-      const specs = data;
+  async function cargarExcelDesdeGitHub() {
+    const url = "https://github.com/rsx-diseno-desarrollo/spec_fndr/raw/refs/heads/main/specs.xlsx";
+    try {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
 
-      const clienteSelect = document.getElementById("cliente");
-      const nombreSelect = document.getElementById("nombre");
-
-      const clientes = [...new Set(specs.map(s => s["CLIENTE"]))];
-      const nombres = [...new Set(specs.map(s => s["NOMBRE"]))];
-
-      clientes.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c;
-        opt.textContent = c;
-        clienteSelect.appendChild(opt);
-      });
-
-      nombres.forEach(n => {
-        const opt = document.createElement("option");
-        opt.value = n;
-        opt.textContent = n;
-        nombreSelect.appendChild(opt);
-      });
-
-      function buscar() {
-        const parte = document.getElementById("parte").value.toLowerCase();
-        const cliente = clienteSelect.value.toLowerCase();
-        const nombre = nombreSelect.value.toLowerCase();
-
-        const filtered = specs.filter(spec =>
-          (parte === "" || String(spec["NO. PARTE"]).toLowerCase().includes(parte)) &&
-          (cliente === "" || spec["CLIENTE"].toLowerCase() === cliente) &&
-          (nombre === "" || spec["NOMBRE"].toLowerCase() === nombre)
-        );
-
-        const resultsDiv = document.getElementById("results-prod");
-        resultsDiv.innerHTML = "";
-        filtered.forEach(spec => {
-          resultsDiv.innerHTML += `
-            <div class="spec">
-              <strong>${spec["CLIENTE"]}</strong><br>
-              Código: ${spec["CODIGO"]}<br>
-              No. de Parte: ${spec["NO. PARTE"]}<br>
-              Nombre: ${spec["NOMBRE"]}<br>
-              Ver: <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
-            </div>
-          `;
+        const allData = {};
+        workbook.SheetNames.forEach(sheetName => {
+            allData[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
         });
-      }
 
-      document.getElementById("parte").addEventListener("input", buscar);
-      clienteSelect.addEventListener("change", buscar);
-      nombreSelect.addEventListener("change", buscar);
-    });
+        window.data = allData;
+        console.log("Datos cargados:", allData);
+
+        // Inicializar buscador para la hoja "prod"
+        const specs = allData.prod;
+        const clienteSelect = document.getElementById("cliente");
+        const nombreSelect = document.getElementById("nombre");
+
+        const clientes = [...new Set(specs.map(s => s["CLIENTE"]))];
+        const nombres = [...new Set(specs.map(s => s["NOMBRE"]))];
+
+        clientes.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c;
+            opt.textContent = c;
+            clienteSelect.appendChild(opt);
+        });
+
+        nombres.forEach(n => {
+            const opt = document.createElement("option");
+            opt.value = n;
+            opt.textContent = n;
+            nombreSelect.appendChild(opt);
+        });
+
+        function buscar() {
+            const parte = document.getElementById("parte").value.toLowerCase();
+            const cliente = clienteSelect.value.toLowerCase();
+            const nombre = nombreSelect.value.toLowerCase();
+
+            const filtered = specs.filter(spec => {
+                const partesArray = String(spec["NO. PARTE"]).split(",").map(p => p.trim().toLowerCase());
+                return (
+                    (parte === "" || partesArray.some(p => p.includes(parte))) &&
+                    (cliente === "" || spec["CLIENTE"].toLowerCase() === cliente) &&
+                    (nombre === "" || spec["NOMBRE"].toLowerCase() === nombre)
+                );
+            });
+
+            const resultsDiv = document.getElementById("results-prod");
+            resultsDiv.innerHTML = "";
+            filtered.forEach(spec => {
+                resultsDiv.innerHTML += `
+                    <div class="spec">
+                        <strong>${spec["CLIENTE"]}</strong><br>
+                        Código: ${spec["CODIGO"]}<br>
+                        No. de Parte: ${spec["NO. PARTE"]}<br>
+                        Nombre: ${spec["NOMBRE"]}<br>
+                        Ver: <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById("parte").addEventListener("input", buscar);
+        clienteSelect.addEventListener("change", buscar);
+        nombreSelect.addEventListener("change", buscar);
+
+    } catch (error) {
+        console.error("Error al cargar el Excel:", error);
+    }
+}
+cargarExcelDesdeGitHub();
     
   document.querySelectorAll('.menu a').forEach(link => {
   link.addEventListener('click', e => {
