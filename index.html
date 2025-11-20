@@ -78,7 +78,7 @@
 <!-- Cargar excel -->
   <script>
   async function cargarExcelDesdeGitHub() {
-    const url = "https://github.com/rsx-diseno-desarrollo/spec_fndr/raw/refs/heads/main/specs.xlsx";
+    const url = "specs.xlsx";
     try {
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
@@ -115,7 +115,9 @@
         });
 
         function buscar() {
-            const parte = document.getElementById("parte").value.toLowerCase();
+            const partesArray = String(spec["NO. PARTE"] || "")
+                 .split(",")
+                 .map(p => p.trim().toLowerCase());
             const cliente = clienteSelect.value.toLowerCase();
             const nombre = nombreSelect.value.toLowerCase();
 
