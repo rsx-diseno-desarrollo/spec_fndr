@@ -115,36 +115,37 @@
         });
 
         function buscar() {
-            const partesArray = String(spec["NO. PARTE"] || "")
-                 .split(",")
-                 .map(p => p.trim().toLowerCase());
-            const cliente = clienteSelect.value.toLowerCase();
-            const nombre = nombreSelect.value.toLowerCase();
+        const parte = document.getElementById("parte").value.toLowerCase();
+        const cliente = clienteSelect.value.toLowerCase();
+        const nombre = nombreSelect.value.toLowerCase();
 
-            const filtered = specs.filter(spec => {
-                const partesArray = String(spec["NO. PARTE"]).split(",").map(p => p.trim().toLowerCase());
-                return (
-                    (parte === "" || partesArray.some(p => p.includes(parte))) &&
-                    (cliente === "" || spec["CLIENTE"].toLowerCase() === cliente) &&
-                    (nombre === "" || spec["NOMBRE"].toLowerCase() === nombre)
-                );
-            });
+        const filtered = specs.filter(spec => {
+        const partesArray = String(spec["NO. PARTE"] || "")
+            .split(",")
+            .map(p => p.trim().toLowerCase());
 
-            const resultsDiv = document.getElementById("results-prod");
-            resultsDiv.innerHTML = "";
-            filtered.forEach(spec => {
-                resultsDiv.innerHTML += `
-                    <div class="spec">
-                        <strong>${spec["CLIENTE"]}</strong><br>
-                        Código: ${spec["CODIGO"]}<br>
-                        No. de Parte: ${spec["NO. PARTE"]}<br>
-                        Nombre: ${spec["NOMBRE"]}<br>
-                        Ver: <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
-                    </div>
-                `;
-            });
-        }
-
+            return (
+                (parte === "" || partesArray.some(p => p.includes(parte))) &&
+                (cliente === "" || spec["CLIENTE"].toLowerCase() === cliente) &&
+                (nombre === "" || spec["NOMBRE"].toLowerCase() === nombre)
+            );
+        });
+    
+        const resultsDiv = document.getElementById("results-prod");
+        resultsDiv.innerHTML = "";
+        filtered.forEach(spec => {
+            resultsDiv.innerHTML += `
+                <div class="spec">
+                    <strong>${spec["CLIENTE"]}</strong><br>
+                    Código: ${spec["CODIGO"]}<br>
+                    No. de Parte: ${spec["NO. PARTE"]}<br>
+                    Nombre: ${spec["NOMBRE"]}<br>
+                    Ver: <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
+                </div>
+            `;
+        });
+    }
+      
         document.getElementById("parte").addEventListener("input", buscar);
         clienteSelect.addEventListener("change", buscar);
         nombreSelect.addEventListener("change", buscar);
