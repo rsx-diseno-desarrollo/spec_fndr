@@ -1,5 +1,4 @@
-
-const CACHE_NAME = 'specs-cache-v5';
+const CACHE_NAME = 'specs-cache-v6';
 const STATIC_FILES = [
   './',
   'index.html',
@@ -12,9 +11,7 @@ const STATIC_FILES = [
 self.addEventListener('install', event => {
   self.skipWaiting(); // Activa el nuevo SW inmediatamente
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(STATIC_FILES);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_FILES))
   );
 });
 
@@ -28,28 +25,15 @@ self.addEventListener('activate', event => {
   );
 });
 
-self.addEventListener('fetch', event => {
-  const requestUrl = new URL(event.request.url);
+ const requestUrl = new URL(event.request.url);
 
-  // Estrategia network-first para specs.json
-  if (requestUrl.pathname.endsWith('/specs.json')) {
+  // Solo cache-first para archivos estáticos
+  if (STATIC_FILES.includes(requestUrl.pathname) || requestUrl.pathname === '/') {
     event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          return caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, response.clone());
-            return response;
-          });
-        })
-        .catch(() => caches.match(event.request))
+      caches.match(event.request).then(response => response || fetch(event.request))
     );
-    return;
+  } else {
+    // Para todo lo demás (incluyendo specs.xlsx): network-only
+    event.respondWith(fetch(event.request));
   }
-
-  // Estrategia cache-first para archivos estáticos
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
 });
