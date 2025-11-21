@@ -80,6 +80,7 @@ a:hover {
 
 /* MENÚ */
 .menu {
+  pointer-events: none; /* No permite clicks cuando está cerrado */
   position: fixed;
   top: 0;
   left: -250px; /* Oculto fuera de la pantalla */
@@ -93,6 +94,7 @@ a:hover {
 }
 
 .menu.abierto {
+  pointer-events: auto; /* Activa los clicks cuando está abierto */
   left: 0; /* Se desliza hacia dentro */
 }
 
