@@ -90,12 +90,10 @@ a:hover {
   transition: left 0.3s ease-in-out;
   padding-top: 60px;
   z-index: 1000;
-  pointer-events: none; /* Desactiva interacción */
 }
 
 .menu.abierto {
   left: 0; /* Se desliza hacia dentro */
-  pointer-events: auto; /* Activa interacción cuando está abierto */
 }
 
 .menu ul {
@@ -118,7 +116,7 @@ a:hover {
 .menu ul li a {
   display: block;       /* Ocupa todo el espacio del li */
   width: 100%;          /* Se extiende al ancho completo */
-  padding: 10px;        /* Igual que el li */
+  padding: 15px;        /* Igual que el li */
 }
 
 .boton-menu {
