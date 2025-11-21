@@ -80,22 +80,37 @@ a:hover {
 
 /* MENÚ */
 .menu {
-  pointer-events: none; /* No permite clicks cuando está cerrado */
   position: fixed;
   top: 0;
-  left: -250px; /* Oculto fuera de la pantalla */
+  left: 0;   /* ahora siempre al 0, lo movemos con transform */
   width: 250px;
   height: 100%;
   background-color: var(--color-gris-oscuro);
   color: var(--color-blanco);
-  transition: left 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(-100%); /* fuera de pantalla */
   padding-top: 60px;
   z-index: 1000;
+  visibility: hidden;   /* no visible cuando está cerrado */
+  pointer-events: none; /* no recibir clicks cuando está cerrado */
 }
 
 .menu.abierto {
-  pointer-events: auto; /* Activa los clicks cuando está abierto */
-  left: 0; /* Se desliza hacia dentro */
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* overlay para bloquear el resto de la pantalla mientras el menú está abierto */
+.menu-overlay {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  background: rgba(0,0,0,0.0); /* transparente por defecto, cambia si quieres un oscurecimiento */
+  z-index: 900; /* por debajo del menú (1000) */
+  display: none;
+}
+.menu-overlay.visible {
+  display: block;
 }
 
 .menu ul {
