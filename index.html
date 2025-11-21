@@ -40,79 +40,8 @@
   const botonMenu = document.querySelector('.boton-menu');
   const menu = document.querySelector('.menu');
 
-  // crear overlay dinámicamente (si no lo tienes en el HTML)
-  let overlay = document.querySelector('.menu-overlay');
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.className = 'menu-overlay';
-    document.body.appendChild(overlay);
-  }
-
-  // función para habilitar/deshabilitar enlaces dentro del menú
-  function setMenuLinksDisabled(disabled) {
-    menu.querySelectorAll('a').forEach(a => {
-      if (disabled) {
-        a.setAttribute('tabindex', '-1'); // no focusable
-        a.dataset.disabled = 'true';
-      } else {
-        a.removeAttribute('tabindex');
-        delete a.dataset.disabled;
-      }
-    });
-  }
-
-  // inicializar (menú cerrado)
-  setMenuLinksDisabled(true);
-
-  function abrirCerrarMenu() {
-    const abierto = menu.classList.toggle('abierto');
-    if (abierto) {
-      overlay.classList.add('visible');
-      setMenuLinksDisabled(false);
-    } else {
-      overlay.classList.remove('visible');
-      setMenuLinksDisabled(true);
-    }
-  }
-
-  botonMenu.addEventListener('click', abrirCerrarMenu);
-
-  // cerrar al tocar overlay
-  overlay.addEventListener('click', () => {
-    menu.classList.remove('abierto');
-    overlay.classList.remove('visible');
-    setMenuLinksDisabled(true);
-  });
-
-  // manejador de links: añade una guardia extra por si acaso
-  document.querySelectorAll('.menu a').forEach(link => {
-    link.addEventListener('click', e => {
-      // si el menú no está abierto no hacemos nada
-      if (!menu.classList.contains('abierto')) return;
-
-      e.preventDefault();
-      const target = link.dataset.section;
-      if (!target) return;
-
-      document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
-      document.getElementById(target).classList.add('activa');
-      localStorage.setItem('seccionActiva', target); // Guardar sección
-
-      // cerrar menú y deshabilitar enlaces
-      menu.classList.remove('abierto');
-      overlay.classList.remove('visible');
-      setMenuLinksDisabled(true);
-    });
-  });
-
-  // restaurar sección activa al cargar
-  window.addEventListener('load', () => {
-    const ultimaSeccion = localStorage.getItem('seccionActiva');
-    if (ultimaSeccion) {
-      document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
-      const el = document.getElementById(ultimaSeccion);
-      if (el) el.classList.add('activa');
-    }
+  botonMenu.addEventListener('click', () => {
+    menu.classList.toggle('abierto');
   });
 </script>
 <!-- Menu script END -->
