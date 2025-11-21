@@ -118,7 +118,7 @@ a:hover {
 .menu ul li a {
   display: block;       /* Ocupa todo el espacio del li */
   width: 100%;          /* Se extiende al ancho completo */
-  padding: 15px;        /* Igual que el li */
+  padding: 10px;        /* Igual que el li */
 }
 
 .boton-menu {
