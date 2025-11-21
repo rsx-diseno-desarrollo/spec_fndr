@@ -90,10 +90,12 @@ a:hover {
   transition: left 0.3s ease-in-out;
   padding-top: 60px;
   z-index: 1000;
+  pointer-events: none; /* Desactiva interacción */
 }
 
 .menu.abierto {
   left: 0; /* Se desliza hacia dentro */
+  pointer-events: auto; /* Activa interacción cuando está abierto */
 }
 
 .menu ul {
