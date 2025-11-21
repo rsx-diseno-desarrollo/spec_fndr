@@ -188,5 +188,28 @@ cargarExcelDesdeGitHub();
 });
 
 </script>
+<!-- Cargar excel END -->
+<!-- Mensaje sin conexión -->
+  <script>
+  window.addEventListener('load', () => {
+    if (!navigator.onLine) {
+      document.body.innerHTML = `
+        <div style="
+          display:flex;
+          flex-direction:column;
+          justify-content:center;
+          align-items:center;
+          height:100vh;
+          font-family:'Segoe UI', Tahoma, sans-serif;
+          text-align:center;
+          color:#424242;">
+          <img src="img/icon-192.png" alt="Logo" style="width:80px; margin-bottom
+          <p>No se puede cargar la aplicación. Conéctate a la red para continuar.</p>
+        </div>
+      `;
+    }
+  });
+</script>
+<!-- Mensaje sin conexión END -->
 </body>
 </html>
