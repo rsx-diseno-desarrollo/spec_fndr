@@ -39,7 +39,7 @@ self.addEventListener('fetch', event => {
           </style>
         </head>
         <body>
-          img/icon-192.png
+          <img src="img/icon-192.png"/>
           <h2>Sin conexión</h2>
           <p>No se puede cargar la aplicación. Conéctate a la red para continuar.</p>
         </body>
