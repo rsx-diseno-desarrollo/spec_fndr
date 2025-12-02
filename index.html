@@ -83,12 +83,12 @@
   <div id="seccion-componentes" class="seccion"> 
   <h3>Especificaciones de Componentes</h3>
     <div class="buscador">
-      <input type="text" id="codigoComp" placeholder="Código de componente">
+      <input type="text" id="codigoComp" placeholder="Código sin guiones">
       <select id="tipoComp">
         <option value="">-- Selecciona tipo --</option>
       </select>
     </div>
-    <div id="results-comp"></div>
+    <div id="results-comp"></di
   </div>
   <!-- SECCION COMPONENETES END -->
   
@@ -167,11 +167,24 @@
         clienteSelect.addEventListener("change", buscar);
         nombreSelect.addEventListener("change", buscar);
 
-    // Inicializar buscador para la hoja "prod" END
+// Inicializar buscador para la hoja "prod" END
 
-    
 // Inicializar buscador para la hoja "componentes"
 const componentes = allData.componentes; // Asegúrate que la hoja se llame "componentes" en el Excel
+const tipoSelect = document.getElementById("tipoComp");
+
+// Obtener lista única de tipos
+const tipos = [...new Set(componentes.map(c => c["TIPO DE COMPONENTE"]))];
+tipos.forEach(t => {
+  const opt = document.createElement("option");
+  opt.value = t;
+  opt.textContent = t;
+  tipoSelect.appendChild(opt);
+});
+
+
+// Inicializar buscador para la hoja "comp"
+const componentes = allData.comp; // Hoja llamada "comp"
 const tipoSelect = document.getElementById("tipoComp");
 
 // Obtener lista única de tipos
@@ -206,12 +219,14 @@ function buscarComponentes() {
         <strong>${comp["TIPO DE COMPONENTE"]}</strong><br>
         Código(s): ${comp["CODIGO COMPONENTES"]}<br>
         Documento: ${comp["NOMBRE DE DOCUMENTO"]}<br>
-        Ver: <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
-  });
+        Ver: <a href="${comp["LIGA"]}" target="_blank">Abrir RMS</a>
+        </div>
+ `;
+});
 }
-
 document.getElementById("codigoComp").addEventListener("input", buscarComponentes);
 tipoSelect.addEventListener("change", buscarComponentes);
+
 // Inicializar buscador para la hoja "componentes" END
     } 
     catch (error) {
