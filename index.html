@@ -80,10 +80,15 @@
   <!-- SECCION EMPAQUE END -->
 
   <!-- SECCION COMPONENETES -->
-  <div id="seccion-componentes" class="seccion">
-    <h3>Especificaciones de Componentes</h3>
-    <!-- Contenido específico para componentes -->
-    <p>Aquí podrás buscar specs de componentes :D</p>
+  <div id="seccion-componentes" class="seccion"> 
+  <h3>Especificaciones de Componentes</h3>
+    <div class="buscador">
+      <input type="text" id="codigoComp" placeholder="Código de componente">
+      <select id="tipoComp">
+        <option value="">-- Selecciona tipo --</option>
+      </select>
+    </div>
+    <div id="results-comp"></div>
   </div>
   <!-- SECCION COMPONENETES END -->
   
@@ -164,7 +169,52 @@
 
     // Inicializar buscador para la hoja "prod" END
 
-    } catch (error) {
+    
+// Inicializar buscador para la hoja "componentes"
+const componentes = allData.componentes; // Asegúrate que la hoja se llame "componentes" en el Excel
+const tipoSelect = document.getElementById("tipoComp");
+
+// Obtener lista única de tipos
+const tipos = [...new Set(componentes.map(c => c["TIPO DE COMPONENTE"]))];
+tipos.forEach(t => {
+  const opt = document.createElement("option");
+  opt.value = t;
+  opt.textContent = t;
+  tipoSelect.appendChild(opt);
+});
+
+function buscarComponentes() {
+  const codigo = document.getElementById("codigoComp").value.toLowerCase();
+  const tipo = tipoSelect.value.toLowerCase();
+
+  const filtered = componentes.filter(comp => {
+    const codigosArray = String(comp["CODIGO COMPONENTES"] || "")
+      .split(",")
+      .map(c => c.trim().toLowerCase());
+
+    return (
+      (codigo === "" || codigosArray.some(c => c.includes(codigo))) &&
+      (tipo === "" || comp["TIPO DE COMPONENTE"].toLowerCase() === tipo)
+    );
+  });
+
+  const resultsDiv = document.getElementById("results-comp");
+  resultsDiv.innerHTML = "";
+  filtered.forEach(comp => {
+    resultsDiv.innerHTML += `
+      <div class="spec">
+        <strong>${comp["TIPO DE COMPONENTE"]}</strong><br>
+        Código(s): ${comp["CODIGO COMPONENTES"]}<br>
+        Documento: ${comp["NOMBRE DE DOCUMENTO"]}<br>
+        Ver: <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
+  });
+}
+
+document.getElementById("codigoComp").addEventListener("input", buscarComponentes);
+tipoSelect.addEventListener("change", buscarComponentes);
+// Inicializar buscador para la hoja "componentes" END
+    } 
+    catch (error) {
         console.error("Error al cargar el Excel:", error);
     }
 }
