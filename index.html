@@ -89,7 +89,7 @@
   
 <!-- Cargar excel -->
   <script>
-  async function cargarExcelDesdeGitHub() {
+  async function cargarExcel() {
     const url = "specs.xlsx";
     try {
         const response = await fetch(url);
@@ -168,7 +168,7 @@
         console.error("Error al cargar el Excel:", error);
     }
 }
-cargarExcelDesdeGitHub();
+cargarExcel();
     
   document.querySelectorAll('.menu a').forEach(link => {
   link.addEventListener('click', e => {
