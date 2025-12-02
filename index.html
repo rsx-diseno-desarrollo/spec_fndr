@@ -190,26 +190,26 @@ const tipoSelect = document.getElementById("tipoComp");
 // Obtener lista única de tipos
 const tipos = [...new Set(componentes.map(c => c["TIPO DE COMPONENTE"]))];
 tipos.forEach(t => {
-  const opt = document.createElement("option");
-  opt.value = t;
-  opt.textContent = t;
-  tipoSelect.appendChild(opt);
+const opt = document.createElement("option");
+opt.value = t;
+opt.textContent = t;
+tipoSelect.appendChild(opt);
 });
 
 function buscarComponentes() {
-  const codigo = document.getElementById("codigoComp").value.toLowerCase();
-  const tipo = tipoSelect.value.toLowerCase();
+const codigo = document.getElementById("codigoComp").value.toLowerCase();
+const tipo = tipoSelect.value.toLowerCase();
 
-  const filtered = componentes.filter(comp => {
-    const codigosArray = String(comp["CODIGO COMPONENTES"] || "")
-      .split(",")
-      .map(c => c.trim().toLowerCase());
+const filtered = componentes.filter(comp => {
+ const codigosArray = String(comp["CODIGO COMPONENTES"] || "")
+   .split(",")
+   .map(c => c.trim().toLowerCase());
 
-    return (
-      (codigo === "" || codigosArray.some(c => c.includes(codigo))) &&
-      (tipo === "" || comp["TIPO DE COMPONENTE"].toLowerCase() === tipo)
-    );
-  });
+ return (
+   (codigo === "" || codigosArray.some(c => c.includes(codigo))) &&
+   (tipo === "" || comp["TIPO DE COMPONENTE"].toLowerCase() === tipo)
+ );
+});
 
   const resultsDiv = document.getElementById("results-comp");
   resultsDiv.innerHTML = "";
