@@ -49,7 +49,8 @@
 <!-- SheetJS -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <!-- SheetJS END -->
-  
+
+  <!-- SECCIONES -->
   <div class="header">
     <img src="img/spec-finder-logo.jpg"/>
     <h2>CONSULTA DE ESPECIFICACIONES</h2><br>
@@ -161,6 +162,8 @@
         clienteSelect.addEventListener("change", buscar);
         nombreSelect.addEventListener("change", buscar);
 
+    // Inicializar buscador para la hoja "prod" END
+
     } catch (error) {
         console.error("Error al cargar el Excel:", error);
     }
@@ -188,6 +191,5 @@ cargarExcelDesdeGitHub();
 });
 
 </script>
-<!-- Cargar excel END -->
 </body>
 </html>
