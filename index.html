@@ -95,143 +95,125 @@
 <!-- Cargar excel -->
   <script>
   async function cargarExcel() {
-    const url = "specs.xlsx";
-    try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+const url = "specs.xlsx";
+try {
+ const response = await fetch(url);
+ const arrayBuffer = await response.arrayBuffer();
+ const workbook = XLSX.read(arrayBuffer, { type: 'array' });
 
-        const allData = {};
-        workbook.SheetNames.forEach(sheetName => {
-            allData[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-        });
+ const allData = {};
+ workbook.SheetNames.forEach(sheetName => {
+   allData[sheetName] = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+ });
 
-        window.data = allData;
-        console.log("Datos cargados:", allData);
+ window.data = allData;
+ console.log("Datos cargados:", allData);
 
-        // Inicializar buscador para la hoja "prod"
-        const specs = allData.prod;
-        const clienteSelect = document.getElementById("cliente");
-        const nombreSelect = document.getElementById("nombre");
+ // --- PRODUCTOS ---
+ const specs = allData.prod;
+ const clienteSelect = document.getElementById("cliente");
+ const nombreSelect = document.getElementById("nombre");
 
-        const clientes = [...new Set(specs.map(s => s["CLIENTE"]))];
-        const nombres = [...new Set(specs.map(s => s["NOMBRE"]))];
+ const clientes = [...new Set(specs.map(s => s["CLIENTE"]))];
+ const nombres = [...new Set(specs.map(s => s["NOMBRE"]))];
 
-        clientes.forEach(c => {
-            const opt = document.createElement("option");
-            opt.value = c;
-            opt.textContent = c;
-            clienteSelect.appendChild(opt);
-        });
+ clientes.forEach(c => {
+   const opt = document.createElement("option");
+   opt.value = c;
+   opt.textContent = c;
+   clienteSelect.appendChild(opt);
+ });
 
-        nombres.forEach(n => {
-            const opt = document.createElement("option");
-            opt.value = n;
-            opt.textContent = n;
-            nombreSelect.appendChild(opt);
-        });
+ nombres.forEach(n => {
+   const opt = document.createElement("option");
+   opt.value = n;
+   opt.textContent = n;
+   nombreSelect.appendChild(opt);
+ });
 
-        function buscar() {
-        const parte = document.getElementById("parte").value.toLowerCase();
-        const cliente = clienteSelect.value.toLowerCase();
-        const nombre = nombreSelect.value.toLowerCase();
+ function buscar() {
+   const parte = document.getElementById("parte").value.toLowerCase();
+   const cliente = clienteSelect.value.toLowerCase();
+   const nombre = nombreSelect.value.toLowerCase();
 
-        const filtered = specs.filter(spec => {
-        const partesArray = String(spec["NO. PARTE"] || "")
-            .split(",")
-            .map(p => p.trim().toLowerCase());
+   const filtered = specs.filter(spec => {
+     const partesArray = String(spec["NO. PARTE"] || "")
+       .split(",")
+       .map(p => p.trim().toLowerCase());
 
-            return (
-                (parte === "" || partesArray.some(p => p.includes(parte))) &&
-                (cliente === "" || spec["CLIENTE"].toLowerCase() === cliente) &&
-                (nombre === "" || spec["NOMBRE"].toLowerCase() === nombre)
-            );
-        });
-    
-        const resultsDiv = document.getElementById("results-prod");
-        resultsDiv.innerHTML = "";
-        filtered.forEach(spec => {
-            resultsDiv.innerHTML += `
-                <div class="spec">
-                    <strong>${spec["CLIENTE"]}</strong><br>
-                    Código: ${spec["CODIGO"]}<br>
-                    No. de Parte: ${spec["NO. PARTE"]}<br>
-                    Nombre: ${spec["NOMBRE"]}<br>
-                    Ver: <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
-                </div>
-            `;
-        });
-    }
-      
-        document.getElementById("parte").addEventListener("input", buscar);
-        clienteSelect.addEventListener("change", buscar);
-        nombreSelect.addEventListener("change", buscar);
+     return (
+       (parte === "" || partesArray.some(p => p.includes(parte))) &&
+       (cliente === "" || spec["CLIENTE"].toLowerCase() === cliente) &&
+       (nombre === "" || spec["NOMBRE"].toLowerCase() === nombre)
+     );
+   });
 
-// Inicializar buscador para la hoja "prod" END
+   const resultsDiv = document.getElementById("results-prod");
+   resultsDiv.innerHTML = "";
+   filtered.forEach(spec => {
+     resultsDiv.innerHTML += `
+       <div class="spec">
+         <strong>${spec["CLIENTE"]}</strong><br>
+         Código: ${spec["CODIGO"]}<br>
+         No. de Parte: ${spec["NO. PARTE"]}<br>
+         Nombre: ${spec["NOMBRE"]}<br>
+         <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
+       </div>
+     `;
+   });
+ }
 
-// Inicializar buscador para la hoja "componentes"
-const componentes = allData.componentes; // Asegúrate que la hoja se llame "componentes" en el Excel
-const tipoSelect = document.getElementById("tipoComp");
+ document.getElementById("parte").addEventListener("input", buscar);
+ clienteSelect.addEventListener("change", buscar);
+ nombreSelect.addEventListener("change", buscar);
 
-// Obtener lista única de tipos
-const tipos = [...new Set(componentes.map(c => c["TIPO DE COMPONENTE"]))];
-tipos.forEach(t => {
-  const opt = document.createElement("option");
-  opt.value = t;
-  opt.textContent = t;
-  tipoSelect.appendChild(opt);
-});
+ // --- COMPONENTES ---
+ const componentes = allData.comp;
+ const tipoSelect = document.getElementById("tipoComp");
 
+ const tipos = [...new Set(componentes.map(c => c["TIPO DE COMPONENTE"]))];
+ tipos.forEach(t => {
+   const opt = document.createElement("option");
+   opt.value = t;
+   opt.textContent = t;
+   tipoSelect.appendChild(opt);
+ });
 
-// Inicializar buscador para la hoja "comp"
-const componentes = allData.comp; // Hoja llamada "comp"
-const tipoSelect = document.getElementById("tipoComp");
+ function buscarComponentes() {
+   const codigo = document.getElementById("codigoComp").value.toLowerCase();
+   const tipo = tipoSelect.value.toLowerCase();
 
-// Obtener lista única de tipos
-const tipos = [...new Set(componentes.map(c => c["TIPO DE COMPONENTE"]))];
-tipos.forEach(t => {
-const opt = document.createElement("option");
-opt.value = t;
-opt.textContent = t;
-tipoSelect.appendChild(opt);
-});
+   const filtered = componentes.filter(comp => {
+     const codigosArray = String(comp["CODIGO COMPONENTES"] || "")
+       .split(",")
+       .map(c => c.trim().toLowerCase());
 
-function buscarComponentes() {
-const codigo = document.getElementById("codigoComp").value.toLowerCase();
-const tipo = tipoSelect.value.toLowerCase();
+     return (
+       (codigo === "" || codigosArray.some(c => c.includes(codigo))) &&
+       (tipo === "" || comp["TIPO DE COMPONENTE"].toLowerCase() === tipo)
+     );
+   });
 
-const filtered = componentes.filter(comp => {
- const codigosArray = String(comp["CODIGO COMPONENTES"] || "")
-   .split(",")
-   .map(c => c.trim().toLowerCase());
+   const resultsDiv = document.getElementById("results-comp");
+   resultsDiv.innerHTML = "";
+   filtered.forEach(comp => {
+     resultsDiv.innerHTML += `
+       <div class="spec">
+         <strong>${comp["TIPO DE COMPONENTE"]}</strong><br>
+         Código(s): ${comp["CODIGO COMPONENTES"]}<br>
+         Documento: ${comp["NOMBRE DE DOCUMENTO"]}<br>
+         <a href="${comp["LIGA"]}" target="_blank">Abrir RMS</a>
+       </div>
+     `;
+   });
+ }
 
- return (
-   (codigo === "" || codigosArray.some(c => c.includes(codigo))) &&
-   (tipo === "" || comp["TIPO DE COMPONENTE"].toLowerCase() === tipo)
- );
-});
+ document.getElementById("codigoComp").addEventListener("input", buscarComponentes);
+ tipoSelect.addEventListener("change", buscarComponentes);
 
-  const resultsDiv = document.getElementById("results-comp");
-  resultsDiv.innerHTML = "";
-  filtered.forEach(comp => {
-    resultsDiv.innerHTML += `
-      <div class="spec">
-        <strong>${comp["TIPO DE COMPONENTE"]}</strong><br>
-        Código(s): ${comp["CODIGO COMPONENTES"]}<br>
-        Documento: ${comp["NOMBRE DE DOCUMENTO"]}<br>
-        Ver: <a href="${comp["LIGA"]}" target="_blank">Abrir RMS</a>
-        </div>
- `;
-});
+} catch (error) {
+ console.error("Error al cargar el Excel:", error);
 }
-document.getElementById("codigoComp").addEventListener("input", buscarComponentes);
-tipoSelect.addEventListener("change", buscarComponentes);
-
-// Inicializar buscador para la hoja "componentes" END
-    } 
-    catch (error) {
-        console.error("Error al cargar el Excel:", error);
-    }
 }
 cargarExcel();
     
