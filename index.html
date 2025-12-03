@@ -92,14 +92,30 @@
         </select>
       </div>
       <div id="results-comp"></div>
+      
+          <!-- Modal para cotas con SVG -->
+          <div id="modal-cotas" class="modal" style="display:none;">
+            <div class="modal-content">
+              <span id="cerrar-modal" style="cursor:pointer;">&times;</span>
+              <h3>Cotas del Tornillo</h3>
+              <svg id="svg-tornillo" width="400" height="200" viewBox="0 0 400 200" style="border:1px solid #ccc;">
+                <!-- Tornillo base -->
+                <rect x="50" y="80" width="250" height="40" fill="#ccc" stroke="#000"/>
+                <!-- Cabeza -->
+                <rect x="30" y="70" width="20" height="60" fill="#999" stroke="#000"/>
+                
+                <!-- Texto dinámico -->
+                <text id="cota-A" x="200" y="140" font-size="14" fill="blue">A:</text>
+                <text id="cota-B" x="280" y="70" font-size="14" fill="blue">B:</text>
+                <text id="cota-C" x="40" y="50" font-size="14" fill="blue">C:</text>
+                <text id="cota-D" x="40" y="160" font-size="14" fill="blue">D:</text>
+                <text id="cota-R" x="300" y="160" font-size="14" fill="blue">R:</text>
+              </svg>
+            </div>
+          </div>
+      <!-- Modal para cotas con SVG END -->
+
     </div>
-
-<!-- Modal para cotas -->
-<div id="modal-cotas" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span id="cerrar-modal" style="cursor:pointer;">&times;</span>
-    <h3>Cotas del Tornillo</h3>
-
   <!-- SECCION COMPONENETES END -->
   
 <!-- Cargar excel -->
@@ -225,7 +241,7 @@ function buscarComponentes() {
       <div class="spec">
         <strong>${comp["NO. DE DIBUJO/PARTE"]}</strong> - ${comp["NOMBRE DE DOCUMENTO"]}<br>
         Código(s): ${comp["CODIGO COMPONENTES"]}<br>
-        <a href="${comp["LIGA"]}" target="_blank class="ver-cotas" data-cotas='${JSON.stringify(comp)}'>Ver cotas</button>
+        <button class="ver-cotas" data-cotas='${JSON.stringify(comp)}'>Buscar</button>
       </div>
     `;
   });
@@ -242,21 +258,22 @@ function buscarComponentes() {
 // Mostrar modal con cotas
 function mostrarCotas(comp) {
   const modal = document.getElementById("modal-cotas");
-  const cotasDiv = document.getElementById("cotas-info");
-  cotasDiv.innerHTML = `
-    <p><strong>A:</strong> ${comp["A"]}</p>
-    <p><strong>B:</strong> ${comp["B"]}</p>
-    <p><strong>C:</strong> ${comp["C"]}</p>
-    <p><strong>D:</strong> ${comp["D"]}</p>
-    <p><strong>Radio:</strong> ${comp["RADIO"]}</p>
-  `;
+  document.getElementById("cota-A").textContent = `A: ${comp["A"]}`;
+  document.getElementById("cota-B").textContent = `B: ${comp["B"]}`;
+  document.getElementById("cota-C").textContent = `C: ${comp["C"]}`;
+  document.getElementById("cota-D").textContent = `D: ${comp["D"]}`;
+  document.getElementById("cota-R").textContent = `Radio: ${comp["RADIO"]}`;
   modal.style.display = "flex";
+
 }
 
 // Cerrar modal
 document.getElementById("cerrar-modal").addEventListener("click", () => {
   document.getElementById("modal-cotas").style.display = "none";
 });
+
+
+
 // --- COMPONENTES END ---
 
 } catch (error) {
