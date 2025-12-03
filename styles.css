@@ -151,3 +151,37 @@ a:hover {
 .seccion.activa {
   display: block;
 }
+
+/* MENÚ END */
+/* COMPONENTES */
+.autocomplete-items {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 200px;
+  z-index: 1000;
+}
+.autocomplete-items div {
+  padding: 8px;
+  cursor: pointer;
+}
+.autocomplete-items div:hover {
+  background: #f0f0f0;
+}
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex; justify-content: center; align-items: center;
+}
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+}
+
+/* COMPONENTES END */
