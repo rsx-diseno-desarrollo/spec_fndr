@@ -153,11 +153,12 @@ a:hover {
 }
 
 /* MENÚ END */
+
 /* COMPONENTES */
 .autocomplete-items {
   position: absolute;
-  background: #fff;
-  border: 1px solid #ccc;
+  background: var(--color-blanco);
+  border: 1px solid var(--color-gris-oscuro);
   max-height: 150px;
   overflow-y: auto;
   width: 200px;
@@ -166,10 +167,12 @@ a:hover {
 .autocomplete-items div {
   padding: 8px;
   cursor: pointer;
+  color: var(--color-gris-oscuro);
 }
 .autocomplete-items div:hover {
-  background: #f0f0f0;
+  background: var(--color-gris-claro);
 }
+
 .modal {
   position: fixed;
   top: 0; left: 0;
@@ -177,11 +180,17 @@ a:hover {
   background: rgba(0,0,0,0.5);
   display: flex; justify-content: center; align-items: center;
 }
+
 .modal-content {
-  background: #fff;
+  background: var(--color-blanco);
   padding: 20px;
   border-radius: 8px;
   width: 400px;
+  border: 2px solid var(--color-naranja);
 }
 
+.modal-content h3 {
+  color: var(--color-naranja);
+  margin-bottom: 15px;
+}
 /* COMPONENTES END */
