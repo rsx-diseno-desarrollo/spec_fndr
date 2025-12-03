@@ -199,9 +199,9 @@ try {
    filtered.forEach(comp => {
      resultsDiv.innerHTML += `
        <div class="spec">
-         <strong>${comp["TIPO DE COMPONENTE"]}</strong><br>
+         <strong>${comp["NO. DE DIBUJO/PARTE"]}</strong>
+          - ${comp["NOMBRE DE DOCUMENTO"]}<br>
          Código(s): ${comp["CODIGO COMPONENTES"]}<br>
-         Documento: ${comp["NOMBRE DE DOCUMENTO"]}<br>
          <a href="${comp["LIGA"]}" target="_blank">Abrir RMS</a>
        </div>
      `;
