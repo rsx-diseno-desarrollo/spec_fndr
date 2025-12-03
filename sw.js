@@ -34,13 +34,11 @@ self.addEventListener('fetch', event => {
               margin:0;
             }
             h2 { color:#f57c00; margin-bottom:10px; }
-            img { width:80px; margin-bottom:20px; }
-            p { font-size:1.1em; }
+            p { font-size:1.5em; }
           </style>
         </head>
         <body>
-          <img src="img/icon-192.png"/>
-          <h2>Sin conexión</h2>
+          <h2>Sin conexión :(</h2>
           <p>No se puede cargar la aplicación. Conéctate a la red para continuar.</p>
         </body>
         </html>
