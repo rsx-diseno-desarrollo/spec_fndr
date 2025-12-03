@@ -80,16 +80,26 @@
   <!-- SECCION EMPAQUE END -->
 
   <!-- SECCION COMPONENETES -->
-  <div id="seccion-componentes" class="seccion"> 
-  <h3>Especificaciones de Componentes</h3>
-    <div class="buscador">
-      <input type="text" id="codigoComp" placeholder="Código sin guiones">
-      <select id="tipoComp">
-        <option value="">-- Selecciona tipo --</option>
-      </select>
+  
+<!-- Dentro de la sección COMPONENTES -->
+    <div id="seccion-componentes" class="seccion"> 
+      <h3>Especificaciones de Componentes</h3>
+      <div class="buscador">
+        <input type="text" id="codigoComp" placeholder="Código sin guiones">
+        <div id="autocomplete-list" class="autocomplete-items"></div>
+        <select id="tipoComp">
+          <option value="">-- Selecciona tipo --</option>
+        </select>
+      </div>
+      <div id="results-comp"></div>
     </div>
-    <div id="results-comp"></div
-  </div>
+
+<!-- Modal para cotas -->
+<div id="modal-cotas" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span id="cerrar-modal" style="cursor:pointer;">&times;</span>
+    <h3>Cotas del Tornillo</h3>
+
   <!-- SECCION COMPONENETES END -->
   
 <!-- Cargar excel -->
@@ -166,50 +176,88 @@ try {
  document.getElementById("parte").addEventListener("input", buscar);
  clienteSelect.addEventListener("change", buscar);
  nombreSelect.addEventListener("change", buscar);
+// --- PRODUCTOS END ---
 
- // --- COMPONENTES ---
- const componentes = allData.comp;
- const tipoSelect = document.getElementById("tipoComp");
+// --- COMPONENTES ---
+const componentes = allData.comp;
+const tipoSelect = document.getElementById("tipoComp");
+const autocompleteList = document.getElementById("autocomplete-list");
 
- const tipos = [...new Set(componentes.map(c => c["TIPO DE COMPONENTE"]))];
- tipos.forEach(t => {
-   const opt = document.createElement("option");
-   opt.value = t;
-   opt.textContent = t;
-   tipoSelect.appendChild(opt);
- });
+// Autocompletado
+document.getElementById("codigoComp").addEventListener("input", function() {
+  const val = this.value.toLowerCase();
+  autocompleteList.innerHTML = "";
+  if (!val) return;
+  const sugerencias = componentes
+    .map(c => c["CODIGO COMPONENTES"])
+    .filter(codigo => codigo.toLowerCase().includes(val));
+  sugerencias.slice(0, 10).forEach(s => {
+    const div = document.createElement("div");
+    div.textContent = s;
+    div.addEventListener("click", () => {
+      document.getElementById("codigoComp").value = s;
+      autocompleteList.innerHTML = "";
+      buscarComponentes();
+    });
+    autocompleteList.appendChild(div);
+  });
+});
 
- function buscarComponentes() {
-   const codigo = document.getElementById("codigoComp").value.toLowerCase();
-   const tipo = tipoSelect.value.toLowerCase();
+// Botón para mostrar cotas
+function buscarComponentes() {
+  const codigo = document.getElementById("codigoComp").value.toLowerCase();
+  const tipo = tipoSelect.value.toLowerCase();
 
-   const filtered = componentes.filter(comp => {
-     const codigosArray = String(comp["CODIGO COMPONENTES"] || "")
-       .split(",")
-       .map(c => c.trim().toLowerCase());
+  const filtered = componentes.filter(comp => {
+    const codigosArray = String(comp["CODIGO COMPONENTES"] || "")
+      .split(",")
+      .map(c => c.trim().toLowerCase());
+    return (
+      (codigo === "" || codigosArray.some(c => c.includes(codigo))) &&
+      (tipo === "" || comp["TIPO DE COMPONENTE"].toLowerCase() === tipo)
+    );
+  });
 
-     return (
-       (codigo === "" || codigosArray.some(c => c.includes(codigo))) &&
-       (tipo === "" || comp["TIPO DE COMPONENTE"].toLowerCase() === tipo)
-     );
-   });
+  const resultsDiv = document.getElementById("results-comp");
+  resultsDiv.innerHTML = "";
+  filtered.forEach(comp => {
+    resultsDiv.innerHTML += `
+      <div class="spec">
+        <strong>${comp["NO. DE DIBUJO/PARTE"]}</strong> - ${comp["NOMBRE DE DOCUMENTO"]}<br>
+        Código(s): ${comp["CODIGO COMPONENTES"]}<br>
+        <a href="${comp["LIGA"]}" target="_blank class="ver-cotas" data-cotas='${JSON.stringify(comp)}'>Ver cotas</button>
+      </div>
+    `;
+  });
 
-   const resultsDiv = document.getElementById("results-comp");
-   resultsDiv.innerHTML = "";
-   filtered.forEach(comp => {
-     resultsDiv.innerHTML += `
-       <div class="spec">
-         <strong>${comp["NO. DE DIBUJO/PARTE"]}</strong>
-          - ${comp["NOMBRE DE DOCUMENTO"]}<br>
-         Código(s): ${comp["CODIGO COMPONENTES"]}<br>
-         <a href="${comp["LIGA"]}" target="_blank">Abrir RMS</a>
-       </div>
-     `;
-   });
- }
+  // Agregar evento a los botones
+  document.querySelectorAll(".ver-cotas").forEach(btn => {
+    btn.addEventListener("click", e => {
+      const compData = JSON.parse(e.target.dataset.cotas);
+      mostrarCotas(compData);
+    });
+  });
+}
 
- document.getElementById("codigoComp").addEventListener("input", buscarComponentes);
- tipoSelect.addEventListener("change", buscarComponentes);
+// Mostrar modal con cotas
+function mostrarCotas(comp) {
+  const modal = document.getElementById("modal-cotas");
+  const cotasDiv = document.getElementById("cotas-info");
+  cotasDiv.innerHTML = `
+    <p><strong>A:</strong> ${comp["A"]}</p>
+    <p><strong>B:</strong> ${comp["B"]}</p>
+    <p><strong>C:</strong> ${comp["C"]}</p>
+    <p><strong>D:</strong> ${comp["D"]}</p>
+    <p><strong>Radio:</strong> ${comp["RADIO"]}</p>
+  `;
+  modal.style.display = "flex";
+}
+
+// Cerrar modal
+document.getElementById("cerrar-modal").addEventListener("click", () => {
+  document.getElementById("modal-cotas").style.display = "none";
+});
+// --- COMPONENTES END ---
 
 } catch (error) {
  console.error("Error al cargar el Excel:", error);
