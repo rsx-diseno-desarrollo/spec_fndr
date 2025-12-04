@@ -58,7 +58,7 @@
 
   <!-- SECCION PRODUCTO -->
   <div id="seccion-producto" class="seccion activa">
-  <h3>Especificaciones de producto</h3>
+  <h3>Especificaciones de producto</h3><br>
     <div class="buscador">
       <input type="text" id="parte" placeholder="No. de parte sin guiones">
       <select id="cliente">
@@ -74,7 +74,7 @@
   
   <!-- SECCION EMPAQUE -->
   <div id="seccion-empaque" class="seccion">
-    <h3>Especificaciones de Empaque</h3>
+    <h3>Especificaciones de Empaque</h3><br>
     <p>Aquí podrás buscar specs de empaque :D</p>
   </div>
   <!-- SECCION EMPAQUE END -->
@@ -83,8 +83,7 @@
   
 <!-- SECCION COMPONENTES -->
 <div id="seccion-componentes" class="seccion">
-      <h3>Especificaciones de Componentes</h3>
-    
+      <h3>Especificaciones de Componentes</h3><br>
       <!-- Buscador -->
       <div class="buscador" style="position:relative;">
         <input type="text" id="codigoComp" placeholder="Código sin guiones" autocomplete="off">
@@ -96,36 +95,6 @@
     
         <!-- Botón Buscar debajo del selector -->
         <button id="btnBuscarComp" class="btn btn-primario">Buscar</button>
-      </div>
-    
-      <!-- Panel de cotas y dibujo (aparece debajo del buscador) -->
-      <div id="panel-cotas" class="panel-cotas" style="margin-top:16px;">
-        <h4>Cotas del componente seleccionado</h4>
-    
-        <!-- SVG interactivo del tornillo -->
-        <svg id="svg-tornillo" width="400" height="200" viewBox="0 0 400 200" style="border:1px solid #ccc;">
-          <!-- Tornillo base -->
-          <rect x="50" y="80" width="250" height="40" fill="#ccc" stroke="#000"/>
-          <!-- Cabeza -->
-          <rect x="30" y="70" width="20" height="60" fill="#999" stroke="#000"/>
-          <!-- Etiquetas dinámicas -->
-          <text id="cota-A" x="200" y="140" font-size="14" fill="blue">A: -</text>
-          <text id="cota-B" x="280" y="70" font-size="14" fill="blue">B: -</text>
-          <text id="cota-C" x="40" y="50" font-size="14" fill="blue">C: -</text>
-          <text id="cota-D" x="40" y="160" font-size="14" fill="blue">D: -</text>
-          <text id="cota-R" x="300" y="160" font-size="14" fill="blue">Radio: -</text>
-        </svg>
-    
-        <!-- Tabla/Lista de cotas textual -->
-        <div id="cotas-texto" style="margin-top:10px;">
-          <p><strong>A:</strong> <span id="txt-A">-</span></p>
-          <p><strong>B:</strong> <span id="txt-B">-</span></p>
-          <p><strong>C:</strong> <span id="txt-C">-</span></p>
-          <p><strong>D:</strong> <span id="txt-D">-</span></p>
-          <p><strong>Radio:</strong> <span id="txt-R">-</span></p>
-          <!-- (Opcional) Enlace al RMS del componente activo -->
-          <p id="rms-link" style="margin-top:6px;"></p>
-        </div>
       </div>
 </div>
 
@@ -206,152 +175,6 @@ try {
  clienteSelect.addEventListener("change", buscar);
  nombreSelect.addEventListener("change", buscar);
 // --- PRODUCTOS END ---
-
-// ====== COMPONENTES (nuevo) ======
-function inicializarComponentes(componentes = []) {
-  const tipoSelect = document.getElementById("tipoComp");
-  const autocompleteList = document.getElementById("autocomplete-list");
-  const inputCodigo = document.getElementById("codigoComp");
-  const btnBuscar = document.getElementById("btnBuscarComp");
-
-  if (!tipoSelect || !inputCodigo || !btnBuscar) return;
-
-  // Popular tipos
-  const tipos = [...new Set(componentes.map(c => c["TIPO DE COMPONENTE"]).filter(Boolean))];
-  tipos.forEach(t => {
-    const opt = document.createElement("option");
-    opt.value = t;
-    opt.textContent = t;
-    tipoSelect.appendChild(opt);
-  });
-
-  // Autocompletado (solo lista sugerencias; no renderiza tarjetas)
-  inputCodigo.addEventListener("input", function () {
-    const val = this.value.toLowerCase();
-    if (!autocompleteList) return;
-    autocompleteList.innerHTML = "";
-    if (!val) return;
-
-    const sugerencias = componentes
-      .map(c => String(c["CODIGO COMPONENTES"] || ""))
-      .filter(codigo => codigo.toLowerCase().includes(val));
-
-    sugerencias.slice(0, 10).forEach(s => {
-      const div = document.createElement("div");
-      div.textContent = s;
-      div.addEventListener("click", () => {
-        inputCodigo.value = s;
-        autocompleteList.innerHTML = "";
-      });
-      autocompleteList.appendChild(div);
-    });
-  });
-
-  // Cerrar autocompletado al hacer click fuera
-  document.addEventListener("click", (e) => {
-    const clickedInside =
-      e.target === inputCodigo ||
-      e.target === autocompleteList ||
-      e.target?.parentElement === autocompleteList;
-    if (!clickedInside && autocompleteList) autocompleteList.innerHTML = "";
-  });
-
-  // Botón Buscar: aplica filtro y muestra cotas + SVG abajo
-  btnBuscar.addEventListener("click", () => {
-    mostrarCotasSeleccion(componentes);
-  });
-
-  // También disparar búsqueda al cambiar tipo (opcional)
-  tipoSelect.addEventListener("change", () => {
-    // Si quieres que cambie en tiempo real al cambiar el tipo, descomenta:
-    // mostrarCotasSeleccion(componentes);
-  });
-}
-
-// Aplica filtros y muestra cotas y SVG debajo del buscador
-function mostrarCotasSeleccion(componentes) {
-  const codigo = (document.getElementById("codigoComp")?.value || "").toLowerCase();
-  const tipo = (document.getElementById("tipoComp")?.value || "").toLowerCase();
-
-  // Filtrar
-  const matches = componentes.filter(comp => {
-    const codigosArray = String(comp["CODIGO COMPONENTES"] || "")
-      .split(",")
-      .map(c => c.trim().toLowerCase());
-    const pasaCodigo = (codigo === "" || codigosArray.some(c => c.includes(codigo)));
-    const pasaTipo = (tipo === "" || String(comp["TIPO DE COMPONENTE"] || "").toLowerCase() === tipo);
-    return pasaCodigo && pasaTipo;
-  });
-
-  if (matches.length === 0) {
-    // Limpiar panel si no hay resultados
-    actualizarCotasYSvg(null);
-    const rms = document.getElementById("rms-link");
-    if (rms) rms.innerHTML = `<span style="color:#c62828;">Sin resultados con el filtro actual.</span>`;
-    return;
-  }
-
-  // Priorizar coincidencia exacta del código (si se escribió)
-  let compSeleccionado = matches[0];
-  if (codigo) {
-    const exact = matches.find(m =>
-      String(m["CODIGO COMPONENTES"] || "")
-        .toLowerCase()
-        .split(",")
-        .map(s => s.trim())
-        .includes(codigo)
-    );
-    if (exact) compSeleccionado = exact;
-  }
-
-  // Actualizar cotas y SVG
-  actualizarCotasYSvg(compSeleccionado);
-}
-
-// Actualiza textos del SVG y cotas textuales
-function actualizarCotasYSvg(comp) {
-  const setTxt = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
-
-  if (!comp) {
-    setTxt("cota-A", "A: -"); setTxt("txt-A", "-");
-    setTxt("cota-B", "B: -"); setTxt("txt-B", "-");
-    setTxt("cota-C", "C: -"); setTxt("txt-C", "-");
-    setTxt("cota-D", "D: -"); setTxt("txt-D", "-");
-    setTxt("cota-R", "Radio: -"); setTxt("txt-R", "-");
-    const rms = document.getElementById("rms-link");
-    if (rms) rms.innerHTML = "";
-    return;
-  }
-
-  const A = comp["A"] ?? "-";
-  const B = comp["B"] ?? "-";
-  const C = comp["C"] ?? "-";
-  const D = comp["D"] ?? "-";
-  const R = comp["RADIO"] ?? "-";
-
-  // SVG
-  setTxt("cota-A", `A: ${A}`);
-  setTxt("cota-B", `B: ${B}`);
-  setTxt("cota-C", `C: ${C}`);
-  setTxt("cota-D", `D: ${D}`);
-  setTxt("cota-R", `Radio: ${R}`);
-
-  // Texto
-  setTxt("txt-A", `${A}`);
-  setTxt("txt-B", `${B}`);
-  setTxt("txt-C", `${C}`);
-  setTxt("txt-D", `${D}`);
-  setTxt("txt-R", `${R}`);
-
-  // Link RMS opcional
-  const rms = document.getElementById("rms-link");
-  if (rms) {
-    const liga = comp["LIGA"] || "";
-    rms.innerHTML = liga ? `<a href="${liga}">Abrir RMS</a>` : "";
-  }
-}
-
-// ====== COMPONENTES (nuevo) END ======
   
 } catch (error) {
  console.error("Error al cargar el Excel:", error);
