@@ -117,3 +117,116 @@ window.addEventListener('load', () => {
     document.getElementById(ultimaSeccion).classList.add('activa');
   }
 });
+
+// ======================================================
+//  COMPONENTES
+// ======================================================
+
+window.addEventListener("load", () => {
+  // Esperar a que los datos ya estén cargados
+  const waitData = setInterval(() => {
+    if (!window.data) return;
+    clearInterval(waitData);
+    iniciarComponentes();
+  }, 200);
+});
+
+function iniciarComponentes() {
+  const compData = window.data.comp; // toda la hoja "comp"
+
+  const tipoComp = document.getElementById("tipoComp");
+  const codigoInput = document.getElementById("codigoComp");
+  const autocompleteList = document.getElementById("autocomplete-list");
+  const btnBuscarComp = document.getElementById("btnBuscarComp");
+  const resultsComp = document.getElementById("results-comp");
+
+  // ------------------------------------------------------
+  // Llenar selector de tipos (por ahora solo TORNILLO)
+  // ------------------------------------------------------
+  const tipos = [...new Set(compData.map(x => x["TIPO"]))];
+
+  tipos.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t;
+    opt.textContent = t;
+    tipoComp.appendChild(opt);
+  });
+
+  // ------------------------------------------------------
+  // Autocompletar por código
+  // ------------------------------------------------------
+  codigoInput.addEventListener("input", () => {
+    const texto = codigoInput.value.toLowerCase();
+    autocompleteList.innerHTML = "";
+
+    if (texto.length < 1) return;
+
+    let filtrados = compData.filter(row =>
+      String(row["CODIGO"]).toLowerCase().includes(texto)
+    );
+
+    filtrados.slice(0, 10).forEach(row => {
+      const div = document.createElement("div");
+      div.classList.add("autocomplete-item");
+      div.textContent = row["CODIGO"];
+      div.addEventListener("click", () => {
+        codigoInput.value = row["CODIGO"];
+        autocompleteList.innerHTML = "";
+      });
+      autocompleteList.appendChild(div);
+    });
+  });
+
+  // Cerrar autocompletar al hacer clic fuera
+  document.addEventListener("click", (e) => {
+    if (e.target !== codigoInput) {
+      autocompleteList.innerHTML = "";
+    }
+  });
+
+  // ------------------------------------------------------
+  // Acción del botón "Buscar"
+  // ------------------------------------------------------
+  btnBuscarComp.addEventListener("click", () => {
+    const tipo = tipoComp.value;
+    const codigo = codigoInput.value.trim();
+
+    if (!tipo || !codigo) {
+      resultsComp.innerHTML = `<p>Selecciona tipo y escribe un código.</p>`;
+      return;
+    }
+
+    // Filtrar
+    const match = compData.find(row =>
+      row["TIPO"] === tipo &&
+      String(row["CODIGO"]) === codigo
+    );
+
+    if (!match) {
+      resultsComp.innerHTML = `<p>No se encontró el componente.</p>`;
+      return;
+    }
+
+    // ----------------------------------------------------
+    // Mostrar SOLO las cotas (columnas A, B, C, D, etc.)
+    // ----------------------------------------------------
+    const columnasIgnorar = ["TIPO", "CODIGO", "DESCRIPCION"];
+
+    let html = `<h4>Resultados:</h4><div class="tabla-cotas">`;
+
+    Object.keys(match).forEach(col => {
+      if (!columnasIgnorar.includes(col) && match[col] !== "" && match[col] !== null) {
+        html += `
+          <div><strong>${col}:</strong> ${match[col]}</div>
+        `;
+      }
+    });
+
+    html += `</div>`;
+
+    resultsComp.innerHTML = html;
+  });
+}
+// ======================================================
+//  COMPONENTES END
+// ======================================================
