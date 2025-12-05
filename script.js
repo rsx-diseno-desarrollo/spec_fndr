@@ -117,7 +117,6 @@ window.addEventListener('load', () => {
     document.getElementById(ultimaSeccion).classList.add('activa');
   }
 });
-
 // ======================================================
 //  COMPONENTES
 // ======================================================
@@ -131,124 +130,8 @@ window.addEventListener("load", () => {
   }, 200);
 });
 
-// -------------------------------
-// Utilidad: convertir texto a número
-function toNum(v) {
-  if (v === null || v === undefined) return NaN;
-  const s = String(v).replace(',', '.').trim();
-  const n = parseFloat(s);
-  return Number.isFinite(n) ? n : NaN;
-}
-
-// -------------------------------
-// Render del tornillo en SVG
-function renderScrewSVG(cotas) {
-  const A = toNum(cotas.A);
-  const B = toNum(cotas.B);
-  const C = toNum(cotas.C);
-  const D = toNum(cotas.D);
-  const R = toNum(cotas.RADIO);
-
-  const safeA = Number.isFinite(A) ? A : 40;
-  const safeB = Number.isFinite(B) ? B : Math.max(safeA - 10, 10);
-  const safeC = Number.isFinite(C) ? C : 10;
-  const safeD = Number.isFinite(D) ? D : 6;
-  const safeR = Number.isFinite(R) ? R : 4;
-
-  const maxVisualWidth = 480;
-  const margin = 30;
-  const scale = Math.max(0.5, Math.min(8, maxVisualWidth / safeA));
-  const svgWidth = Math.round(safeA * scale + margin * 2);
-  const svgHeight = 200;
-
-  const shaftY = 80;
-  const shaftHeight = 24;
-  const headLength = safeC * scale;
-  const threadLength = safeB * scale;
-  const totalLengthPx = safeA * scale;
-  const headRadiusPx = safeD * scale;
-  const lowerRadiusPx = safeR * scale;
-
-  const leftX = margin;
-  const shaftStart = leftX;
-  const shaftEnd = leftX + totalLengthPx;
-  const headStart = shaftEnd - headLength;
-  const threadStart = shaftStart + (totalLengthPx - headLength - threadLength);
-
-  const svg = `
-  <svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-        <path d="M0,0 L8,4 L0,8 L2,4 z" />
-      </marker>
-      <style>
-        .shaft { fill:#ddd; stroke:#333; stroke-width:1; }
-        .head { fill:#bbb; stroke:#333; stroke-width:1; }
-        .thread { fill:none; stroke:#666; stroke-width:1.4; stroke-linecap:round; }
-        .dimline { stroke:#111; stroke-width:1; marker-start:url(#arrow); marker-end:url(#arrow); fill:none; }
-        .dimtext { font-family: Arial, sans-serif; font-size:12px; fill:#111; }
-      </style>
-    </defs>
-
-    <!-- EJE -->
-    <rect class="shaft" x="${shaftStart}" y="${shaftY}"
-          width="${totalLengthPx - headLength}"
-          height="${shaftHeight}"
-          rx="${lowerRadiusPx}" ry="${lowerRadiusPx}" />
-
-    <!-- CABEZA -->
-    <rect class="head"
-          x="${headStart}" 
-          y="${shaftY - (headRadiusPx - shaftHeight/2)}"
-          width="${headLength}"
-          height="${headRadiusPx*2 - shaftHeight}" />
-    <circle class="head" cx="${headStart}" cy="${shaftY + shaftHeight/2}" r="${headRadiusPx}" />
-
-    <!-- ROSCA -->
-    <g class="thread">
-      ${
-        [...Array(Math.max(2, Math.floor((shaftEnd - headLength - threadStart)/10)))]
-        .map((_,i)=>{
-          const x1 = threadStart + i*10;
-          const x2 = x1 + 8;
-          return `<line x1="${x1}" y1="${shaftY+4}" x2="${x2}" y2="${shaftY+shaftHeight-4}" />`;
-        }).join("")
-      }
-    </g>
-
-    <!-- COTAS A, B, C, D, RADIO -->
-    <line class="dimline" x1="${shaftStart}" y1="${shaftY + shaftHeight + 40}"
-                         x2="${shaftEnd}" y2="${shaftY + shaftHeight + 40}" />
-    <text class="dimtext" x="${(shaftStart+shaftEnd)/2 - 10}"
-                          y="${shaftY + shaftHeight + 35}">A=${safeA}</text>
-
-    <line class="dimline" x1="${threadStart}" y1="${shaftY - 20}"
-                         x2="${shaftEnd - headLength}" y2="${shaftY - 20}" />
-    <text class="dimtext" x="${(threadStart + shaftEnd - headLength)/2 - 10}"
-                          y="${shaftY - 25}">B=${safeB}</text>
-
-    <line class="dimline" x1="${headStart}" y1="${shaftY - 45}"
-                         x2="${shaftEnd}" y2="${shaftY - 45}" />
-    <text class="dimtext" x="${(headStart + shaftEnd)/2 - 10}"
-                          y="${shaftY - 50}">C=${safeC}</text>
-
-    <circle cx="${headStart}" cy="${shaftY + shaftHeight/2}"
-            r="${headRadiusPx}" fill="none" stroke="#111" stroke-dasharray="3 2" />
-    <text class="dimtext"
-          x="${headStart - headRadiusPx - 30}"
-          y="${shaftY + shaftHeight/2}">D=${safeD}</text>
-
-    <line class="dimline" x1="${shaftStart}" y1="${shaftY - 60}"
-                         x2="${shaftStart + Math.min(30, lowerRadiusPx)}" y2="${shaftY - 60}" />
-    <text class="dimtext" x="${shaftStart + 8}" y="${shaftY - 65}">R=${safeR}</text>
-
-  </svg>
-  `;
-  return svg;
-}
-
 function iniciarComponentes() {
-  const compData = window.data.comp; // toda la hoja "comp"
+  const compData = (window.data && window.data.comp) ? window.data.comp : [];
 
   const tipoComp = document.getElementById("tipoComp");
   const codigoInput = document.getElementById("codigoComp");
@@ -256,12 +139,13 @@ function iniciarComponentes() {
   const btnBuscarComp = document.getElementById("btnBuscarComp");
   const resultsComp = document.getElementById("results-comp");
 
-  // ------------------------------------------------------
-  // Llenar selector de tipos (por ahora solo TORNILLO)
-  // ------------------------------------------------------
-  const tipos = [...new Set(compData.map(x => x["TIPO DE COMPONENTE"]))];
+  if (!tipoComp || !codigoInput || !autocompleteList || !btnBuscarComp || !resultsComp) return;
 
-  tipos.forEach(t => {
+  // ------------------------------------------------------
+  // Llenar selector de tipos
+  // ------------------------------------------------------
+  const tipos = [...new Set(compData.map(x => String(x["TIPO DE COMPONENTE"] ?? "").trim()))].filter(t => t);
+  tipos.sort().forEach(t => {
     const opt = document.createElement("option");
     opt.value = t;
     opt.textContent = t;
@@ -269,59 +153,65 @@ function iniciarComponentes() {
   });
 
   // ------------------------------------------------------
-  // Autocompletar por código
+  // Autocompletar por código (filtra por tipo seleccionado)
   // ------------------------------------------------------
-    codigoInput.addEventListener("input", () => {
-      const texto = codigoInput.value.toLowerCase();
-      autocompleteList.innerHTML = "";
-  
-      if (texto.length < 1) return;
-  
-      let filtrados = compData.filter(row =>
-        String(row["CODIGO COMPONENTES"]).toLowerCase().includes(texto)
-      );
-  
-      filtrados.slice(0, 10).forEach(row => {
-        const div = document.createElement("div");
-        div.classList.add("autocomplete-item");
-        div.textContent = row["CODIGO COMPONENTES"];
-        div.addEventListener("click", () => {
-          codigoInput.value = row["CODIGO COMPONENTES"];
-          autocompleteList.innerHTML = "";
-        });
-        autocompleteList.appendChild(div);
-      });
-    });
-  
-    // Cerrar autocompletar al hacer clic fuera
-    document.addEventListener("click", (e) => {
-      if (e.target !== codigoInput) {
-        autocompleteList.innerHTML = "";
-      }
-    });
-  
-    // ------------------------------------------------------
-    // Acción del botón "Buscar"
-    // ------------------------------------------------------
-    btnBuscarComp.addEventListener("click", () => {
-    const tipo = tipoComp.value;
-    const codigo = codigoInput.value.trim();
-  
-    if (!tipo || !codigo) {
-      resultsComp.innerHTML = `<p>Selecciona tipo y escribe un código.</p>`;
-      return;
+  codigoInput.addEventListener("input", () => {
+    const texto = codigoInput.value.toLowerCase().trim();
+    autocompleteList.innerHTML = "";
+    if (texto.length < 1) return;
+
+    const tipoSel = String(tipoComp.value ?? "");
+    let fuente = compData;
+    if (tipoSel) {
+      fuente = fuente.filter(row => String(row["TIPO DE COMPONENTE"] ?? "") === tipoSel);
     }
-  
-    const match = compData.find(row =>
-      row["TIPO DE COMPONENTE"] === tipo &&
-      String(row["CODIGO COMPONENTES"]) === codigo
+
+    const filtrados = fuente.filter(row =>
+      String(row["CODIGO COMPONENTES"] ?? "").toLowerCase().includes(texto)
     );
-  
-    if (!match) {
-      resultsComp.innerHTML = `<p>No se encontró el componente.</p>`;
+
+    filtrados.slice(0, 10).forEach(row => {
+      const div = document.createElement("div");
+      div.classList.add("autocomplete-item");
+      div.textContent = row["CODIGO COMPONENTES"];
+      div.addEventListener("click", () => {
+        codigoInput.value = row["CODIGO COMPONENTES"];
+        autocompleteList.innerHTML = "";
+      });
+      autocompleteList.appendChild(div);
+    });
+  });
+
+  // Cerrar autocompletar al hacer clic fuera
+  document.addEventListener("click", (e) => {
+    if (e.target !== codigoInput) {
+      autocompleteList.innerHTML = "";
+    }
+  });
+
+  // ------------------------------------------------------
+  // Acción del botón "Buscar"
+  // ------------------------------------------------------
+  btnBuscarComp.addEventListener("click", () => {
+    const tipo = String(tipoComp.value ?? "");
+    const codigo = String(codigoInput.value ?? "").trim();
+
+    if (!tipo || !codigo) {
+      showMessage("Selecciona tipo y escribe un código.", "warn");
       return;
     }
-  
+
+    const match = compData.find(row =>
+      String(row["TIPO DE COMPONENTE"] ?? "") === tipo &&
+      String(row["CODIGO COMPONENTES"] ?? "") === codigo
+    );
+
+    if (!match) {
+      showMessage("No se encontró el componente.", "empty");
+      return;
+    }
+
+    // Tomar cotas directamente (solo texto)
     const cotas = {
       A: match["A"],
       B: match["B"],
@@ -329,9 +219,41 @@ function iniciarComponentes() {
       D: match["D"],
       RADIO: match["RADIO"]
     };
-  
-    resultsComp.innerHTML = renderScrewSVG(cotas);
+
+    // Actualizar etiquetas de cotas en el viewer existente
+    const set = (id, label, val) => {
+      const el = resultsComp.querySelector(`#${id}`);
+      if (el) el.textContent = `${label}=${val ?? '--'}`;
+    };
+    set("cota-A", "A", cotas.A);
+    set("cota-B", "B", cotas.B);
+    set("cota-C", "C", cotas.C);
+    set("cota-D", "D", cotas.D);
+    set("cota-R", "R", cotas.RADIO);
+
+    // (Opcional) Mostrar encabezado con tipo/código sin eliminar el viewer
+    const viewer = resultsComp.querySelector("#viewer-tornillo");
+    if (viewer) {
+      resultsComp.innerHTML = `
+        <div class="card card-comp">
+          <div class="card-header"><strong>${tipo}</strong> — Código: ${codigo}</div>
+        </div>
+      `;
+      resultsComp.appendChild(viewer);
+    }
   });
+
+  // Mensajes arriba del viewer sin perder el PNG
+  function showMessage(text, kind = "info") {
+    const viewer = resultsComp.querySelector("#viewer-tornillo");
+    const msgClass =
+      kind === "warn" ? "msg-warn" :
+      kind === "empty" ? "msg-empty" :
+      kind === "error" ? "msg-error" : "msg-info";
+
+    resultsComp.innerHTML = `<div class="${msgClass}">${text}</div>`;
+    if (viewer) resultsComp.appendChild(viewer);
+  }
 }
 // ======================================================
 //  COMPONENTES END
