@@ -143,7 +143,7 @@ function iniciarComponentes() {
   // ------------------------------------------------------
   // Llenar selector de tipos (por ahora solo TORNILLO)
   // ------------------------------------------------------
-  const tipos = [...new Set(compData.map(x => x["TIPO"]))];
+  const tipos = [...new Set(compData.map(x => x["TIPO DE COMPONENTE"]))];
 
   tipos.forEach(t => {
     const opt = document.createElement("option");
@@ -162,15 +162,15 @@ function iniciarComponentes() {
     if (texto.length < 1) return;
 
     let filtrados = compData.filter(row =>
-      String(row["CODIGO"]).toLowerCase().includes(texto)
+      String(row["CODIGO COMPONENTES"]).toLowerCase().includes(texto)
     );
 
     filtrados.slice(0, 10).forEach(row => {
       const div = document.createElement("div");
       div.classList.add("autocomplete-item");
-      div.textContent = row["CODIGO"];
+      div.textContent = row["CODIGO COMPONENTES"];
       div.addEventListener("click", () => {
-        codigoInput.value = row["CODIGO"];
+        codigoInput.value = row["CODIGO COMPONENTES"];
         autocompleteList.innerHTML = "";
       });
       autocompleteList.appendChild(div);
@@ -198,8 +198,8 @@ function iniciarComponentes() {
 
     // Filtrar
     const match = compData.find(row =>
-      row["TIPO"] === tipo &&
-      String(row["CODIGO"]) === codigo
+      row["TIPO DE COMPONENTE"] === tipo &&
+      String(row["CODIGO COMPONENTES"]) === codigo
     );
 
     if (!match) {
@@ -210,7 +210,7 @@ function iniciarComponentes() {
     // ----------------------------------------------------
     // Mostrar SOLO las cotas (columnas A, B, C, D, etc.)
     // ----------------------------------------------------
-    const columnasIgnorar = ["TIPO", "CODIGO", "DESCRIPCION"];
+    const columnasIgnorar = ["TIPO DE COMPONENTE", "CODIGO COMPONENTES", "NO. DE DIBUJO/PARTE"];
 
     let html = `<h4>Resultados:</h4><div class="tabla-cotas">`;
 
