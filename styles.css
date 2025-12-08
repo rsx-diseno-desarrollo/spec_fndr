@@ -185,16 +185,16 @@ a:hover {
 #cota-A { top: 100%; left: 55%; }
 
 /* B: longitud roscada (flecha superior, zona central) */
-#cota-B { top: 7%; left: 65%; }
+#cota-B { top: 7%; left: 63%; }
 
 /* C: longitud cabeza (flecha superior derecha corta) */
 #cota-C { top: 100%; left: 25%; }
 
 /* D: diámetro/radio de cabeza (vertical izq) */
-#cota-D { top: 43%; left: 13%; }
+#cota-D { top: 43%; left: 10%; }
 
 /* R: radio del vástago (vertical derecha) */
-#cota-R { top: 43%; left: 86%; }
+#cota-R { top: 43%; left: 88%; }
 
 /* Autocomplete overlay por encima del input */
 .autocomplete-items {
