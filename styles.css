@@ -182,19 +182,19 @@ a:hover {
 
 /* Posiciones aproximadas (ajusta finamente según tu PNG) */
 /* A: longitud total (flecha inferior) */
-#cota-A { top: 92%; left: 48%; }
+#cota-A { top: 100%; left: 55%; }
 
 /* B: longitud roscada (flecha superior, zona central) */
-#cota-B { top: 18%; left: 58%; }
+#cota-B { top: 7%; left: 65%; }
 
 /* C: longitud cabeza (flecha superior derecha corta) */
-#cota-C { top: 32%; left: 88%; }
+#cota-C { top: 100%; left: 25%; }
 
-/* D: diámetro/radio de cabeza (vertical derecha) */
-#cota-D { top: 52%; left: 96%; }
+/* D: diámetro/radio de cabeza (vertical izq) */
+#cota-D { top: 43%; left: 13%; }
 
-/* R: radio del vástago (vertical izquierda) */
-#cota-R { top: 52%; left: 4%; }
+/* R: radio del vástago (vertical derecha) */
+#cota-R { top: 43%; left: 86%; }
 
 /* Autocomplete overlay por encima del input */
 .autocomplete-items {
