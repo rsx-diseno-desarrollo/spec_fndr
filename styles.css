@@ -167,6 +167,76 @@ a:hover {
   display: block;
 }
 
+
+/* ===== Botón base ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font: 600 14px/1 system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", sans-serif;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+/* ===== Tema Rassini para botón de buscar ===== */
+.btn-buscar {
+  background: var(--color-naranja);
+  color: var(--color-blanco);
+  border-color: var(--color-naranja);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.12);
+}
+
+/* Hover: ligeramente más oscuro */
+.btn-buscar:hover {
+  background: #e56f00;                 /* tono más oscuro del naranja */
+  border-color: #e56f00;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* Active: “clic” */
+.btn-buscar:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.16) inset;
+}
+
+/* Focus visible: accesible con teclado */
+.btn-buscar:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245,124,0,0.35), 0 2px 0 rgba(0,0,0,0.12);
+}
+
+/* Disabled */
+.btn-buscar:disabled,
+.btn-buscar[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  background: var(--color-gris-oscuro);
+  border-color: var(--color-gris-oscuro);
+  color: var(--color-blanco);
+  box-shadow: none;
+}
+
+/* Tamaños en móvil: botón al 100% del ancho del buscador */
+@media (max-width: 640px) {
+  .buscador .btn-buscar {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===== Variante con icono lupa (opcional) ===== */
+.btn-buscar::before {
+  content: "";
+  display: inline-block;
+  width: 16px; height: 16px;
+  mask: url("img/icons/lupa.svg") no-repeat center / contain; /* si tienes un SVG de lupa */
+  background-color: currentColor;
+}
+
 /* Etiquetas de cotas (estilo y legibilidad) */
 .cota {
   position: absolute;
