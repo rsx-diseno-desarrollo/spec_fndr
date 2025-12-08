@@ -266,6 +266,11 @@ a:hover {
 /* R: radio del vástago (vertical derecha) */
 #cota-R { top: 43%; left: 88%; }
 
+.cota::after {
+  content: " mm";
+  font-style: italic;
+}
+
 /* Autocomplete overlay por encima del input */
 .autocomplete-items {
   position: absolute;
