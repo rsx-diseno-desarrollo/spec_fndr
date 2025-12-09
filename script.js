@@ -192,68 +192,92 @@ function iniciarComponentes() {
   // ------------------------------------------------------
   // Acción del botón "Buscar"
   // ------------------------------------------------------
-  btnBuscarComp.addEventListener("click", () => {
-    const tipo = String(tipoComp.value ?? "");
-    const codigo = String(codigoInput.value ?? "").trim();
+  
+btnBuscarComp.addEventListener("click", () => {
+  const tipo = String(tipoComp.value ?? "");
+  const codigo = String(codigoInput.value ?? "").trim();
 
-    if (!tipo || !codigo) {
-      showMessage("Selecciona tipo y escribe un código.", "warn");
-      return;
-    }
+  if (!tipo || !codigo) {
+    showMessage("Selecciona tipo y escribe un código.", "warn");
+    return;
+  }
 
-    const match = compData.find(row =>
-      String(row["TIPO DE COMPONENTE"] ?? "") === tipo &&
-      String(row["CODIGO COMPONENTES"] ?? "") === codigo
-    );
+  const match = compData.find(row =>
+    String(row["TIPO DE COMPONENTE"] ?? "") === tipo &&
+    String(row["CODIGO COMPONENTES"] ?? "") === codigo
+  );
 
-    if (!match) {
-      showMessage("No se encontró el componente.", "empty");
-      return;
-    }
+  if (!match) {
+    showMessage("No se encontró el componente.", "empty");
+    return;
+  }
 
-    // Tomar cotas directamente (solo texto)
+  // 1) Encabezado arriba
+  const header = resultsComp.querySelector("#comp-header");
+  if (header) {
+    header.textContent = `${tipo} — Código: ${codigo}`;
+  }
+
+  // 2) Imagen (si después quieres que cambie por tipo)
+  const imgEl = resultsComp.querySelector("#comp-img");
+  if (imgEl) {
+    // Por ahora usa la plantilla genérica
+    // Sugerencia futura: mapear por tipo -> nombre de PNG
+    imgEl.src = "img/tornillo_plantilla.png";
+    imgEl.alt = `Imagen del componente ${tipo}`;
+  }
+
+  // 3) Cotas como lista debajo
+  const cotasList = resultsComp.querySelector("#cotas-list");
+  if (cotasList) {
     const cotas = {
       A: match["A"],
       B: match["B"],
       C: match["C"],
       D: match["D"],
-      RADIO: match["RADIO"]
+      R: match["RADIO"] // renombramos a 'R' por claridad visual
     };
 
-    // Actualizar etiquetas de cotas en el viewer existente
-    const set = (id, label, val) => {
-      const el = resultsComp.querySelector(`#${id}`);
-      if (el) el.textContent = `${label}=${val ?? '--'}`;
-    };
-    set("cota-A", "A", cotas.A);
-    set("cota-B", "B", cotas.B);
-    set("cota-C", "C", cotas.C);
-    set("cota-D", "D", cotas.D);
-    set("cota-R", "R", cotas.RADIO);
-
-    // (Opcional) Mostrar encabezado con tipo/código sin eliminar el viewer
-    const viewer = resultsComp.querySelector("#viewer-tornillo");
-    if (viewer) {
-      resultsComp.innerHTML = `
-        <div class="card card-comp">
-          <div class="card-header"><strong>${tipo}</strong> — Código: ${codigo}</div>
-        </div>
+    // Render simple de pares label: value
+    cotasList.innerHTML = ""; // limpia anterior
+    Object.entries(cotas).forEach(([label, value]) => {
+      const item = document.createElement("div");
+      item.className = "cota-item";
+      item.innerHTML = `
+        <span class="cota-label">${label}:</span>
+        <span class="cota-value">${value ?? "--"}</span>
       `;
-      resultsComp.appendChild(viewer);
-    }
-  });
-
-  // Mensajes arriba del viewer sin perder el PNG
-  function showMessage(text, kind = "info") {
-    const viewer = resultsComp.querySelector("#viewer-tornillo");
-    const msgClass =
-      kind === "warn" ? "msg-warn" :
-      kind === "empty" ? "msg-empty" :
-      kind === "error" ? "msg-error" : "msg-info";
-
-    resultsComp.innerHTML = `<div class="${msgClass}">${text}</div>`;
-    if (viewer) resultsComp.appendChild(viewer);
+      cotasList.appendChild(item);
+    });
   }
+});
+
+function showMessage(text, kind = "info") {
+  const msgClass = kind === "warn" ? "msg-warn"
+                 : kind === "empty" ? "msg-empty"
+                 : kind === "error" ? "msg-error"
+                 : "msg-info";
+
+  // Mensaje arriba del visor
+  const header = resultsComp.querySelector("#comp-header");
+  if (header) {
+    header.innerHTML = `<span class="${msgClass}">${text}</span>`;
+  }
+
+  // Mantener visor y lista
+  // (no limpiamos #viewer-comp ni #cotas-list)
+
+  // CABIAR IMAGEN POR TIPO
+const imagenPorTipo = {
+  "TORNILLO": "img/tornillo_plantilla.png",
+  "TUERCA": "img/tuerca_plantilla.png",
+  "LAINA": "img/laina_plantilla.png"
+  // ...
+};
+
+// Dentro del click:
+imgEl.src = imagenPorTipo[tipo] ?? "img/tornillo_plantilla.png";
+
 }
 // ======================================================
 //  COMPONENTES END
