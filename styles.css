@@ -154,20 +154,6 @@ a:hover {
 
 /* MENÚ END */
 
-
-/* Contenedor e imagen del tornillo */
-.tornillo-container {
-  position: relative;
-  max-width: 600px;       /* Ajusta al ancho deseado. En móvil, puedes usar 100% */
-  margin: 12px 0;
-}
-.tornillo-img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-
 /* ===== Botón base ===== */
 .btn {
   display: inline-flex;
@@ -219,59 +205,9 @@ a:hover {
   color: var(--color-blanco);
   box-shadow: none;
 }
+/* ===== Botón base END ===== */
 
-/* Tamaños en móvil: botón al 100% del ancho del buscador */
-@media (max-width: 640px) {
-  .buscador .btn-buscar {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-/* ===== Variante con icono lupa (opcional) ===== */
-.btn-buscar::before {
-  content: "";
-  display: inline-block;
-  width: 16px; height: 16px;
-  mask: url("img/icons/lupa.svg") no-repeat center / contain; /* si tienes un SVG de lupa */
-  background-color: currentColor;
-}
-
-/* Etiquetas de cotas (estilo y legibilidad) */
-.cota {
-  position: absolute;
-  font: 600 14px/1.2 system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", sans-serif;
-  color: #ff6a00;                         /* Naranja de las líneas */
-  background: rgba(255,255,255,0.9);      /* Fondo claro para contraste */
-  padding: 2px 6px;
-  border-radius: 4px;
-  box-shadow: 0 0 0 1px rgba(255,106,0,0.25);
-  transform: translate(-50%, -50%);       /* Ancla al centro del texto */
-  white-space: nowrap;
-}
-
-/* Posiciones aproximadas (ajusta finamente según tu PNG) */
-/* A: longitud total (flecha inferior) */
-#cota-A { top: 100%; left: 55%; }
-
-/* B: longitud roscada (flecha superior, zona central) */
-#cota-B { top: 7%; left: 63%; }
-
-/* C: longitud cabeza (flecha superior derecha corta) */
-#cota-C { top: 100%; left: 25%; }
-
-/* D: diámetro/radio de cabeza (vertical izq) */
-#cota-D { top: 43%; left: 10%; }
-
-/* R: radio del vástago (vertical derecha) */
-#cota-R { top: 43%; left: 88%; }
-
-.cota::after {
-  content: " mm";
-  font-style: italic;
-}
-
-/* Autocomplete overlay por encima del input */
+/* Autocomplete  */
 .autocomplete-items {
   position: absolute;
   top: 100%;
@@ -284,3 +220,49 @@ a:hover {
   border-radius: 6px;
 }
 .autocomplete-item { padding: 6px 10px; cursor: pointer; }
+/* Autocomplete END */
+
+/* ===== VIZUALIZADOR DE LISTA DE COTAS DINAMICAS ===== */
+.viewer-comp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.comp-img {
+  max-width: 100%;
+  height: auto;
+}
+
+.comp-header {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.cotas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.cota-item {
+  background: #f5f5f7;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px;
+  font-family: monospace;
+}
+
+.cota-label {
+  color: #333;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.cota-value {
+  color: #111;
+}
+
+/* ===== VIZUALIZADOR DE LISTA DE COTAS DINAMICAS END ===== */
