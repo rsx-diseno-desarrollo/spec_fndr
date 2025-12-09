@@ -82,18 +82,20 @@
         <!-- Botón Buscar -->
         <button id="btnBuscarComp" class="btn btn-buscar">Buscar</button>
       </div>
-     
+  
     <!-- Resultados / Visor -->
-      <div id="results-comp">
-        <div id="viewer-tornillo" class="tornillo-container">
-          <img src="img/tornillo_plantilla.png" alt="Tornillo con líneas de cotas" class="tornillo-img">
-          <div id="cota-A" class="cota">A=--</div>
-          <div id="cota-B" class="cota">B=--</div>
-          <div id="cota-C" class="cota">C=--</div>
-          <div id="cota-D" class="cota">D=--</div>
-          <div id="cota-R" class="cota">E=--</div>
-        </div>
+    <div id="results-comp">
+      <!-- Encabezado dinámico -->
+      <div id="comp-header" class="comp-header"></div>
+      <!-- Visor de imagen del componente -->
+      <div id="viewer-comp" class="viewer-comp">
+        <img idnillo_plantilla.png
       </div>
+      <!-- Cotas debajo de la imagen -->
+      <div id="cotas-list" class="cotas-list">
+        <!-- Se llena dinámicamente: A, B, C, D, R -->
+      </div>
+
 </div>
   <!-- SECCION COMPONENETES END -->
   
