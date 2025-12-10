@@ -230,10 +230,7 @@ btnBuscarComp.addEventListener("click", () => {
           // ...
         };
 // Dentro del click:
-imgEl.src = imagenPorTipo[tipo] ?? "img/tornillo_plantilla.png";
-    // Por ahora usa la plantilla genérica
-    // Sugerencia futura: mapear por tipo -> nombre de PNG
-    imgEl.src = "img/tornillo_plantilla.png";
+    imgEl.src = imagenPorTipo[tipo] ?? "img/tornillo_plantilla.png";
     imgEl.alt = `Imagen del componente ${tipo}`;
   }
 
