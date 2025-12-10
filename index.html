@@ -14,7 +14,7 @@
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=13')
+      navigator.serviceWorker.register('sw.js?v=14')
         .then(reg => console.log('Service Worker registrado'))
         .catch(err => console.log('Error al registrar el Service Worker:', err));
     });
@@ -68,24 +68,31 @@
     <p>Aquí podrás buscar specs de empaque :D</p>
   </div>
   <!-- SECCION EMPAQUE END -->
-
-  <!-- SECCION COMPONENETES -->
   
 <!-- SECCION COMPONENTES -->
 <div id="seccion-componentes" class="seccion">
       <h3>Especificaciones de Componentes</h3><br>
       <!-- Buscador -->
+      <div class="buscador" style="position:relative;">
         <select id="tipoComp">
           <option value="">-- Selecciona tipo --</option>
         </select>
-  
-      <div class="buscador" style="position:relative;">
         <input type="text" id="codigoComp" placeholder="Código sin guiones" autocomplete="off">
         <div id="autocomplete-list" class="autocomplete-items"></div>
-    
-        <!-- Botón Buscar debajo del selector -->
-        <button id="btnBuscarComp" class="btn btn-primario">Buscar</button>
+        <!-- Botón Buscar -->
+        <button id="btnBuscarComp" class="btn btn-buscar">Buscar</button>
       </div>
+  
+    <!-- Resultados / Visor -->
+    <div id="results-comp">
+      <!-- Encabezado dinámico -->
+      <div id="comp-header" class="comp-header"></div>
+      <!-- Visor de imagen del componente -->
+      <div id="viewer-comp" class="viewer-comp">
+        <img src="idnillo_plantilla.png"/>
+      </div>
+      <!-- Cotas debajo de la imagen -->
+      <div id="cotas-list" class="cotas-list"></div>
 </div>
   <!-- SECCION COMPONENETES END -->
   
@@ -93,3 +100,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
