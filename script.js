@@ -274,6 +274,7 @@ function showMessage(text, kind = "info") {
   // Mantener visor y lista
   // (no limpiamos #viewer-comp ni #cotas-list)
 
+  }
 }
 // ======================================================
 //  COMPONENTES END
