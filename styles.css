@@ -233,6 +233,9 @@ a:hover {
 .comp-img {
   max-width: 100%;
   height: auto;
+  background-color: var(--color-negro);
+  border: 1px solid #ddd;
+  border-radius: 6px;
 }
 
 .comp-header {
