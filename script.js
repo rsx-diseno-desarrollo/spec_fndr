@@ -221,6 +221,16 @@ btnBuscarComp.addEventListener("click", () => {
   // 2) Imagen (si después quieres que cambie por tipo)
   const imgEl = resultsComp.querySelector("#comp-img");
   if (imgEl) {
+
+      // CABIAR IMAGEN POR TIPO
+        const imagenPorTipo = {
+          "TORNILLO": "img/tornillo_plantilla.png",
+          "TUERCA": "img/tuerca_plantilla.png",
+          "LAINA": "img/laina_plantilla.png"
+          // ...
+        };
+// Dentro del click:
+imgEl.src = imagenPorTipo[tipo] ?? "img/tornillo_plantilla.png";
     // Por ahora usa la plantilla genérica
     // Sugerencia futura: mapear por tipo -> nombre de PNG
     imgEl.src = "img/tornillo_plantilla.png";
@@ -266,17 +276,6 @@ function showMessage(text, kind = "info") {
 
   // Mantener visor y lista
   // (no limpiamos #viewer-comp ni #cotas-list)
-
-  // CABIAR IMAGEN POR TIPO
-const imagenPorTipo = {
-  "TORNILLO": "img/tornillo_plantilla.png",
-  "TUERCA": "img/tuerca_plantilla.png",
-  "LAINA": "img/laina_plantilla.png"
-  // ...
-};
-
-// Dentro del click:
-imgEl.src = imagenPorTipo[tipo] ?? "img/tornillo_plantilla.png";
 
 }
 // ======================================================
