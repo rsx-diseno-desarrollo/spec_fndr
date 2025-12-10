@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SpecFinder BETA</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="img/favicon.ico">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PWA Manifest END -->
+<!-- Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js?v=13')
+        .then(reg => console.log('Service Worker registrado'))
+        .catch(err => console.log('Error al registrar el Service Worker:', err));
+    });
+  }
+</script>
+<!-- Service Worker END -->
+</head>
+<body>
+<header>
+  <!-- Menu -->
+  <button class="boton-menu"><img src="img/menu-icon.png"/></button>
+<nav class="menu">
+  <ul>
+    <li><a href="#" data-section="seccion-producto">Producto</a></li>
+    <li><a href="#" data-section="seccion-empaque">Empaque</a></li>
+    <li><a href="#" data-section="seccion-componentes">Componentes</a></li>
+  </ul>
+</nav>
+<!-- Menu END -->
+</header>
+  
+<!-- SheetJS -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<!-- SheetJS END -->
+
+  <!-- SECCIONES -->
+  <div class="header">
+    <img src="img/spec-finder-logo.jpg"/>
+    <h2>CONSULTA DE ESPECIFICACIONES</h2><br>
+  </div>
+
+  <!-- SECCION PRODUCTO -->
+  <div id="seccion-producto" class="seccion activa">
+  <h3>Especificaciones de producto</h3><br>
+    <div class="buscador">
+      <input type="text" id="parte" placeholder="No. de parte sin guiones">
+      <select id="cliente">
+        <option value="">-- Selecciona cliente --</option>
+      </select>
+      <select id="nombre">
+        <option value="">-- Selecciona nombre --</option>
+      </select>
+    </div>
+      <div id="results-prod"></div>
+  </div>
+  <!-- SECCION PRODUCTO END -->
+  
+  <!-- SECCION EMPAQUE -->
+  <div id="seccion-empaque" class="seccion">
+    <h3>Especificaciones de Empaque</h3><br>
+    <p>Aquí podrás buscar specs de empaque :D</p>
+  </div>
+  <!-- SECCION EMPAQUE END -->
+
+  <!-- SECCION COMPONENETES -->
+  
+<!-- SECCION COMPONENTES -->
+<div id="seccion-componentes" class="seccion">
+      <h3>Especificaciones de Componentes</h3><br>
+      <!-- Buscador -->
+      <div class="buscador" style="position:relative;">
+        <input type="text" id="codigoComp" placeholder="Código sin guiones" autocomplete="off">
+        <div id="autocomplete-list" class="autocomplete-items"></div>
+    
+        <select id="tipoComp">
+          <option value="">-- Selecciona tipo --</option>
+        </select>
+    
+        <!-- Botón Buscar debajo del selector -->
+        <button id="btnBuscarComp" class="btn btn-primario">Buscar</button>
+      </div>
+</div>
+  <!-- SECCION COMPONENETES END -->
+  
+  <!-- Tu archivo JS externo -->
+    <script src="script.js"></script>
+</body>
+</html>

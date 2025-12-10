@@ -1,0 +1,155 @@
+
+/* estilos.css - Paleta Rassini minimalista y responsivo */
+:root {
+  --color-naranja: #f57c00;
+  --color-gris-claro: #F2F2F2;
+  --color-gris-oscuro: #424242;
+  --color-blanco: #ffffff;
+  --color-negro: #000000;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-blanco);
+  color: var(--color-negro);
+  margin: 0;
+  padding: 20px;
+}
+
+.header img {
+  max-width: 500px; /* Ajusta el tamaÃ±o mÃ¡ximo */
+  width: 100%;      /* Se adapta al contenedor */
+  height: auto;     /* Mantiene proporciÃ³n */
+  display: block;
+  margin: 0 auto;   /* Centra la imagen */
+  border-radius: 10px;
+  padding-top: clamp(10px, 5vh, 40px);
+/* Mínimo 10px, preferido 5vh, máximo 40px */
+}
+
+  h2 {
+  color: var(--color-naranja);
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+h3 {
+  color: var(--color-gris-oscuro);
+  margin-bottom: 5px;
+  font-size: 1.2em;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--color-gris-oscuro);
+  border-radius: 4px;
+  background-color: var(--color-blanco);
+  color: var(--color-negro);
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.spec {
+  background-color: var(--color-gris-claro);
+  font-size: 0.8em;
+  padding: 15px;
+  border-radius: 10px 40px 40px 10px;
+  margin-bottom: 15px;
+  border-left: 10px solid var(--color-naranja);
+  transition: 0.3s;
+}
+
+.spec:hover {
+  background-color: var(--color-negro);
+  color: var(--color-blanco); 
+  text-decoration: none;
+  
+}
+
+a {
+  color: var(--color-naranja);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* MENÚ */
+.menu {
+  pointer-events: none; /* Desactiva interacción */
+  position: fixed;
+  top: 0;
+  left: -250px; /* Oculto fuera de la pantalla */
+  width: 250px;
+  height: 100%;
+  background-color: var(--color-gris-oscuro);
+  color: var(--color-blanco);
+  transition: left 0.3s ease-in-out;
+  padding-top: 60px;
+  z-index: 1000;
+}
+
+.menu.abierto {
+  left: 0; /* Se desliza hacia dentro */
+  pointer-events: auto; /* Activa interacción cuando está abierto */
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  padding-top: 10px;
+  margin: 0;
+}
+
+.menu ul li {
+  border-bottom: 1px solid var(--color-gris-claro);
+  transition: 0.3s;
+}
+
+.menu ul li:hover {
+  background-color: var(--color-gris-claro);
+  transition: background-color 0.3s ease;
+}
+
+.menu ul li a {
+  display: block;       /* Ocupa todo el espacio del li */
+  width: 100%;          /* Se extiende al ancho completo */
+  padding: 15px;        /* Igual que el li */
+}
+
+.boton-menu {
+  background-color: var(--color-naranja);
+  color: var(--color-blanco);
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px 40px 40px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1100;
+  transition: transform 0.3s ease;
+}
+
+.boton-menu img {
+  height: 24px; /* Ajusta el tamaño del ícono */
+  width: auto;
+}
+
+.boton-menu:hover {
+  transform: scale(1.1);
+}
+/* SECCIONES */
+.seccion {
+  display: none;
+}
+.seccion.activa {
+  display: block;
+}
+
+/* MENÚ END */
