@@ -174,6 +174,7 @@ a:hover {
   color: var(--color-blanco);
   border-color: var(--color-naranja);
   box-shadow: 0 2px 0 rgba(0,0,0,0.12);
+  align-items: center;
 }
 
 /* Hover: ligeramente más oscuro */
@@ -229,9 +230,9 @@ a:hover {
   justify-content: center;
   align-items: center;
   margin: 12px 0;
-  background-color: var(--color-negro);
+  background-color: var(--color-gris-oscuro);
   border: 1px solid;
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
 .comp-img {
