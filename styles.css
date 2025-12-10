@@ -156,6 +156,7 @@ a:hover {
 
 /* ===== Botón base ===== */
 .btn {
+  width: 100%;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -228,14 +229,14 @@ a:hover {
   justify-content: center;
   align-items: center;
   margin: 12px 0;
+  background-color: var(--color-negro);
+  border: 1px solid;
+  border-radius: 6px;
 }
 
 .comp-img {
   max-width: 100%;
   height: auto;
-  background-color: var(--color-negro);
-  border: 1px solid #ddd;
-  border-radius: 6px;
 }
 
 .comp-header {
