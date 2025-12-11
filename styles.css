@@ -230,7 +230,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   margin: 12px 0;
-  background-color: var(--color-negro);
+  background-color: var(--color-gris-claro);
   border: 1px solid;
   border-radius: 10px;
 }
