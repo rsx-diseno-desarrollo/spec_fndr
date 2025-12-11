@@ -212,10 +212,19 @@ btnBuscarComp.addEventListener("click", () => {
     return;
   }
 
+  
   // 1) Encabezado arriba
   const header = resultsComp.querySelector("#comp-header");
   if (header) {
-    header.textContent = `${tipo} — Código: ${codigo}`;
+    const numeroDibujo = String(match["NO. DE DIBUJO/PARTE"] ?? "").trim();
+    const nombreDocumento = String(match["NOMBRE DE DOCUMENTO"] ?? "").trim();
+  
+    // Fallback si alguno viene vacío
+    const numeroDibujoShown = numeroDibujo || "--";
+    const nombreDocumentoShown = nombreDocumento || "--";
+  
+    // Formato: primero NO. DE DIBUJO/PARTE y luego NOMBRE DE DOCUMENTO
+    header.textContent = `${numeroDibujoShown} — ${nombreDocumentoShown}`;
   }
 
   // 2) Imagen (si después quieres que cambie por tipo)
@@ -272,7 +281,6 @@ function showMessage(text, kind = "info") {
   }
 
   // Mantener visor y lista
-  // (no limpiamos #viewer-comp ni #cotas-list)
 
   }
 }
