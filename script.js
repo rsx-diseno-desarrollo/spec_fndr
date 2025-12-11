@@ -224,7 +224,7 @@ btnBuscarComp.addEventListener("click", () => {
     const nombreDocumentoShown = nombreDocumento || "--";
   
     // Formato: primero NO. DE DIBUJO/PARTE y luego NOMBRE DE DOCUMENTO
-    header.textContent = `${numeroDibujoShown} — ${nombreDocumentoShown}`;
+    header.textContent = `${numeroDibujoShown} / ${nombreDocumentoShown}`;
   }
 
   // 2) Imagen (si después quieres que cambie por tipo)
