@@ -253,7 +253,7 @@ a:hover {
 }
 
 .cota-item {
-  background: #f5f5f7;
+  background: var(--color-gris-claro);
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 8px;
@@ -261,13 +261,13 @@ a:hover {
 }
 
 .cota-label {
-  color: #333;
+  color: var(--color-naranja);
   font-weight: 600;
   margin-right: 6px;
 }
 
 .cota-value {
-  color: #111;
+  color: var(--color-gris-oscuro);
 }
 
 /* ===== VIZUALIZADOR DE LISTA DE COTAS DINAMICAS END ===== */
