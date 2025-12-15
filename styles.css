@@ -17,9 +17,9 @@ body {
 }
 
 .header img {
-  max-width: 500px; /* Ajusta el tamaÃ±o mÃ¡ximo */
+  max-width: 500px; 
   width: 100%;      /* Se adapta al contenedor */
-  height: auto;     /* Mantiene proporciÃ³n */
+  height: auto;     /* Mantiene proporcion */
   display: block;
   margin: 0 auto;   /* Centra la imagen */
   border-radius: 10px;
@@ -111,6 +111,7 @@ a:hover {
 }
 
 .menu ul li:hover {
+  cursor: pointer;
   background-color: var(--color-gris-claro);
   transition: background-color 0.3s ease;
 }
@@ -154,17 +155,17 @@ a:hover {
 
 /* MENÚ END */
 
-/* ===== Botón base ===== */
+/* ===== Botón BUSCAR ===== */
 .btn {
   width: 100%;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 10px 16px;
   border: 2px solid transparent;
   border-radius: 8px;
   font: 600 14px/1 system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", sans-serif;
-  cursor: pointer;
   transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
@@ -174,7 +175,6 @@ a:hover {
   color: var(--color-blanco);
   border-color: var(--color-naranja);
   box-shadow: 0 2px 0 rgba(0,0,0,0.12);
-  align-items: center;
 }
 
 /* Hover: ligeramente más oscuro */
@@ -207,7 +207,7 @@ a:hover {
   color: var(--color-blanco);
   box-shadow: none;
 }
-/* ===== Botón base END ===== */
+/* ===== Botón BUSCAR END ===== */
 
 /* Autocomplete  */
 .autocomplete-items {
