@@ -252,6 +252,10 @@ btnBuscarComp.addEventListener("click", () => {
       C: match["C"],
       D: match["D"],
       E: match["RADIO"] // renombramos a 'R' por claridad visual
+    
+      "ROSCA": `1/2" - 20 UNF_2A`,
+      "GRADO DE DUREZA": `8° - 33-39 Rc.`
+
     };
 
     // Render simple de pares label: value
