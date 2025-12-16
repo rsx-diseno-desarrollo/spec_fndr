@@ -17,14 +17,14 @@ body {
 }
 
 .header img {
-  max-width: 500px; 
+  max-width: 150px; 
   width: 100%;      /* Se adapta al contenedor */
   height: auto;     /* Mantiene proporcion */
   display: block;
   margin: 0 auto;   /* Centra la imagen */
   border-radius: 10px;
-  padding-top: clamp(10px, 5vh, 40px);
-/* Mínimo 10px, preferido 5vh, máximo 40px */
+  padding-top: clamp(10px, 1vh, 30px);
+/* Mínimo , preferido , máximo */
 }
 
   h2 {
