@@ -117,7 +117,7 @@ window.addEventListener('load', () => {
     document.getElementById(ultimaSeccion).classList.add('activa');
   }
 });
-// ======================================================
+
 //  COMPONENTES
 // ======================================================
 
@@ -138,8 +138,9 @@ function iniciarComponentes() {
   const autocompleteList = document.getElementById("autocomplete-list");
   const btnBuscarComp = document.getElementById("btnBuscarComp");
   const resultsComp = document.getElementById("results-comp");
+  const imgEl = resultsComp.querySelector("#comp-img");
 
-  if (!tipoComp || !codigoInput || !autocompleteList || !btnBuscarComp || !resultsComp) return;
+  if (!tipoComp || !codigoInput || !autocompleteList || !btnBuscarComp || !resultsComp || !imgEl) return;
 
   // ------------------------------------------------------
   // Llenar selector de tipos
@@ -151,6 +152,18 @@ function iniciarComponentes() {
     opt.textContent = t;
     tipoComp.appendChild(opt);
   });
+
+  // --- 0) Estado inicial: ocultar y limpiar imagen ---
+  ocultarImagen(imgEl);
+
+  // --- Mapa centralizado (fácil de extender) ---
+  const imagenPorTipo = {
+    "TORNILLO": "img/tornillo_plantilla.png",
+    "TUERCA":   "img/tuerca_plantilla.png",
+    "LAINA":    "img/laina_plantilla.png",
+    // "ARANDELA": "img/arandela_plantilla.png",
+    // "PASADOR":  "img/pasador_plantilla.png",
+  };
 
   // ------------------------------------------------------
   // Autocompletar por código (filtra por tipo seleccionado)
@@ -192,102 +205,109 @@ function iniciarComponentes() {
   // ------------------------------------------------------
   // Acción del botón "Buscar"
   // ------------------------------------------------------
-  
-btnBuscarComp.addEventListener("click", () => {
-  const tipo = String(tipoComp.value ?? "");
-  const codigo = String(codigoInput.value ?? "").trim();
+  btnBuscarComp.addEventListener("click", () => {
+    const tipo = String(tipoComp.value ?? "");
+    const codigo = String(codigoInput.value ?? "").trim();
 
-  if (!tipo || !codigo) {
-    showMessage("Selecciona tipo y escribe un código.", "warn");
-    return;
+    if (!tipo || !codigo) {
+      showMessage("Selecciona tipo y escribe un código.", "warn");
+      ocultarImagen(imgEl); // <-- typo corregido
+      return;
+    }
+
+    const match = compData.find(row =>
+      String(row["TIPO DE COMPONENTE"] ?? "") === tipo &&
+      String(row["CODIGO COMPONENTES"] ?? "") === codigo
+    );
+
+    if (!match) {
+      showMessage("No se encontró el componente.", "empty");
+      ocultarImagen(imgEl);
+      return;
+    }
+
+    // 1) Encabezado arriba
+    const header = resultsComp.querySelector("#comp-header");
+    if (header) {
+      const numeroDibujo = String(match["NO. DE DIBUJO/PARTE"] ?? "").trim();
+      const nombreDocumento = String(match["NOMBRE DE DOCUMENTO"] ?? "").trim();
+
+      const numeroDibujoShown = numeroDibujo || "--";
+      const nombreDocumentoShown = nombreDocumento || "--";
+
+      header.textContent = `${numeroDibujoShown} / ${nombreDocumentoShown}`;
+    }
+
+    // 2) Imagen (cambiar y mostrar solo cuando cargue)
+    const src = imagenPorTipo[tipo]; // sin default para no mostrar si no existe
+    if (!src) {
+      showMessage(`No hay imagen registrada para tipo: ${tipo}`, "warn");
+      ocultarImagen(imgEl);
+    } else {
+      mostrarImagenCuandoCargue(imgEl, src, `Imagen del componente ${tipo}`);
+    }
+
+    // 3) Cotas como lista debajo
+    const cotasList = resultsComp.querySelector("#cotas-list");
+    if (cotasList) {
+      const cotas = {
+        A: match["A"],
+        B: match["B"],
+        C: match["C"],
+        D: match["D"],
+        E: match["RADIO"],
+        "ROSCA": `1/2" - 20 UNF_2A`,
+        "GRADO DE DUREZA": `8° - 33-39 Rc.`
+      };
+
+      cotasList.innerHTML = ""; // limpia anterior
+      Object.entries(cotas).forEach(([label, value]) => {
+        const item = document.createElement("div");
+        item.className = "cota-item";
+        item.innerHTML = `
+          <span class="cota-label">${label}:</span>
+          <span class="cota-value">${value ?? "--"}</span>
+        `;
+        cotasList.appendChild(item);
+      });
+    }
+  });
+
+  // ------------------------------------------------------
+  // Utilidades
+  // ------------------------------------------------------
+  function showMessage(text, kind = "info") {
+    const msgClass = kind === "warn" ? "msg-warn"
+                  : kind === "empty" ? "msg-empty"
+                  : kind === "error" ? "msg-error"
+                  : "msg-info";
+
+    // Mensaje arriba del visor
+    const header = resultsComp.querySelector("#comp-header");
+    if (header) {
+      header.innerHTML = `<span class="${msgClass}">${text}</span>`;
+    }
+    // Mantener visor y lista tal como están
   }
 
-  const match = compData.find(row =>
-    String(row["TIPO DE COMPONENTE"] ?? "") === tipo &&
-    String(row["CODIGO COMPONENTES"] ?? "") === codigo
-  );
-
-  if (!match) {
-    showMessage("No se encontró el componente.", "empty");
-    return;
+  function ocultarImagen(img) {
+    img.classList.remove("is-visible");
+    img.removeAttribute("src");
+    img.alt = "Imagen del componente";
   }
 
-  
-  // 1) Encabezado arriba
-  const header = resultsComp.querySelector("#comp-header");
-  if (header) {
-    const numeroDibujo = String(match["NO. DE DIBUJO/PARTE"] ?? "").trim();
-    const nombreDocumento = String(match["NOMBRE DE DOCUMENTO"] ?? "").trim();
-  
-    // Fallback si alguno viene vacío
-    const numeroDibujoShown = numeroDibujo || "--";
-    const nombreDocumentoShown = nombreDocumento || "--";
-  
-    // Formato: primero NO. DE DIBUJO/PARTE y luego NOMBRE DE DOCUMENTO
-    header.textContent = `${numeroDibujoShown} / ${nombreDocumentoShown}`;
-  }
-
-  // 2) Imagen (si después quieres que cambie por tipo)
-  const imgEl = resultsComp.querySelector("#comp-img");
-  if (imgEl) {
-
-      // CABIAR IMAGEN POR TIPO
-        const imagenPorTipo = {
-          "TORNILLO": "img/tornillo_plantilla.png",
-          "TUERCA": "img/tuerca_plantilla.png",
-          "LAINA": "img/laina_plantilla.png"
-          // ...
-        };
-// Dentro del click:
-    imgEl.src = imagenPorTipo[tipo] ?? "img/tornillo_plantilla.png";
-    imgEl.alt = `Imagen del componente ${tipo}`;
-  }
-
-  // 3) Cotas como lista debajo
-  const cotasList = resultsComp.querySelector("#cotas-list");
-  if (cotasList) {
-    const cotas = {
-      A: match["A"],
-      B: match["B"],
-      C: match["C"],
-      D: match["D"],
-      E: match["RADIO"],
-    
-      "ROSCA": `1/2" - 20 UNF_2A`,
-      "GRADO DE DUREZA": `8° - 33-39 Rc.`
-
+  function mostrarImagenCuandoCargue(img, src, alt) {
+    img.classList.remove("is-visible"); // ocultar mientras carga
+    img.alt = alt || "Imagen del componente";
+    img.onload = () => img.classList.add("is-visible");
+    img.onerror = () => {
+      showMessage("No se pudo cargar la imagen del componente.", "error");
+      img.classList.remove("is-visible");
+      img.removeAttribute("src");
     };
-
-    // Render simple de pares label: value
-    cotasList.innerHTML = ""; // limpia anterior
-    Object.entries(cotas).forEach(([label, value]) => {
-      const item = document.createElement("div");
-      item.className = "cota-item";
-      item.innerHTML = `
-        <span class="cota-label">${label}:</span>
-        <span class="cota-value">${value ?? "--"}</span>
-      `;
-      cotasList.appendChild(item);
-    });
-  }
-});
-
-function showMessage(text, kind = "info") {
-  const msgClass = kind === "warn" ? "msg-warn"
-                 : kind === "empty" ? "msg-empty"
-                 : kind === "error" ? "msg-error"
-                 : "msg-info";
-
-  // Mensaje arriba del visor
-  const header = resultsComp.querySelector("#comp-header");
-  if (header) {
-    header.innerHTML = `<span class="${msgClass}">${text}</span>`;
-  }
-
-  // Mantener visor y lista
-
+    img.src = src;
   }
 }
 // ======================================================
 //  COMPONENTES END
-// ======================================================
+
