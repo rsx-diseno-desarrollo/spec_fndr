@@ -156,7 +156,7 @@ a:hover {
 /* MENÚ END */
 
 /* ===== Botón BUSCAR ===== */
-.btn {
+.btnComp {
   width: 100%;
   display: inline-flex;
   align-items: center;
@@ -170,7 +170,7 @@ a:hover {
 }
 
 /* ===== Tema Rassini para botón de buscar ===== */
-.btn-buscar {
+.btnComp-buscar {
   background: var(--color-naranja);
   color: var(--color-blanco);
   border-color: var(--color-naranja);
@@ -178,7 +178,7 @@ a:hover {
 }
 
 /* Hover: ligeramente más oscuro */
-.btn-buscar:hover {
+.btnComp-buscar:hover {
   background: #e56f00;                 /* tono más oscuro del naranja */
   border-color: #e56f00;
   transform: translateY(-1px);
@@ -186,20 +186,20 @@ a:hover {
 }
 
 /* Active: “clic” */
-.btn-buscar:active {
+.btnComp-buscar:active {
   transform: translateY(0);
   box-shadow: 0 1px 4px rgba(0,0,0,0.16) inset;
 }
 
 /* Focus visible: accesible con teclado */
-.btn-buscar:focus-visible {
+.btnComp-buscar:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(245,124,0,0.35), 0 2px 0 rgba(0,0,0,0.12);
 }
 
 /* Disabled */
-.btn-buscar:disabled,
-.btn-buscar[aria-disabled="true"] {
+.btnComp-buscar:disabled,
+.btnComp-buscar[aria-disabled="true"] {
   cursor: not-allowed;
   opacity: 0.55;
   background: var(--color-gris-oscuro);
