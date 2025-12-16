@@ -238,6 +238,11 @@ a:hover {
 .comp-img {
   max-width: 100%;
   height: auto;
+  display: none;
+}
+
+.comp-img.is-visible {
+  display: block;
 }
 
 .comp-header {
