@@ -291,7 +291,7 @@ a:hover {
   width: 100%;
   border-collapse: collapse;
   background: var(--color-blanco);
-  border: 1px solid var(--color-gris-oscuro);
+  border-radius: 6px solid var(--color-gris-oscuro);
 }
 
 .emp-table tbody tr:nth-child(even) {
@@ -314,18 +314,24 @@ a:hover {
 /* Columna de valor */
 .emp-table .value-cell {
   color: var(--color-negro);
+  text-align: center;
   font-family: monospace;
   word-break: break-word;
 }
 
-/* Encabezado visual (si quieres destacar el título de la tabla) */
+.emp-header {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Encabezado visual */
 .emp-table .table-title {
   text-align: center;
   font-weight: 800;
   color: var(--color-gris-oscuro);
 }
 
-/* Resalte de última fila (PESO NETO) */
+/* Resalte de  filas */
 .emp-table .is-emphasis {
   font-weight: 800;
   color: var(--color-naranja);
