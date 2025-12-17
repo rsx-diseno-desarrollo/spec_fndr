@@ -399,9 +399,9 @@ function iniciarEmpaque() {
     // Encabezado: NO. DE PARTE / CLIENTE
     const parteShown   = (String(match["NO. DE PARTE"] ?? "").trim() || "--");
     const clienteShown = (String(match["CLIENTE"] ?? "").trim() || "--");
-    setEmpHeader(results, `${parteShown} / ${clienteShown}`);
+    setEmpHeader(results, `${clienteShown} / ${parteShown}`);
 
-    // Render de tabla (omitimos LIGA y RMS)
+    // Render de tabla
     const detalles = [
       ["TARIMA",                   match["COD TARIMA"]],
       ["LARGEROS",                 match["LARGUEROS"]],
@@ -430,9 +430,9 @@ function iniciarEmpaque() {
     tbody.innerHTML = "";
   
         const emphasized = new Set([
-        "TARIMA",                 // TARIMA (tu columna es "COD TARIMA")
-        "Muelles x Tarima",   // MxT
-        "PESO NETO EMPAQUE (Kg)"      // PESO NETO
+        "TARIMA",                 // TARIMA
+        "Muelles x Tarima",       // MxT
+        "PESO NETO EMPAQUE (Kg)"  // PESO NETO
       ]);
     rows.forEach(([label, value], idx) => {
       const tr = document.createElement("tr");
