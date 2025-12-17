@@ -63,16 +63,17 @@
   <!-- SECCION PRODUCTO END -->
   
   
+
 <!-- SECCION EMPAQUE -->
 <div id="seccion-empaque" class="seccion">
   <h3>Especificaciones de Empaque</h3>
 
+  <!-- Buscador -->
   <div class="buscador">
-    <!-- Selector de cliente -->
     <select id="emp-cliente">
       <option value="">-- Selecciona cliente --</option>
     </select>
-    <!-- Campo número de parte con autocompletar -->
+
     <div class="field with-autocomplete">
       <input type="text" id="emp-parte" placeholder="No. de parte" autocomplete="off">
       <div id="emp-autocomplete" class="autocomplete-items"></div>
@@ -82,11 +83,15 @@
 
   <!-- Resultados -->
   <div id="emp-results">
-    <!-- Encabezado dinámico -->
+    <!-- Encabezado: NO. DE PARTE / CLIENTE -->
     <div id="emp-header" class="comp-header"></div>
 
-    <!-- Tarjeta de detalles -->
-    <div id="emp-card" class="emp-card"></div>
+    <!-- Tabla de detalles -->
+    <div class="emp-table-wrap">
+      <table id="emp-table" class="emp-table" aria-describedby="emp-header">
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 </div>
 <!-- SECCION EMPAQUE END -->
