@@ -328,8 +328,10 @@ a:hover {
 /* Encabezado visual */
 .emp-table .table-title {
   text-align: center;
-  font-weight: 600;
+   font-weight: 800;
+  font-size: 1.1rem;
   color: var(--color-gris-oscuro);
+  background: var(--color-gris-claro);
 }
 
 /* Resalte de  filas */
