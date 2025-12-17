@@ -405,7 +405,7 @@ function iniciarEmpaque() {
     const detalles = [
       ["TARIMA",                   match["COD TARIMA"]],
       ["LARGEROS",                 match["LARGUEROS"]],
-      ["POLIN SUP/IN",             match["POLIN SUP/INF"]],
+      ["POLIN SUP/INF",            match["POLIN SUP/INF"]],
       ["FLEJE",                    match["FLEJE"]],
       ["Muelles x Cama",           match["MxC"]],
       ["CAMAS",                    match["CAMAS"]],
@@ -430,7 +430,6 @@ function iniciarEmpaque() {
     tbody.innerHTML = "";
   
         const emphasized = new Set([
-        "TARIMA",                 // TARIMA
         "Muelles x Tarima",       // MxT
         "PESO NETO EMPAQUE (Kg)"  // PESO NETO
       ]);
