@@ -396,10 +396,10 @@ function iniciarEmpaque() {
       return;
     }
 
-    // Encabezado: NO. DE PARTE / CLIENTE
+    // Encabezado: CLIENTE / NO. DE PARTE
     const parteShown   = (String(match["NO. DE PARTE"] ?? "").trim() || "--");
     const clienteShown = (String(match["CLIENTE"] ?? "").trim() || "--");
-    setEmpHeader(results, `${clienteShown} / ${parteShown}`);
+    const headerText = `${clienteShown} / ${parteShown}`;
 
     // Render de tabla
     const detalles = [
@@ -413,7 +413,7 @@ function iniciarEmpaque() {
       ["PESO NETO EMPAQUE (Kg)",   match["PESO NETO EMPAQUE (Kg)"]],
     ];
 
-    renderEmpTable(tableBody, detalles);
+    renderEmpTable(tableBody, detalles, headerText);
   });
 
   // ---- utilidades ----
