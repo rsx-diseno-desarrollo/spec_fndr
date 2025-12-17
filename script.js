@@ -426,10 +426,20 @@ function iniciarEmpaque() {
     tbody.innerHTML = "";
   }
 
-  function renderEmpTable(tbody, rows) {
+  function renderEmpTable(tbody, rows, headerText) {
     tbody.innerHTML = "";
   
-        const emphasized = new Set([
+        
+      // Fila de encabezado dentro de la tabla
+        const headerRow = document.createElement("tr");
+        const headerCell = document.createElement("th");
+        headerCell.colSpan = 2; // ocupa ambas columnas
+        headerCell.className = "table-title";
+        headerCell.textContent = headerText;
+        headerRow.appendChild(headerCell);
+        tbody.appendChild(headerRow);
+
+      const emphasized = new Set([
         "Muelles x Tarima",       // MxT
         "PESO NETO EMPAQUE (Kg)"  // PESO NETO
       ]);
