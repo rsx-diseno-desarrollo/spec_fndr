@@ -308,7 +308,7 @@ a:hover {
 
 /* Columna de etiqueta (concepto) */
 .emp-table .label-cell {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-gris-oscuro);
 }
 
@@ -318,6 +318,7 @@ a:hover {
   text-align: center;
   font-family: monospace;
   word-break: break-word;
+  font-weight: 700;
 }
 
 .emp-header {
