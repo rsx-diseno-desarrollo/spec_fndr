@@ -281,35 +281,57 @@ a:hover {
 /* ===== COMPONENETES STYLES END===== */
 
 /* ===== EMPAQUE STYLES ===== */
-/* ===== Empaque: tarjeta de detalles ===== */
-.emp-card {
+/* ===== Empaque: tabla de detalles ===== */
+.emp-table-wrap {
   margin-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 10px;
+  overflow-x: auto; /* seguridad en móviles */
 }
 
-.emp-item {
+.emp-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-blanco);
+  border: 1px solid var(--color-gris-oscuro);
+}
+
+.emp-table tbody tr:nth-child(even) {
   background: var(--color-gris-claro);
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
 }
 
-.emp-label {
-  color: var(--color-naranja);
+.emp-table th,
+.emp-table td {
+  border: 1px solid var(--color-gris-oscuro);
+  padding: 10px 12px;
+  vertical-align: top;
+}
+
+/* Columna de etiqueta (concepto) */
+.emp-table .label-cell {
   font-weight: 700;
-  display: block;
-  margin-bottom: 4px;
+  color: var(--color-gris-oscuro);
 }
 
-.emp-value {
-  color: var(--color-gris-oscuro);
+/* Columna de valor */
+.emp-table .value-cell {
+  color: var(--color-negro);
   font-family: monospace;
   word-break: break-word;
 }
 
-/* Autocomplete anclado al input */
+/* Encabezado visual (si quieres destacar el título de la tabla) */
+.emp-table .table-title {
+  text-align: center;
+  font-weight: 800;
+  color: var(--color-gris-oscuro);
+}
+
+/* Resalte de última fila (PESO NETO) */
+.emp-table .is-emphasis {
+  font-weight: 800;
+  color: var(--color-naranja);
+}
+
+/* Autocomplete anclado al input (reutilizado) */
 .field.with-autocomplete { position: relative; }
 
 .field.with-autocomplete .autocomplete-items {
