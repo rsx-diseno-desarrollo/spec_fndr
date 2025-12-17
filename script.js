@@ -403,13 +403,13 @@ function iniciarEmpaque() {
 
     // Render de tabla (omitimos LIGA y RMS)
     const detalles = [
-      ["COD TARIMA",               match["COD TARIMA"]],
+      ["TARIMA",                   match["COD TARIMA"]],
       ["LARGEROS",                 match["LARGUEROS"]],
       ["POLIN SUP/IN",             match["POLIN SUP/INF"]],
       ["FLEJE",                    match["FLEJE"]],
-      ["MxC",                      match["MxC"]],
+      ["Muelles x Cama",           match["MxC"]],
       ["CAMAS",                    match["CAMAS"]],
-      ["MxT",                      match["MxT"]],
+      ["Muelles x Tarima",         match["MxT"]],
       ["PESO NETO EMPAQUE (Kg)",   match["PESO NETO EMPAQUE (Kg)"]],
     ];
 
@@ -431,7 +431,7 @@ function iniciarEmpaque() {
   
         const emphasized = new Set([
         "TARIMA",                 // TARIMA (tu columna es "COD TARIMA")
-        "MxT",   // MxT
+        "Muelles x Tarima",   // MxT
         "PESO NETO EMPAQUE (Kg)"      // PESO NETO
       ]);
     rows.forEach(([label, value], idx) => {
