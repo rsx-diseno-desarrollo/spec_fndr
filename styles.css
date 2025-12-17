@@ -326,8 +326,8 @@ a:hover {
   text-align: center;
    font-weight: 800;
   font-size: 1.1rem;
-  color: var(--color-gris-oscuro);
-  background: var(--color-gris-claro);
+  color: var(--color-gris-claro);
+  background: var(--color-naranja);
 }
 
 /* Resalte de  filas */
