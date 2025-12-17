@@ -313,8 +313,6 @@ function iniciarComponentes() {
 }
 // ======================================================
 //  COMPONENTES END
-
-
 // ======================================================
 //  EMPAQUE
 // ======================================================
@@ -323,14 +321,16 @@ function iniciarEmpaque() {
 
   const selCliente = document.getElementById("emp-cliente");
   const inputParte = document.getElementById("emp-parte");
-  const autoList = document.getElementById("emp-autocomplete");
-  const btnBuscar = document.getElementById("emp-btn-buscar");
-  const results = document.getElementById("emp-results");
+  const autoList   = document.getElementById("emp-autocomplete");
+  const btnBuscar  = document.getElementById("emp-btn-buscar");
+  const results    = document.getElementById("emp-results");
+  const tableBody  = document.querySelector("#emp-table tbody");
 
-  if (!selCliente || !inputParte || !autoList || !btnBuscar || !results) return;
+  if (!selCliente || !inputParte || !autoList || !btnBuscar || !results || !tableBody) return;
 
   // --- 1) Llenar selector de clientes ---
-  const clientes = [...new Set(empData.map(x => String(x["CLIENTE"] ?? "").trim()))].filter(Boolean).sort();
+  const clientes = [...new Set(empData.map(x => String(x["CLIENTE"] ?? "").trim()))]
+                    .filter(Boolean).sort();
   clientes.forEach(c => {
     const opt = document.createElement("option");
     opt.value = c;
@@ -367,9 +367,9 @@ function iniciarEmpaque() {
   });
 
   // Cerrar autocompletar si el clic fue fuera del wrapper
-  const wrapperCodigo = inputParte.closest(".field.with-autocomplete");
+  const wrapperParte = inputParte.closest(".field.with-autocomplete");
   document.addEventListener("click", (e) => {
-    if (e.target !== inputParte && !wrapperCodigo.contains(e.target)) {
+    if (e.target !== inputParte && !wrapperParte.contains(e.target)) {
       autoList.innerHTML = "";
     }
   });
@@ -377,15 +377,14 @@ function iniciarEmpaque() {
   // --- 3) Acción del botón Buscar ---
   btnBuscar.addEventListener("click", () => {
     const cliente = String(selCliente.value ?? "").trim();
-    const parte = String(inputParte.value ?? "").trim();
+    const parte   = String(inputParte.value ?? "").trim();
 
     if (!cliente || !parte) {
       setEmpHeader(results, `<span class="msg-warn">Selecciona CLIENTE y escribe NO. DE PARTE.</span>`);
-      renderEmpCard(results, null);
+      clearEmpTable(tableBody);
       return;
     }
 
-    // Encuentra la fila exacta (cliente + parte)
     const match = empData.find(row =>
       String(row["CLIENTE"] ?? "") === cliente &&
       String(row["NO. DE PARTE"] ?? "") === parte
@@ -393,55 +392,69 @@ function iniciarEmpaque() {
 
     if (!match) {
       setEmpHeader(results, `<span class="msg-empty">No se encontró el empaque para ese cliente y parte.</span>`);
-      renderEmpCard(results, null);
+      clearEmpTable(tableBody);
       return;
     }
 
     // Encabezado: NO. DE PARTE / CLIENTE
-    const parteShown = (String(match["NO. DE PARTE"] ?? "").trim() || "--");
+    const parteShown   = (String(match["NO. DE PARTE"] ?? "").trim() || "--");
     const clienteShown = (String(match["CLIENTE"] ?? "").trim() || "--");
     setEmpHeader(results, `${parteShown} / ${clienteShown}`);
 
-    // Render de detalles (omitimos LIGA y RMS)
-    const detalles = {
-      "TARIMA": match["COD TARIMA"],
-      "LARGEROS": match["LARGEROS"],
-      "POLIN SUP/IN": match["POLIN SUP/IN"],
-      "FLEJE": match["FLEJE"],
-      "MxC": match["MxC"],                 // muelles por cama
-      "CAMAS": match["CAMAS"],
-      "MxT": match["MxT"],                 // muelles por tarima
-      "PESO NETO EMPAQUE (Kg)": match["PESO NETO EMPAQUE (Kg)"]
-    };
-    renderEmpCard(results, detalles);
+    // Render de tabla (omitimos LIGA y RMS)
+    const detalles = [
+      ["COD TARIMA",               match["COD TARIMA"]],
+      ["LARGEROS",                 match["LARGUEROS"]],
+      ["POLIN SUP/IN",             match["POLIN SUP/INF"]],
+      ["FLEJE",                    match["FLEJE"]],
+      ["MxC",                      match["MxC"]],
+      ["CAMAS",                    match["CAMAS"]],
+      ["MxT",                      match["MxT"]],
+      ["PESO NETO EMPAQUE (Kg)",   match["PESO NETO EMPAQUE (Kg)"]],
+    ];
+
+    renderEmpTable(tableBody, detalles);
   });
 
-  // ---- utilidades sección empaque ----
+  // ---- utilidades ----
   function setEmpHeader(resultsRoot, html) {
     const header = resultsRoot.querySelector("#emp-header");
     if (header) header.innerHTML = html || "";
   }
 
-  function renderEmpCard(resultsRoot, dataObj) {
-    const card = resultsRoot.querySelector("#emp-card");
-    if (!card) return;
-    card.innerHTML = "";
+  function clearEmpTable(tbody) {
+    tbody.innerHTML = "";
+  }
 
-    if (!dataObj) return; // nada que mostrar
+  function renderEmpTable(tbody, rows) {
+    tbody.innerHTML = "";
+  
+        const emphasized = new Set([
+        "TARIMA",                 // TARIMA (tu columna es "COD TARIMA")
+        "MxT",   // MxT
+        "PESO NETO EMPAQUE (Kg)"      // PESO NETO
+      ]);
+    rows.forEach(([label, value], idx) => {
+      const tr = document.createElement("tr");
 
-    Object.entries(dataObj).forEach(([label, value]) => {
-      const item = document.createElement("div");
-      item.className = "emp-item";
-      item.innerHTML = `
-        <span class="emp-label">${label}</span>
-        <span class="emp-value">${(value ?? "--")}</span>
-      `;
-      card.appendChild(item);
+      
+    const th = document.createElement("th");
+    th.scope = "row";
+    th.className = "label-cell" + (emphasized.has(label) ? " is-emphasis" : "");
+    th.textContent = label;
+
+    const td = document.createElement("td");
+    td.className = "value-cell" + (emphasized.has(label) ? " is-emphasis" : "");
+    td.textContent = (value ?? "--");
+
+      tr.appendChild(th);
+      tr.appendChild(td);
+      tbody.appendChild(tr);
     });
   }
 }
 
-// Llama iniciarEmpaque cuando tus datos estén listos, similar a componentes
+// Llama iniciarEmpaque cuando los datos estén listos (igual que componentes)
 window.addEventListener("load", () => {
   const waitEmp = setInterval(() => {
     if (!window.data) return;
