@@ -155,8 +155,9 @@ a:hover {
 
 /* MENÚ END */
 
-/* ===== Botón BUSCAR ===== */
-.btnComp {
+/* ===== COMPONENETES STYLES ===== */
+/* Boton buscar */
+.btn {
   width: 100%;
   display: inline-flex;
   align-items: center;
@@ -170,7 +171,7 @@ a:hover {
 }
 
 /* ===== Tema Rassini para botón de buscar ===== */
-.btnComp-buscar {
+.btn-buscar {
   background: var(--color-naranja);
   color: var(--color-blanco);
   border-color: var(--color-naranja);
@@ -178,7 +179,7 @@ a:hover {
 }
 
 /* Hover: ligeramente más oscuro */
-.btnComp-buscar:hover {
+.btn-buscar:hover {
   background: #e56f00;                 /* tono más oscuro del naranja */
   border-color: #e56f00;
   transform: translateY(-1px);
@@ -186,20 +187,20 @@ a:hover {
 }
 
 /* Active: “clic” */
-.btnComp-buscar:active {
+.btn-buscar:active {
   transform: translateY(0);
   box-shadow: 0 1px 4px rgba(0,0,0,0.16) inset;
 }
 
 /* Focus visible: accesible con teclado */
-.btnComp-buscar:focus-visible {
+.btn-buscar:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(245,124,0,0.35), 0 2px 0 rgba(0,0,0,0.12);
 }
 
 /* Disabled */
-.btnComp-buscar:disabled,
-.btnComp-buscar[aria-disabled="true"] {
+.btn-buscar:disabled,
+.btn-buscar[aria-disabled="true"] {
   cursor: not-allowed;
   opacity: 0.55;
   background: var(--color-gris-oscuro);
@@ -277,3 +278,58 @@ a:hover {
 }
 
 /* ===== VIZUALIZADOR DE LISTA DE COTAS DINAMICAS END ===== */
+/* ===== COMPONENETES STYLES END===== */
+
+/* ===== EMPAQUE STYLES ===== */
+/* ===== Empaque: tarjeta de detalles ===== */
+.emp-card {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.emp-item {
+  background: var(--color-gris-claro);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.emp-label {
+  color: var(--color-naranja);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.emp-value {
+  color: var(--color-gris-oscuro);
+  font-family: monospace;
+  word-break: break-word;
+}
+
+/* Autocomplete anclado al input */
+.field.with-autocomplete { position: relative; }
+
+.field.with-autocomplete .autocomplete-items {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  z-index: 10;
+  background: var(--color-blanco);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.autocomplete-item {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.autocomplete-item:hover {
+  background: var(--color-gris-claro);
+}
+/* ===== EMPAQUE STYLES END===== */
