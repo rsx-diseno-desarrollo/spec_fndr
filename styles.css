@@ -250,6 +250,7 @@ a:hover {
 .comp-header {
   font-weight: 600;
   margin-bottom: 6px;
+  display: relative;
 }
 
 .cotas-list {
@@ -327,7 +328,7 @@ a:hover {
 /* Encabezado visual */
 .emp-table .table-title {
   text-align: center;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--color-gris-oscuro);
 }
 
