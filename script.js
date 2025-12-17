@@ -26,7 +26,8 @@ async function cargarExcel() {
     window.data = allData;
     console.log("Datos cargados:", allData);
 
-    // --- PRODUCTOS ---
+    //  PRODUCTO
+    // ======================================================
     const specs = allData.prod;
     const clienteSelect = document.getElementById("cliente");
     const nombreSelect = document.getElementById("nombre");
@@ -83,7 +84,9 @@ async function cargarExcel() {
     document.getElementById("parte").addEventListener("input", buscar);
     clienteSelect.addEventListener("change", buscar);
     nombreSelect.addEventListener("change", buscar);
-    // --- PRODUCTOS END ---
+  
+    //  PRODUCTO END
+    // ======================================================
 
   } catch (error) {
     console.error("Error al cargar el Excel:", error);
@@ -311,3 +314,141 @@ function iniciarComponentes() {
 // ======================================================
 //  COMPONENTES END
 
+
+// ======================================================
+//  EMPAQUE
+// ======================================================
+function iniciarEmpaque() {
+  const empData = (window.data && window.data.emp) ? window.data.emp : [];
+
+  const selCliente = document.getElementById("emp-cliente");
+  const inputParte = document.getElementById("emp-parte");
+  const autoList = document.getElementById("emp-autocomplete");
+  const btnBuscar = document.getElementById("emp-btn-buscar");
+  const results = document.getElementById("emp-results");
+
+  if (!selCliente || !inputParte || !autoList || !btnBuscar || !results) return;
+
+  // --- 1) Llenar selector de clientes ---
+  const clientes = [...new Set(empData.map(x => String(x["CLIENTE"] ?? "").trim()))].filter(Boolean).sort();
+  clientes.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    selCliente.appendChild(opt);
+  });
+
+  // --- 2) Autocompletar por No. de parte (filtra por cliente seleccionado) ---
+  inputParte.addEventListener("input", () => {
+    const texto = inputParte.value.toLowerCase().trim();
+    autoList.innerHTML = "";
+    if (texto.length < 1) return;
+
+    const clienteSel = String(selCliente.value ?? "");
+    let fuente = empData;
+    if (clienteSel) {
+      fuente = fuente.filter(row => String(row["CLIENTE"] ?? "") === clienteSel);
+    }
+
+    const filtrados = fuente.filter(row =>
+      String(row["NO. DE PARTE"] ?? "").toLowerCase().includes(texto)
+    );
+
+    filtrados.slice(0, 12).forEach(row => {
+      const div = document.createElement("div");
+      div.classList.add("autocomplete-item");
+      div.textContent = row["NO. DE PARTE"];
+      div.addEventListener("click", () => {
+        inputParte.value = row["NO. DE PARTE"];
+        autoList.innerHTML = "";
+      });
+      autoList.appendChild(div);
+    });
+  });
+
+  // Cerrar autocompletar si el clic fue fuera del wrapper
+  const wrapperCodigo = inputParte.closest(".field.with-autocomplete");
+  document.addEventListener("click", (e) => {
+    if (e.target !== inputParte && !wrapperCodigo.contains(e.target)) {
+      autoList.innerHTML = "";
+    }
+  });
+
+  // --- 3) Acción del botón Buscar ---
+  btnBuscar.addEventListener("click", () => {
+    const cliente = String(selCliente.value ?? "").trim();
+    const parte = String(inputParte.value ?? "").trim();
+
+    if (!cliente || !parte) {
+      setEmpHeader(results, `<span class="msg-warn">Selecciona CLIENTE y escribe NO. DE PARTE.</span>`);
+      renderEmpCard(results, null);
+      return;
+    }
+
+    // Encuentra la fila exacta (cliente + parte)
+    const match = empData.find(row =>
+      String(row["CLIENTE"] ?? "") === cliente &&
+      String(row["NO. DE PARTE"] ?? "") === parte
+    );
+
+    if (!match) {
+      setEmpHeader(results, `<span class="msg-empty">No se encontró el empaque para ese cliente y parte.</span>`);
+      renderEmpCard(results, null);
+      return;
+    }
+
+    // Encabezado: NO. DE PARTE / CLIENTE
+    const parteShown = (String(match["NO. DE PARTE"] ?? "").trim() || "--");
+    const clienteShown = (String(match["CLIENTE"] ?? "").trim() || "--");
+    setEmpHeader(results, `${parteShown} / ${clienteShown}`);
+
+    // Render de detalles (omitimos LIGA y RMS)
+    const detalles = {
+      "TARIMA": match["COD TARIMA"],
+      "LARGEROS": match["LARGEROS"],
+      "POLIN SUP/IN": match["POLIN SUP/IN"],
+      "FLEJE": match["FLEJE"],
+      "MxC": match["MxC"],                 // muelles por cama
+      "CAMAS": match["CAMAS"],
+      "MxT": match["MxT"],                 // muelles por tarima
+      "PESO NETO EMPAQUE (Kg)": match["PESO NETO EMPAQUE (Kg)"]
+    };
+    renderEmpCard(results, detalles);
+  });
+
+  // ---- utilidades sección empaque ----
+  function setEmpHeader(resultsRoot, html) {
+    const header = resultsRoot.querySelector("#emp-header");
+    if (header) header.innerHTML = html || "";
+  }
+
+  function renderEmpCard(resultsRoot, dataObj) {
+    const card = resultsRoot.querySelector("#emp-card");
+    if (!card) return;
+    card.innerHTML = "";
+
+    if (!dataObj) return; // nada que mostrar
+
+    Object.entries(dataObj).forEach(([label, value]) => {
+      const item = document.createElement("div");
+      item.className = "emp-item";
+      item.innerHTML = `
+        <span class="emp-label">${label}</span>
+        <span class="emp-value">${(value ?? "--")}</span>
+      `;
+      card.appendChild(item);
+    });
+  }
+}
+
+// Llama iniciarEmpaque cuando tus datos estén listos, similar a componentes
+window.addEventListener("load", () => {
+  const waitEmp = setInterval(() => {
+    if (!window.data) return;
+    clearInterval(waitEmp);
+    iniciarEmpaque();
+  }, 200);
+});
+// ======================================================
+//  EMPAQUE END
+// ======================================================
