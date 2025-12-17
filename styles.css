@@ -321,11 +321,6 @@ a:hover {
   font-weight: 700;
 }
 
-.emp-header {
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
 /* Encabezado visual */
 .emp-table .table-title {
   text-align: center;
@@ -337,8 +332,9 @@ a:hover {
 
 /* Resalte de  filas */
 .emp-table .is-emphasis {
-  font-weight: 800;
+  font-weight: 900;
   color: var(--color-naranja);
+  background: var(--color-gris-oscuro);
 }
 
 /* Autocomplete anclado al input (reutilizado) */
