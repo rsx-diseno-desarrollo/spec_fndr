@@ -314,7 +314,7 @@ a:hover {
 
 .field.with-autocomplete .autocomplete-items {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(74%);
   left: 0; right: 0;
   z-index: 10;
   background: var(--color-blanco);
