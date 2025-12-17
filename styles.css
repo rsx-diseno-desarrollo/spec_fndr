@@ -334,7 +334,11 @@ a:hover {
 .emp-table .is-emphasis {
   font-weight: 900;
   color: var(--color-naranja);
-  background: var(--color-gris-oscuro);
+}
+
+.emp-table .is-emphasis {
+  font-weight: 900;
+  color: #275EF5;
 }
 
 /* Autocomplete anclado al input (reutilizado) */
