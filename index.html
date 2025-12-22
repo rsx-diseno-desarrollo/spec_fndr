@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <!--
 Autor: Auxiliar Diseño - Héctor Ulises Montes Hernández
@@ -21,7 +21,7 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js?v=14')
         .then(reg => console.log('Service Worker registrado'))
-        .catch(err => console.log('Error al registrar el Service Worker:', err));
+        .catch(err => console.log('Error at register Service Worker:', err));
     });
   }
 </script>
@@ -33,9 +33,9 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
   <button class="boton-menu"><img src="img/menu-icon.png" alt=""/></button>
 <nav class="menu">
   <ul>
-    <li><a href="#" data-section="seccion-producto">Producto</a></li>
-    <li><a href="#" data-section="seccion-empaque">Empaque</a></li>
-    <li><a href="#" data-section="seccion-componentes">Componentes</a></li>
+    <li><a href="#" data-section="seccion-producto">Product</a></li>
+    <li><a href="#" data-section="seccion-empaque">Packing</a></li>
+    <li><a href="#" data-section="seccion-componentes">Components</a></li>
   </ul>
 </nav>
 <!-- Menu END -->
@@ -48,19 +48,19 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
   <!-- SECCIONES -->
   <div class="header">
     <img src="img/spec-finder-logo.jpg" alt="Logo Spec Finder"/>
-    <h2>CONSULTA DE ESPECIFICACIONES</h2><br>
+    <h2>Specs Lookup</h2><br>
   </div>
 
   <!-- SECCION PRODUCTO -->
   <div id="seccion-producto" class="seccion activa">
-  <h3>Especificaciones de producto</h3><br>
+  <h3>Product specs</h3><br>
     <div class="buscador">
-      <input type="text" id="parte" placeholder="No. de parte sin guiones">
+      <input type="text" id="parte" placeholder="Part number (without hyphen)">
       <select id="cliente">
-        <option value="">-- Selecciona cliente --</option>
+        <option value="">-- Select client --</option>
       </select>
       <select id="nombre">
-        <option value="">-- Selecciona nombre --</option>
+        <option value="">-- Select type --</option>
       </select>
     </div>
       <div id="results-prod"></div>
@@ -71,19 +71,19 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
 
 <!-- SECCION EMPAQUE -->
 <div id="seccion-empaque" class="seccion">
-  <h3>Especificaciones de Empaque</h3>
+  <h3>Packing specs</h3>
 
   <!-- Buscador -->
   <div class="buscador">
     <select id="emp-cliente">
-      <option value="">-- Selecciona cliente --</option>
+      <option value="">-- Select client --</option>
     </select>
 
     <div class="field with-autocomplete">
-      <input type="text" id="emp-parte" placeholder="No. de parte" autocomplete="off">
+      <input type="text" id="emp-parte" placeholder="Part number" autocomplete="off">
       <div id="emp-autocomplete" class="autocomplete-items"></div>
     </div>
-    <button id="emp-btn-buscar" class="btn btn-buscar" type="button">Buscar empaque</button>
+    <button id="emp-btn-buscar" class="btn btn-buscar" type="button">Search</button>
   </div>
 
   <!-- Resultados -->
@@ -103,16 +103,16 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
   
 <!-- SECCION COMPONENTES -->
 <div id="seccion-componentes" class="seccion">
-      <h3>Especificaciones de Componentes <i>[mm]</i></h3><br>
+      <h3>Component specs <i>[mm]</i></h3><br>
       <!-- Buscador -->
       <div class="buscador" style="position:relative;">
         <select id="tipoComp">
-          <option value="">-- Selecciona tipo --</option>
+          <option value="">-- Select type --</option>
         </select>
         <input type="text" id="codigoComp" placeholder="Código sin guiones" autocomplete="off">
         <div id="autocomplete-list" class="autocomplete-items"></div>
         <!-- Botón Buscar -->
-        <button id="btnBuscarComp" class="btn btn-buscar" type="button">Buscar componenente</button>
+        <button id="btnBuscarComp" class="btn btn-buscar" type="button">Search</button>
       </div>
     <br>
     <!-- Resultados / Visor -->
