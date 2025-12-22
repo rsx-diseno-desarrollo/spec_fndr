@@ -259,8 +259,8 @@ function iniciarComponentes() {
         C: match["C"],
         D: match["D"],
         E: match["RADIO"],
-        "ROSCA": `1/2" - 20 UNF_2A`,
-        "GRADO DE DUREZA": `8° - 33-39 Rc.`
+        "Thread": `1/2" - 20 UNF_2A`,
+        "Hardness grade": `8° - 33-39 Rc.`
       };
 
       cotasList.innerHTML = ""; // limpia anterior
@@ -380,7 +380,7 @@ function iniciarEmpaque() {
     const parte   = String(inputParte.value ?? "").trim();
 
     if (!cliente || !parte) {
-      setEmpHeader(results, `<span class="msg-warn">Selecciona CLIENTE y escribe NO. DE PARTE.</span>`);
+      setEmpHeader(results, `<span class="msg-warn">Select CLIENT and write a Part number.</span>`);
       clearEmpTable(tableBody);
       return;
     }
@@ -391,7 +391,7 @@ function iniciarEmpaque() {
     );
 
     if (!match) {
-      setEmpHeader(results, `<span class="msg-empty">No se encontró el empaque para ese cliente y parte.</span>`);
+      setEmpHeader(results, `<span class="msg-empty">No packing specs found for this client and part number.</span>`);
       clearEmpTable(tableBody);
       return;
     }
@@ -403,14 +403,14 @@ function iniciarEmpaque() {
 
     // Render de tabla
     const detalles = [
-      ["TARIMA",                   match["COD TARIMA"]],
-      ["LARGEROS",                 match["LARGUEROS"]],
-      ["POLIN SUP/INF",            match["POLIN SUP/INF"]],
-      ["FLEJE",                    match["FLEJE"]],
-      ["Muelles x Cama",           match["MxC"]],
-      ["CAMAS",                    match["CAMAS"]],
-      ["Muelles x Tarima",         match["MxT"]],
-      ["PESO NETO EMPAQUE (Kg)",   match["PESO NETO EMPAQUE (Kg)"]],
+      ["PALLET",                   match["COD TARIMA"]],
+      ["STRINGERS",                match["LARGUEROS"]],
+      ["TOP/BOTTOM BEAM",          match["POLIN SUP/INF"]],
+      ["STRAP",                    match["FLEJE"]],
+      ["Springs per Layer",        match["MxC"]],
+      ["Layers",                   match["CAMAS"]],
+      ["Springs per Pallet",       match["MxT"]],
+      ["NET PACKING WEIGHT (Kg)",  match["PESO NETO EMPAQUE (Kg)"]],
     ];
 
     renderEmpTable(tableBody, detalles, headerText);
@@ -440,8 +440,7 @@ function iniciarEmpaque() {
         tbody.appendChild(headerRow);
 
       const emphasized = new Set([
-        "Muelles x Tarima",       // MxT
-        "PESO NETO EMPAQUE (Kg)"  // PESO NETO
+        "NET PACKING WEIGHT (Kg)"  // PESO NETO
       ]);
     rows.forEach(([label, value], idx) => {
       const tr = document.createElement("tr");
