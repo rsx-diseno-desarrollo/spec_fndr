@@ -163,25 +163,12 @@ function iniciarComponentes() {
 
   // --- Mapa centralizado (fácil de extender) ---
   const imagenPorTipo = {
-    "TORNILLO": "img/tornillo_plantilla.png"
-    // "TUERCA": "img/tuerca_plantilla.png",
-    // "LAINA":  "img/laina_plantilla.png",
+     "TORNILLO": "img/tornillo_plantilla.png",
+    "TUERCA":   "img/tuerca_plantilla.png",
+    "LAINA":    "img/laina_plantilla.png",
+    // "ARANDELA": "img/arandela_plantilla.png",
+    // "PASADOR":  "img/pasador_plantilla.png",
   };
-
-  // --- Unidad seleccionada y último match para re-render ---
-  let unidadComp = localStorage.getItem("unidadComp") || "mm";
-  let ultimoMatch = null;
-
-  // Inicializar selector de unidad una sola vez
-  if (unidadSelect) {
-    unidadSelect.value = unidadComp;
-    unidadSelect.addEventListener("change", () => {
-      unidadComp = unidadSelect.value;
-      localStorage.setItem("unidadComp", unidadComp);
-      // Si ya hay un componente mostrado, re-renderizamos las cotas con la nueva unidad
-      if (ultimoMatch) renderCotas(ultimoMatch);
-    });
-  }
 
   // ------------------------------------------------------
   // Autocompletar por código (filtra por tipo seleccionado)
@@ -221,66 +208,6 @@ function iniciarComponentes() {
   });
 
   // ------------------------------------------------------
-  // Conversión de unidades
-  // ------------------------------------------------------
-  function convertirValor(valorMm) {
-    // Evitar que "" se convierta a 0
-    if (valorMm === "" || valorMm === null || valorMm === undefined) return "--";
-    const num = Number(valorMm);
-    if (!isFinite(num)) return valorMm ?? "--";
-
-    if (unidadComp === "in") {
-      const pulgadas = num / 25.4;
-      return `${pulgadas.toFixed(3)}`; // 3 decimales
-    }
-    // mm: entero si es exacto, si no con hasta 2 decimales
-    return Number.isInteger(num) ? `${num}` : `${num.toFixed(2)}`;
-  }
-
-  // ------------------------------------------------------
-  // Render de cotas (reusable)
-  // ------------------------------------------------------
-  function renderCotas(match) {
-    const cotasList = resultsComp.querySelector("#cotas-list");
-    if (!cotasList) return;
-
-    const cotas = {
-      A: match["A"],
-      B: match["B"],
-      C: match["C"],
-      D: match["D"],
-      E: match["RADIO"], // si quieres mostrar "R" en la etiqueta, cambia la llave a "R"
-      // Extras NO métricos:
-      "Trhead": `1/2" - 20 UNF_2A`,
-      "Hardness Grade": `8° - 33-39 Rc.`
-    };
-
-    cotasList.innerHTML = ""; // limpia anterior
-
-    Object.entries(cotas).forEach(([label, value]) => {
-      const item = document.createElement("div");
-      item.className = "cota-item";
-
-      // Determinar si el valor se debe convertir (solo en cotas A–E/R)
-      const esCotaMetrica = ["A", "B", "C", "D", "E", "R", "RADIO"].includes(label.toUpperCase());
-
-      // Valor mostrado según unidad seleccionada
-      const valueShown = esCotaMetrica
-        ? convertirValor(value)
-        : (value ?? "--");
-
-      // Sufijo de unidad para métricas
-      const sufijoUnidad = esCotaMetrica ? (unidadComp === "in" ? ' in' : ' mm') : '';
-
-      item.innerHTML = `
-        <span class="cota-label">${label}:</span>
-        <span class="cota-value">${valueShown}${sufijoUnidad}</span>
-      `;
-      cotasList.appendChild(item);
-    });
-  }
-
-  // ------------------------------------------------------
   // Acción del botón "Buscar"
   // ------------------------------------------------------
   btnBuscarComp.addEventListener("click", () => {
@@ -303,7 +230,6 @@ function iniciarComponentes() {
     if (!match) {
       showMessage("No se encontró el componente.", "empty");
       ocultarImagen(imgEl);
-      resultsComp.querySelector("#cotas-list")?.replaceChildren();
       return;
     }
 
@@ -328,9 +254,30 @@ function iniciarComponentes() {
       mostrarImagenCuandoCargue(imgEl, src, `Imagen del componente ${tipo}`);
     }
 
-    // 3) Cotas (guardar último match y renderizar)
-    ultimoMatch = match;
-    renderCotas(match);
+    // 3) Cotas como lista debajo
+    const cotasList = resultsComp.querySelector("#cotas-list");
+    if (cotasList) {
+      const cotas = {
+        A: match["A"],
+        B: match["B"],
+        C: match["C"],
+        D: match["D"],
+        E: match["RADIO"],
+        "Thread": `1/2" - 20 UNF_2A`,
+        "Hardness grade": `8° - 33-39 Rc.`
+      };
+
+      cotasList.innerHTML = ""; // limpia anterior
+      Object.entries(cotas).forEach(([label, value]) => {
+        const item = document.createElement("div");
+        item.className = "cota-item";
+        item.innerHTML = `
+          <span class="cota-label">${label}:</span>
+          <span class="cota-value">${value ?? "--"}</span>
+        `;
+        cotasList.appendChild(item);
+      });
+    }
   });
 
   // ------------------------------------------------------
