@@ -163,7 +163,7 @@ function iniciarComponentes() {
 
   // --- Mapa centralizado (fácil de extender) ---
   const imagenPorTipo = {
-     "TORNILLO": "img/tornillo_plantilla.png",
+     "BOLT": "img/tornillo_plantilla.png",
     "TUERCA":   "img/tuerca_plantilla.png",
     "LAINA":    "img/laina_plantilla.png",
     // "ARANDELA": "img/arandela_plantilla.png",
