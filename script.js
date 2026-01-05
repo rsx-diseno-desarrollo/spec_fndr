@@ -235,6 +235,60 @@ function iniciarComponentes() {
     return Number.isInteger(num) ? `${num}` : `${num.toFixed(2)}`;
   }
 
+  
+// Convierte un número en mm a texto en la unidad seleccionada
+function convertirNumero(numMm) {
+  if (!isFinite(numMm)) return "--";
+  if (unidadComp === "in") {
+    const inches = numMm / 25.4;
+    return inches.toFixed(3);    // 3 decimales en pulgadas
+  }
+  return Number.isInteger(numMm) ? String(numMm) : numMm.toFixed(2); // mm
+}
+
+// Intenta convertir un string a número (soporta coma decimal)
+function aNumeroSeguro(s) {
+  if (s === null || s === undefined) return NaN;
+  const limpio = String(s).trim().replace(",", "."); // por si viene decimal con coma
+  const n = Number(limpio);
+  return isFinite(n) ? n : NaN;
+}
+
+// Convierte un valor que puede ser número o rango "a-b"
+function convertirValorO_Rango(raw) {
+  if (raw === "" || raw === null || raw === undefined) return "--";
+
+  const str = String(raw).trim();
+
+  // 1) Detectar rango "a - b" con guion normal, largo o en-dash
+  //    admite espacios alrededor del separador
+  const rangoRegex = /^([+-]?\d+(?:[.,]\d+)?)\s*[-–—]\s*([+-]?\d+(?:[.,]\d+)?)$/;
+  const m = str.match(rangoRegex);
+  if (m) {
+    const a = aNumeroSeguro(m[1]);
+    const b = aNumeroSeguro(m[2]);
+    if (isFinite(a) && isFinite(b)) {
+      const convA = convertirNumero(a);
+      const convB = convertirNumero(b);
+      const sufijo = (unidadComp === "in" ? " in" : " mm");
+      // usa un en-dash (–) para legibilidad en rangos
+      return `${convA}–${convB}${sufijo}`;
+    }
+    // si no se pudo convertir, devuelve tal cual
+    return str;
+  }
+
+  // 2) No es rango: intenta numero simple
+  const n = aNumeroSeguro(str);
+  if (isFinite(n)) {
+    return `${convertirNumero(n)}${unidadComp === "in" ? " in" : " mm"}`;
+  }
+
+  // 3) Valor no numérico (p.ej. "M8 x 1.25", "Ø12"): déjalo tal cual
+  return str;
+}
+
+  
 function renderCotas(match) {
   const cotasList = resultsComp.querySelector("#cotas-list");
   if (!cotasList) return;
@@ -252,16 +306,17 @@ function renderCotas(match) {
 
   cotasList.innerHTML = "";
 
-  Object.entries(cotas).forEach(([label, rawValue]) => {
+    Object.entries(cotas).forEach(([label, rawValue]) => {
     const esMetrica = ["A","B","C","D","E","R","RADIO"].includes(label.toUpperCase());
-    const mostrado  = esMetrica ? convertirValor(rawValue) : (rawValue ?? "--");
-    const sufijo    = esMetrica ? (unidadComp === "in" ? " in" : " mm") : "";
+    const mostrado  = esMetrica
+      ? convertirValorO_Rango(rawValue)           // <-- AQUÍ
+      : (rawValue ?? "--");
 
     const item = document.createElement("div");
     item.className = "cota-item";
     item.innerHTML = `
       <span class="cota-label">${label}:</span>
-      <span class="cota-value">${mostrado}${sufijo}</span>
+      <span class="cota-value">${mostrado}</span>
     `;
     cotasList.appendChild(item);
   });
