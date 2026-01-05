@@ -145,6 +145,21 @@ function iniciarComponentes() {
   const imgEl = resultsComp.querySelector("#comp-img");
   const unidadSelect = document.getElementById("comp-unidad"); // <select mm/in>
 
+  // Unidad persistida (default mm)
+  let unidadComp = localStorage.getItem("unidadComp") || "mm";
+  if (unidadSelect) unidadSelect.value = unidadComp;
+  // Último resultado válido para re-render (al cambiar unidad)
+  let ultimoMatch = null;
+
+  if (unidadSelect) {
+    unidadSelect.addEventListener("change", () => {
+      unidadComp = unidadSelect.value;
+      localStorage.setItem("unidadComp", unidadComp);
+      // Si ya hay un componente mostrado, re-renderizamos las cotas
+      if (ultimoMatch) renderCotas(ultimoMatch);
+    });
+  }
+  
   if (!tipoComp || !codigoInput || !autocompleteList || !btnBuscarComp || !resultsComp || !imgEl) return;
 
   // ------------------------------------------------------
@@ -161,7 +176,7 @@ function iniciarComponentes() {
   // --- 0) Estado inicial: ocultar y limpiar imagen ---
   ocultarImagen(imgEl);
 
-  // --- Mapa centralizado (fácil de extender) ---
+  // --- Mapa centralizado ---
   const imagenPorTipo = {
      "BOLT": "img/tornillo_plantilla.png",
     "TUERCA":   "img/tuerca_plantilla.png",
@@ -171,7 +186,7 @@ function iniciarComponentes() {
   };
 
   // ------------------------------------------------------
-  // Autocompletar por código (filtra por tipo seleccionado)
+  // Autocompletar por código
   // ------------------------------------------------------
   codigoInput.addEventListener("input", () => {
     const texto = codigoInput.value.toLowerCase().trim();
@@ -199,13 +214,59 @@ function iniciarComponentes() {
       autocompleteList.appendChild(div);
     });
   });
-
-  // Cerrar autocompletar al hacer clic fuera
-  document.addEventListener("click", (e) => {
-    if (e.target !== codigoInput) {
+  
+    document.addEventListener("click", (e) => {
+    if (e.target !== codigoInput && !autocompleteList.contains(e.target)) {
       autocompleteList.innerHTML = "";
     }
   });
+  
+  function convertirValor(valorMm) {
+    // Evitar que "" se convierta a 0
+    if (valorMm === "" || valorMm === null || valorMm === undefined) return "--";
+    const num = Number(valorMm);
+    if (!isFinite(num)) return valorMm ?? "--";
+  
+    if (unidadComp === "in") {
+      const pulgadas = num / 25.4;
+      return `${pulgadas.toFixed(3)}`; // 3 decimales en pulgadas
+    }
+    // mm: entero si es exacto, si no 2 decimales
+    return Number.isInteger(num) ? `${num}` : `${num.toFixed(2)}`;
+  }
+
+function renderCotas(match) {
+  const cotasList = resultsComp.querySelector("#cotas-list");
+  if (!cotasList) return;
+
+  const cotas = {
+    A: match["A"],
+    B: match["B"],
+    C: match["C"],
+    D: match["D"],
+    E: match["RADIO"],          // si prefieres etiqueta "R", cambia la key a "R"
+    // NO convertir (texto/códigos):
+    "Thread": `1/2" - 20 UNF_2A`,
+    "Hardness grade": `8° - 33-39 Rc.`
+  };
+
+  cotasList.innerHTML = "";
+
+  Object.entries(cotas).forEach(([label, rawValue]) => {
+    const esMetrica = ["A","B","C","D","E","R","RADIO"].includes(label.toUpperCase());
+    const mostrado  = esMetrica ? convertirValor(rawValue) : (rawValue ?? "--");
+    const sufijo    = esMetrica ? (unidadComp === "in" ? " in" : " mm") : "";
+
+    const item = document.createElement("div");
+    item.className = "cota-item";
+    item.innerHTML = `
+      <span class="cota-label">${label}:</span>
+      <span class="cota-value">${mostrado}${sufijo}</span>
+    `;
+    cotasList.appendChild(item);
+  });
+}
+
 
   // ------------------------------------------------------
   // Acción del botón "Buscar"
@@ -254,30 +315,9 @@ function iniciarComponentes() {
       mostrarImagenCuandoCargue(imgEl, src, `Imagen del componente ${tipo}`);
     }
 
-    // 3) Cotas como lista debajo
-    const cotasList = resultsComp.querySelector("#cotas-list");
-    if (cotasList) {
-      const cotas = {
-        A: match["A"],
-        B: match["B"],
-        C: match["C"],
-        D: match["D"],
-        E: match["RADIO"],
-        "Thread": `1/2" - 20 UNF_2A`,
-        "Hardness grade": `8° - 33-39 Rc.`
-      };
-
-      cotasList.innerHTML = ""; // limpia anterior
-      Object.entries(cotas).forEach(([label, value]) => {
-        const item = document.createElement("div");
-        item.className = "cota-item";
-        item.innerHTML = `
-          <span class="cota-label">${label}:</span>
-          <span class="cota-value">${value ?? "--"}</span>
-        `;
-        cotasList.appendChild(item);
-      });
-    }
+    // 3) Cotas (guardar último match y render)
+    ultimoMatch = match;
+    renderCotas(match);
   });
 
   // ------------------------------------------------------
