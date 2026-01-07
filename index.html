@@ -105,24 +105,18 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
 <div id="seccion-componentes" class="seccion">
       <h3>Component specs</h3><br>
       <!-- Buscador -->
-      <div class="buscador" style="position:relative;">
+      <div class="buscador">
         <select id="tipoComp">
           <option value="">-- Select type --</option>
         </select>
+	<div class="field with-autocomplete">
         <input type="text" id="codigoComp" placeholder="Code (no hyphens)" autocomplete="off">
         <div id="autocomplete-list" class="autocomplete-items"></div>
+	</div>
         <!-- Botón Buscar -->
         <button id="btnBuscarComp" class="btn btn-buscar" type="button">Search</button>
       </div>
     <br>
-    <!-- Selector de unidad --> 
-      <div class="unidad-selector">
-        <label for="comp-unidad"><strong>Unit:</strong></label>
-        <select id="comp-unidad">
-          <option value="mm" selected>mm</option>
-          <option value="in">in</option>
-        </select>
-      </div>
     <!-- Resultados / Visor -->
     <div id="results-comp">
       <!-- Encabezado dinámico -->
@@ -131,6 +125,15 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
       <div id="viewer-comp" class="viewer-comp">
         <img id="comp-img" class="comp-img" alt="Imagen del componente">
       </div>
+	<!-- Selector de unidad --> 
+      	<div class="unidad-selector">
+        	<label for="comp-unidad"><strong>Unit:</strong></label>
+        	<select id="comp-unidad">
+          	<option value="mm" selected>mm</option>
+          	<option value="in">in</option>
+        	</select>
+      	</div>
+
       <!-- Cotas debajo de la imagen -->
       <div id="cotas-list" class="cotas-list"></div>
     </div>
