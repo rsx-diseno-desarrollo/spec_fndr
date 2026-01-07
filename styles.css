@@ -216,7 +216,6 @@ a:hover {
   position: relative;
   top: 100%;
   left: 0; right: 0;
-  border: 1px solid #ddd;
   background: #fff;
   z-index: 10;
   max-height: 220px;
@@ -358,11 +357,9 @@ a:hover {
   left: 0; right: 0;
   z-index: 10;
   background: var(--color-blanco);
-  border: 1px solid #ddd;
   border-radius: 6px;
   max-height: 220px;
   overflow-y: auto;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
 .autocomplete-item {
