@@ -33,9 +33,9 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
   <button class="boton-menu"><img src="img/menu-icon.png" alt=""/></button>
 <nav class="menu">
   <ul>
-    <li><a href="#" data-section="seccion-producto">Product</a></li>
-    <li><a href="#" data-section="seccion-empaque">Packing</a></li>
-    <li><a href="#" data-section="seccion-componentes">Components</a></li>
+    <li><a href="#" data-section="seccion-producto">Producto</a></li>
+    <li><a href="#" data-section="seccion-empaque">Empaque</a></li>
+    <li><a href="#" data-section="seccion-componentes">Componentes</a></li>
   </ul>
 </nav>
 <!-- Menu END -->
@@ -48,19 +48,19 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
   <!-- SECCIONES -->
   <div class="header">
     <img src="img/spec-finder-logo.jpg" alt="Logo Spec Finder"/>
-    <h2>Specs Lookup</h2><br>
+    <h2>Busqueda de especificaciones</h2><br>
   </div>
 
   <!-- SECCION PRODUCTO -->
   <div id="seccion-producto" class="seccion activa">
-  <h3>Product specs</h3><br>
+  <h3>Especificaciones de producto</h3><br>
     <div class="buscador">
-      <input type="text" id="parte" placeholder="Part number (without hyphen)">
+      <input type="text" id="parte" placeholder="Número de parte sin guión">
       <select id="cliente">
-        <option value="">-- Select client --</option>
+        <option value="">-- Seleccionar cliente --</option>
       </select>
       <select id="nombre">
-        <option value="">-- Select type --</option>
+        <option value="">-- Seleccionar tipo --</option>
       </select>
     </div>
       <div id="results-prod"></div>
@@ -71,19 +71,19 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
 
 <!-- SECCION EMPAQUE -->
 <div id="seccion-empaque" class="seccion">
-  <h3>Packing specs</h3>
+  <h3>Especificaciones de empaque</h3>
 
   <!-- Buscador -->
   <div class="buscador">
     <select id="emp-cliente">
-      <option value="">-- Select client --</option>
+      <option value="">-- Seleccionar cliente --</option>
     </select>
 
     <div class="field with-autocomplete">
-      <input type="text" id="emp-parte" placeholder="Part number" autocomplete="off">
+      <input type="text" id="emp-parte" placeholder="Número de parte" autocomplete="off">
       <div id="emp-autocomplete" class="autocomplete-items"></div>
     </div>
-    <button id="emp-btn-buscar" class="btn btn-buscar" type="button">Search</button>
+    <button id="emp-btn-buscar" class="btn btn-buscar" type="button">Buscar</button>
   </div>
 
   <!-- Resultados -->
@@ -103,18 +103,18 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
   
 <!-- SECCION COMPONENTES -->
 <div id="seccion-componentes" class="seccion">
-      <h3>Component specs</h3><br>
+      <h3>Especificaciones de componenetes</h3><br>
       <!-- Buscador -->
       <div class="buscador">
         <select id="tipoComp">
-          <option value="">-- Select type --</option>
+          <option value="">-- Seleccionar tipo --</option>
         </select>
 	<div class="field with-autocomplete">
-        <input type="text" id="codigoComp" placeholder="Code (no hyphens)" autocomplete="off">
+        <input type="text" id="codigoComp" placeholder="Código sin guiones" autocomplete="off">
         <div id="autocomplete-list" class="autocomplete-items"></div>
 	</div>
         <!-- Botón Buscar -->
-        <button id="btnBuscarComp" class="btn btn-buscar" type="button">Search</button>
+        <button id="btnBuscarComp" class="btn btn-buscar" type="button">Buscar</button>
       </div>
     <br>
     <!-- Resultados / Visor -->
@@ -127,7 +127,7 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
       </div>
 	<!-- Selector de unidad --> 
       	<div class="unidad-selector">
-        	<label for="comp-unidad"><strong>Unit:</strong></label>
+        	<label for="comp-unidad"><strong>Unidad:</strong></label>
         	<select id="comp-unidad">
           	<option value="mm" selected>mm</option>
           	<option value="in">in</option>
