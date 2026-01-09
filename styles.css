@@ -145,6 +145,20 @@ a:hover {
 .boton-menu:hover {
   transform: scale(1.1);
 }
+
+.lang-toggle button{
+  padding: .35rem .6rem;
+  margin-left:.25rem;
+  border:1px solid #ccc;
+  background:#fff;
+  cursor:pointer;
+}
+.lang-toggle button.active{
+  background:#0EC701;
+  color:#fff;
+  border-color:#0EC701;
+}
+
 /* SECCIONES */
 .seccion {
   display: none;
