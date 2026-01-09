@@ -200,7 +200,7 @@ function iniciarEmpaque() {
     );
 
     if (!match) {
-      setEmpHeader(results, `<span class="msg-empty">No packing specs found for this client and part number.</span>`);
+      setEmpHeader(results, `<span class="msg-empty">No se encontraron specs de empaque para ese cliente y número de parte.</span>`);
       clearEmpTable(tableBody);
       return;
     }
@@ -212,14 +212,14 @@ function iniciarEmpaque() {
 
     // Render de tabla
     const detalles = [
-      ["PALLET",                   match["COD TARIMA"]],
-      ["STRINGERS",                match["LARGUEROS"]],
-      ["TOP/BOTTOM BEAM",          match["POLIN SUP/INF"]],
-      ["STRAP",                    match["FLEJE"]],
-      ["Springs per Layer",        match["MxC"]],
-      ["Layers",                   match["CAMAS"]],
-      ["Springs per Pallet",       match["MxT"]],
-      ["NET PACKING WEIGHT (Kg)",  match["PESO NETO EMPAQUE (Kg)"]],
+      ["TARIMA",                   match["COD TARIMA"]],
+      ["LARGUEROS",                match["LARGUEROS"]],
+      ["POLIN SUP/INF",          match["POLIN SUP/INF"]],
+      ["FLEJE",                    match["FLEJE"]],
+      ["MUELLES x CAMA",        match["MxC"]],
+      ["CAMAS",                   match["CAMAS"]],
+      ["MUELLES x TARIMA",       match["MxT"]],
+      ["PESO NETO EMPAQUE (Kg)",  match["PESO NETO EMPAQUE (Kg)"]],
     ];
 
     renderEmpTable(tableBody, detalles, headerText);
@@ -249,7 +249,7 @@ function iniciarEmpaque() {
         tbody.appendChild(headerRow);
 
       const emphasized = new Set([
-        "NET PACKING WEIGHT (Kg)"  // PESO NETO
+        "PESO NETO EMPAQUE (Kg)"  // PESO NETO
       ]);
     rows.forEach(([label, value], idx) => {
       const tr = document.createElement("tr");
