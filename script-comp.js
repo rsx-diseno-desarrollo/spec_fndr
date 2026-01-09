@@ -55,7 +55,7 @@ function iniciarComponentes() {
 
   // --- Mapa centralizado ---
   const imagenPorTipo = {
-     "BOLT": "img/tornillo_plantilla.png",
+     "TORNILLO": "img/tornillo_plantilla.png",
     "TUERCA":   "img/tuerca_plantilla.png",
     "LAINA":    "img/laina_plantilla.png",
     // "ARANDELA": "img/arandela_plantilla.png",
@@ -177,8 +177,8 @@ function renderCotas(match) {
     D: match["D"],
     E: match["RADIO"],          // si prefieres etiqueta "R", cambia la key a "R"
     // NO convertir (texto/códigos):
-    "Thread": `1/2" - 20 UNF_2A`,
-    "Hardness grade": `8° - 33-39 Rc.`
+    "CUERDA": `1/2" - 20 UNF_2A`,
+    "GRADO DE DUREZA": `8° - 33-39 Rc.`
   };
 
   cotasList.innerHTML = "";
