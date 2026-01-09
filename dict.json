@@ -1,0 +1,95 @@
+{
+  "Producto": { "es": "Producto", "en": "Product" },
+  "Empaque": { "es": "Empaque", "en": "Packing" },
+  "Componentes": { "es": "Componentes", "en": "Components" },
+
+  "Logo Spec Finder": { "es": "Logo Spec Finder", "en": "Spec Finder logo" },
+  "Busqueda de especificaciones": { "es": "Busqueda de especificaciones", "en": "Specifications Lookup" },
+
+  "Especificaciones de producto": { "es": "Especificaciones de producto", "en": "Product specifications" },
+  "Número de parte sin guión": { "es": "Número de parte sin guión", "en": "Part number (without hyphen)" },
+  "-- Seleccionar cliente --": { "es": "-- Seleccionar cliente --", "en": "-- Select client --" },
+  "-- Seleccionar tipo --": { "es": "-- Seleccionar tipo --", "en": "-- Select type --" },
+
+  "Especificaciones de empaque": { "es": "Especificaciones de empaque", "en": "Packing specifications" },
+  "Número de parte": { "es": "Número de parte", "en": "Part number" },
+  "Buscar": { "es": "Buscar", "en": "Search" },
+
+  "Especificaciones de componentes": { "es": "Especificaciones de componentes", "en": "Component specifications" },
+  "Especificaciones de componenetes": { "es": "Especificaciones de componenetes", "en": "Component specifications" },
+  "Código sin guiones": { "es": "Código sin guiones", "en": "Code without hyphens" },
+
+  "Imagen del componente": { "es": "Imagen del componente", "en": "Component image" },
+
+  "Unidad:": { "es": "Unidad:", "en": "Unit:" },
+  "mm": { "es": "mm", "en": "mm" },
+  "in": { "es": "in", "en": "in" },
+
+  "CLIENTE": { "es": "CLIENTE", "en": "CLIENT" },
+  "NO. PARTE": { "es": "NO. PARTE", "en": "PART NUMBER" },
+  "CODIGO": { "es": "CODIGO", "en": "CODE" },
+  "NOMBRE": { "es": "NOMBRE", "en": "NAME" },
+  "LIGA": { "es": "LIGA", "en": "LINK" },
+  "RMS": { "es": "RMS", "en": "RMS" },
+
+  "HOJA DE ESPECIFICACION COMPLETA": { "es": "HOJA DE ESPECIFICACION COMPLETA", "en": "FULL SPECIFICATION SHEET" },
+  "HOJA DE ESPECIFICACION OPERACIONES PREVIAS": { "es": "HOJA DE ESPECIFICACION OPERACIONES PREVIAS", "en": "PRE-PRODUCTION OPERATIONS SPECIFICATION SHEET" },
+  "HOJA DE ESPECIFICACION OPERACIONES FINALES": { "es": "HOJA DE ESPECIFICACION OPERACIONES FINALES", "en": "FINAL OPERATIONS SPECIFICATION SHEET" },
+
+  "PRODUCCION": { "es": "PRODUCCION", "en": "PRODUCTION" },
+  "OP-PREVIAS": { "es": "OP-PREVIAS", "en": "PRE-OPS" },
+  "OP-PREVIAS_": { "es": "OP-PREVIAS", "en": "PRE-OPS" },
+  "OP. PREVIAS": { "es": "OP. PREVIAS", "en": "PRE-OPS" },
+  "OP PREVIAS": { "es": "OP PREVIAS", "en": "PRE-OPS" },
+
+  "OP-FINALES": { "es": "OP-FINALES", "en": "FINAL OPS" },
+  "OP-FINALES_": { "es": "OP-FINALES", "en": "FINAL OPS" },
+  "OP. FINALES": { "es": "OP. FINALES", "en": "FINAL OPS" },
+  "OP FINALES": { "es": "OP FINALES", "en": "FINAL OPS" },
+
+  "PROTOTIPO": { "es": "PROTOTIPO", "en": "PROTOTYPE" },
+  "PENDIENTE": { "es": "PENDIENTE", "en": "PENDING" },
+
+  "NO. DE DIBUJO/PARTE": { "es": "NO. DE DIBUJO/PARTE", "en": "DRAWING/PART NO." },
+  "NOMBRE DE DOCUMENTO": { "es": "NOMBRE DE DOCUMENTO", "en": "DOCUMENT NAME" },
+  "TIPO DE COMPONENTE": { "es": "TIPO DE COMPONENTE", "en": "COMPONENT TYPE" },
+  "CODIGO COMPONENTES": { "es": "CODIGO COMPONENTES", "en": "COMPONENT CODE" },
+  "A": { "es": "A", "en": "A" },
+  "B": { "es": "B", "en": "B" },
+  "C": { "es": "C", "en": "C" },
+  "D": { "es": "D", "en": "D" },
+  "RADIO": { "es": "RADIO", "en": "RADIUS" },
+  "Especificación de tornillo central para parte de repuesto": { "es": "Especificación de tornillo central para parte de repuesto", "en": "Center Bolt Specification for Spare Part" },
+  "TORNILLO": { "es": "TORNILLO", "en": "BOLT" },
+
+  "COD TARIMA": { "es": "COD TARIMA", "en": "PALLET CODE" },
+  "LARGUEROS": { "es": "LARGUEROS", "en": "STRINGERS" },
+  "POLIN SUP/INF": { "es": "POLIN SUP/INF", "en": "TOP/BOTTOM BEAM" },
+  "FLEJE": { "es": "FLEJE", "en": "STRAP" },
+  "MxC": { "es": "MxC", "en": "SPRINGS/LAYER" },
+  "CAMAS": { "es": "CAMAS", "en": "LAYERS" },
+  "MxT": { "es": "MxT", "en": "SPRINGS/PALLET" },
+  "PESO NETO EMPAQUE (Kg)": { "es": "PESO NETO EMPAQUE (Kg)", "en": "NET PACKING WEIGHT (Kg)" },
+  "LINK": { "es": "LINK", "en": "LINK" },
+
+  "NISSAN": { "es": "NISSAN", "en": "NISSAN" },
+  "FORD": { "es": "FORD", "en": "FORD" },
+  "DAYTON": { "es": "DAYTON", "en": "DAYTON" },
+  "AUTOMANN": { "es": "AUTOMANN", "en": "AUTOMANN" },
+  "DINA": { "es": "DINA", "en": "DINA" },
+  "AFTER MARKET": { "es": "AFTER MARKET", "en": "AFTER MARKET" },
+  "REYCO": { "es": "REYCO", "en": "REYCO" },
+
+  /* =========================
+     Variaciones comunes en etiquetas OP (robustez)
+     ========================= */
+  "OP PREVIAS": { "es": "OP PREVIAS", "en": "PRE-OPS" },
+  "OP. PREVIAS": { "es": "OP. PREVIAS", "en": "PRE-OPS" },
+  "OP.PREVIAS": { "es": "OP.PREVIAS", "en": "PRE-OPS" },
+  "OP-PREVIAS": { "es": "OP-PREVIAS", "en": "PRE-OPS" },
+
+  "OP FINALES": { "es": "OP FINALES", "en": "FINAL OPS" },
+  "OP. FINALES": { "es": "OP. FINALES", "en": "FINAL OPS" },
+  "OP.FINALES": { "es": "OP.FINALES", "en": "FINAL OPS" },
+  "OP-FINALES": { "es": "OP-FINALES", "en": "FINAL OPS" }
+}
