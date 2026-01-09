@@ -6,6 +6,7 @@
   --color-gris-oscuro: #424242;
   --color-blanco: #ffffff;
   --color-negro: #000000;
+  --color-hector: #0EC701;
 }
 
 body {
@@ -145,19 +146,24 @@ a:hover {
 .boton-menu:hover {
   transform: scale(1.1);
 }
-
+/* TOGGLE LANG */
 .lang-toggle button{
   padding: .35rem .6rem;
   margin-left:.25rem;
   border:1px solid #ccc;
-  background:#fff;
+  border-radius: 6px;
+  background:var(--color-blanco);
   cursor:pointer;
+  font-size: 1rem;
+  color: #D1D1D1;
 }
 .lang-toggle button.active{
-  background:#0EC701;
+  background: var(--color-hector);
   color:#fff;
-  border-color:#0EC701;
+  border:2px solid var(--color-negro);
+  font-weight: bold;
 }
+/* TOGGLE LANG END */
 
 /* SECCIONES */
 .seccion {
