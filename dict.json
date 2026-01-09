@@ -36,17 +36,6 @@
   "HOJA DE ESPECIFICACION OPERACIONES PREVIAS": { "es": "HOJA DE ESPECIFICACION OPERACIONES PREVIAS", "en": "PRE-PRODUCTION OPERATIONS SPECIFICATION SHEET" },
   "HOJA DE ESPECIFICACION OPERACIONES FINALES": { "es": "HOJA DE ESPECIFICACION OPERACIONES FINALES", "en": "FINAL OPERATIONS SPECIFICATION SHEET" },
 
-  "PRODUCCION": { "es": "PRODUCCION", "en": "PRODUCTION" },
-  "OP-PREVIAS": { "es": "OP-PREVIAS", "en": "PRE-OPS" },
-  "OP-PREVIAS_": { "es": "OP-PREVIAS", "en": "PRE-OPS" },
-  "OP. PREVIAS": { "es": "OP. PREVIAS", "en": "PRE-OPS" },
-  "OP PREVIAS": { "es": "OP PREVIAS", "en": "PRE-OPS" },
-
-  "OP-FINALES": { "es": "OP-FINALES", "en": "FINAL OPS" },
-  "OP-FINALES_": { "es": "OP-FINALES", "en": "FINAL OPS" },
-  "OP. FINALES": { "es": "OP. FINALES", "en": "FINAL OPS" },
-  "OP FINALES": { "es": "OP FINALES", "en": "FINAL OPS" },
-
   "PROTOTIPO": { "es": "PROTOTIPO", "en": "PROTOTYPE" },
   "PENDIENTE": { "es": "PENDIENTE", "en": "PENDING" },
 
@@ -80,16 +69,16 @@
   "AFTER MARKET": { "es": "AFTER MARKET", "en": "AFTER MARKET" },
   "REYCO": { "es": "REYCO", "en": "REYCO" },
 
-  /* =========================
-     Variaciones comunes en etiquetas OP (robustez)
-     ========================= */
   "OP PREVIAS": { "es": "OP PREVIAS", "en": "PRE-OPS" },
   "OP. PREVIAS": { "es": "OP. PREVIAS", "en": "PRE-OPS" },
   "OP.PREVIAS": { "es": "OP.PREVIAS", "en": "PRE-OPS" },
   "OP-PREVIAS": { "es": "OP-PREVIAS", "en": "PRE-OPS" },
+  "PRODUCCION": { "es": "PRODUCCION", "en": "PRODUCTION" },
+  "OP-PREVIAS_": { "es": "OP-PREVIAS", "en": "PRE-OPS" },
 
   "OP FINALES": { "es": "OP FINALES", "en": "FINAL OPS" },
-  "OP. FINALES": { "es": "OP. FINALES", "en": "FINAL OPS" },
   "OP.FINALES": { "es": "OP.FINALES", "en": "FINAL OPS" },
-  "OP-FINALES": { "es": "OP-FINALES", "en": "FINAL OPS" }
+  "OP-FINALES": { "es": "OP-FINALES", "en": "FINAL OPS" },
+  "OP-FINALES_": { "es": "OP-FINALES", "en": "FINAL OPS" },
+  "OP. FINALES": { "es": "OP. FINALES", "en": "FINAL OPS" }
 }
