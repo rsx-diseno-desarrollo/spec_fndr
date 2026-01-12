@@ -21,31 +21,17 @@
   "Imagen del componente": { "es": "Imagen del componente", "en": "Component image" },
 
   "Unidad:": { "es": "Unidad:", "en": "Unit:" },
-  "mm": { "es": "mm", "en": "mm" },
-  "in": { "es": "in", "en": "in" },
-
-  "CLIENTE": { "es": "CLIENTE", "en": "CLIENT" },
-  "NO. PARTE": { "es": "NO. PARTE", "en": "PART NUMBER" },
-  "CODIGO": { "es": "CODIGO", "en": "CODE" },
-  "NOMBRE": { "es": "NOMBRE", "en": "NAME" },
-  "LIGA": { "es": "LIGA", "en": "LINK" },
-  "RMS": { "es": "RMS", "en": "RMS" },
 
   "HOJA DE ESPECIFICACION COMPLETA": { "es": "HOJA DE ESPECIFICACION COMPLETA", "en": "FULL SPECIFICATION SHEET" },
   "HOJA DE ESPECIFICACION OPERACIONES PREVIAS": { "es": "HOJA DE ESPECIFICACION OPERACIONES PREVIAS", "en": "PRE-PRODUCTION OPERATIONS SPECIFICATION SHEET" },
   "HOJA DE ESPECIFICACION OPERACIONES FINALES": { "es": "HOJA DE ESPECIFICACION OPERACIONES FINALES", "en": "FINAL OPERATIONS SPECIFICATION SHEET" },
 
   "PROTOTIPO": { "es": "PROTOTIPO", "en": "PROTOTYPE" },
-  "PENDIENTE": { "es": "PENDIENTE", "en": "PENDING" },
 
   "NO. DE DIBUJO/PARTE": { "es": "NO. DE DIBUJO/PARTE", "en": "DRAWING/PART NO." },
   "NOMBRE DE DOCUMENTO": { "es": "NOMBRE DE DOCUMENTO", "en": "DOCUMENT NAME" },
   "TIPO DE COMPONENTE": { "es": "TIPO DE COMPONENTE", "en": "COMPONENT TYPE" },
   "CODIGO COMPONENTES": { "es": "CODIGO COMPONENTES", "en": "COMPONENT CODE" },
-  "A": { "es": "A", "en": "A" },
-  "B": { "es": "B", "en": "B" },
-  "C": { "es": "C", "en": "C" },
-  "D": { "es": "D", "en": "D" },
   "RADIO": { "es": "RADIO", "en": "RADIUS" },
   "Especificación de tornillo central para parte de repuesto": { "es": "Especificación de tornillo central para parte de repuesto", "en": "Center Bolt Specification for Spare Part" },
   "TORNILLO": { "es": "TORNILLO", "en": "BOLT" },
@@ -60,14 +46,6 @@
   "PESO NETO EMPAQUE (Kg)": { "es": "PESO NETO EMPAQUE (Kg)", "en": "NET PACKING WEIGHT (Kg)" },
   "LINK": { "es": "LINK", "en": "LINK" },
 
-  "NISSAN": { "es": "NISSAN", "en": "NISSAN" },
-  "FORD": { "es": "FORD", "en": "FORD" },
-  "DAYTON": { "es": "DAYTON", "en": "DAYTON" },
-  "AUTOMANN": { "es": "AUTOMANN", "en": "AUTOMANN" },
-  "DINA": { "es": "DINA", "en": "DINA" },
-  "AFTER MARKET": { "es": "AFTER MARKET", "en": "AFTER MARKET" },
-  "REYCO": { "es": "REYCO", "en": "REYCO" },
-
   "OP PREVIAS": { "es": "OP PREVIAS", "en": "PRE-OPS" },
   "OP. PREVIAS": { "es": "OP. PREVIAS", "en": "PRE-OPS" },
   "OP.PREVIAS": { "es": "OP.PREVIAS", "en": "PRE-OPS" },
@@ -79,5 +57,8 @@
   "OP.FINALES": { "es": "OP.FINALES", "en": "FINAL OPS" },
   "OP-FINALES": { "es": "OP-FINALES", "en": "FINAL OPS" },
   "OP-FINALES_": { "es": "OP-FINALES", "en": "FINAL OPS" },
-  "OP. FINALES": { "es": "OP. FINALES", "en": "FINAL OPS" }
+  "OP. FINALES": { "es": "OP. FINALES", "en": "FINAL OPS" },
+
+  "No se encontraron specs de empaque para ese cliente y número de parte.": { "es": "No se encontraron specs de empaque para ese cliente y número de parte.", "en": "No packaging specs found for that client and part number." },
+  "Seleccione CLIENTE y escriba un Número de pieza.": { "es": "Seleccione CLIENTE y escriba un Número de pieza.", "en": "Select CLIENT and write a Part number." }
 }
