@@ -40,9 +40,9 @@
   "LARGUEROS": { "es": "LARGUEROS", "en": "STRINGERS" },
   "POLIN SUP/INF": { "es": "POLIN SUP/INF", "en": "TOP/BOTTOM BEAM" },
   "FLEJE": { "es": "FLEJE", "en": "STRAP" },
-  "MUELLES x CAMA": { "es": "MxC", "en": "SPRINGS/LAYER" },
+  "MUELLES x CAMA": { "es": "MUELLES x CAMA", "en": "SPRINGS/LAYER" },
   "CAMAS": { "es": "CAMAS", "en": "LAYERS" },
-  "MUELLES x TARIMA": { "es": "MxT", "en": "SPRINGS/PALLET" },
+  "MUELLES x TARIMA": { "es": "MUELLES x TARIMA", "en": "SPRINGS/PALLET" },
   "PESO NETO EMPAQUE (Kg)": { "es": "PESO NETO EMPAQUE (Kg)", "en": "NET PACKING WEIGHT (Kg)" },
 
   "OP PREVIAS": { "es": "OP PREVIAS", "en": "PRE-OPS" },
