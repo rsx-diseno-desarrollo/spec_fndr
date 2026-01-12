@@ -61,4 +61,5 @@
 
   "No se encontraron specs de empaque para ese cliente y número de parte.": { "es": "No se encontraron specs de empaque para ese cliente y número de parte.", "en": "No packaging specs found for that client and part number." },
   "Seleccione CLIENTE y escriba un Número de pieza.": { "es": "Seleccione CLIENTE y escriba un Número de pieza.", "en": "Select CLIENT and write a Part number." }
+  "Abrir RMS": { "es": "Abrir RMS", "en": "Open RMS" }
 }
