@@ -36,15 +36,14 @@
   "Especificación de tornillo central para parte de repuesto": { "es": "Especificación de tornillo central para parte de repuesto", "en": "Center Bolt Specification for Spare Part" },
   "TORNILLO": { "es": "TORNILLO", "en": "BOLT" },
 
-  "COD TARIMA": { "es": "COD TARIMA", "en": "PALLET CODE" },
+  "TARIMA": { "es": "TARIMA", "en": "PALLET CODE" },
   "LARGUEROS": { "es": "LARGUEROS", "en": "STRINGERS" },
   "POLIN SUP/INF": { "es": "POLIN SUP/INF", "en": "TOP/BOTTOM BEAM" },
   "FLEJE": { "es": "FLEJE", "en": "STRAP" },
-  "MxC": { "es": "MxC", "en": "SPRINGS/LAYER" },
+  "MUELLES x CAMA": { "es": "MxC", "en": "SPRINGS/LAYER" },
   "CAMAS": { "es": "CAMAS", "en": "LAYERS" },
-  "MxT": { "es": "MxT", "en": "SPRINGS/PALLET" },
+  "MUELLES x TARIMA": { "es": "MxT", "en": "SPRINGS/PALLET" },
   "PESO NETO EMPAQUE (Kg)": { "es": "PESO NETO EMPAQUE (Kg)", "en": "NET PACKING WEIGHT (Kg)" },
-  "LINK": { "es": "LINK", "en": "LINK" },
 
   "OP PREVIAS": { "es": "OP PREVIAS", "en": "PRE-OPS" },
   "OP. PREVIAS": { "es": "OP. PREVIAS", "en": "PRE-OPS" },
