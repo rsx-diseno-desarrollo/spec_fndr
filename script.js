@@ -72,10 +72,10 @@ async function cargarExcel() {
         resultsDiv.innerHTML += `
           <div class="spec">
             <strong>${spec["CLIENTE"]}</strong><br>
-            Código: ${spec[tDisplay("CODIGO")]}<br>
+            Código: ${tDisplay("CODIGO")}: ${spec["CODIGO"]}<br>
             No. de Parte: ${spec["NO. PARTE"]}<br>
-            Nombre: ${spec[tDisplay("NOMBRE")]}<br>
-            <a href="${spec["LIGA"]}" target="_blank">tDisplay(Abrir RMS)</a>
+            Nombre: ${tDisplay("NOMBRE")}: ${tDisplay(spec["NOMBRE"])}<br>
+            <a href="${spec["LIGA"]}" target="_blank">${tDisplay('Abrir RMS')}</a>
           </div>
         `;
       });
@@ -189,7 +189,7 @@ function iniciarEmpaque() {
     const parte   = String(inputParte.value ?? "").trim();
 
     if (!cliente || !parte) {
-      setEmpHeader(results, `<span class="msg-warn">tDisplay(Selecciona CLIENTE y escribe No. DE PARTE)</span>`);
+      setEmpHeader(results, tDisplay(`<span class="msg-warn">Selecciona CLIENTE y escribe No. DE PARTE</span>`));
       clearEmpTable(tableBody);
       return;
     }
@@ -200,7 +200,7 @@ function iniciarEmpaque() {
     );
 
     if (!match) {
-      setEmpHeader(results, `<span class="msg-empty">tDisplay(No se encontraron specs de empaque para ese cliente y número de parte.)</span>`);
+      setEmpHeader(results, tDisplay(`<span class="msg-empty">No se encontraron specs de empaque para ese cliente y número de parte.</span>`));
       clearEmpTable(tableBody);
       return;
     }
