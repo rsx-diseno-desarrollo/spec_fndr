@@ -38,14 +38,14 @@ async function cargarExcel() {
     clientes.forEach(c => {
       const opt = document.createElement("option");
       opt.value = c;
-      opt.textContent = c;
+      opt.textContent = tDisplay(c);
       clienteSelect.appendChild(opt);
     });
 
     nombres.forEach(n => {
       const opt = document.createElement("option");
       opt.value = n;
-      opt.textContent = n;
+      opt.textContent = tDisplay(n);
       nombreSelect.appendChild(opt);
     });
 
@@ -72,10 +72,10 @@ async function cargarExcel() {
         resultsDiv.innerHTML += `
           <div class="spec">
             <strong>${spec["CLIENTE"]}</strong><br>
-            Código: ${spec["CODIGO"]}<br>
+            Código: ${spec[tDisplay("CODIGO")]}<br>
             No. de Parte: ${spec["NO. PARTE"]}<br>
-            Nombre: ${spec["NOMBRE"]}<br>
-            <a href="${spec["LIGA"]}" target="_blank">Abrir RMS</a>
+            Nombre: ${spec[tDisplay("NOMBRE")]}<br>
+            <a href="${spec["LIGA"]}" target="_blank">tDisplay(Abrir RMS)</a>
           </div>
         `;
       });
@@ -143,7 +143,7 @@ function iniciarEmpaque() {
   clientes.forEach(c => {
     const opt = document.createElement("option");
     opt.value = c;
-    opt.textContent = c;
+    opt.textContent = tDisplay(c);
     selCliente.appendChild(opt);
   });
 
@@ -189,7 +189,7 @@ function iniciarEmpaque() {
     const parte   = String(inputParte.value ?? "").trim();
 
     if (!cliente || !parte) {
-      setEmpHeader(results, `<span class="msg-warn">Select CLIENT and write a Part number.</span>`);
+      setEmpHeader(results, `<span class="msg-warn">tDisplay(Selecciona CLIENTE y escribe No. DE PARTE)</span>`);
       clearEmpTable(tableBody);
       return;
     }
@@ -200,7 +200,7 @@ function iniciarEmpaque() {
     );
 
     if (!match) {
-      setEmpHeader(results, `<span class="msg-empty">No se encontraron specs de empaque para ese cliente y número de parte.</span>`);
+      setEmpHeader(results, `<span class="msg-empty">tDisplay(No se encontraron specs de empaque para ese cliente y número de parte.)</span>`);
       clearEmpTable(tableBody);
       return;
     }
@@ -208,7 +208,7 @@ function iniciarEmpaque() {
     // Encabezado: CLIENTE / NO. DE PARTE
     const parteShown   = (String(match["NO. DE PARTE"] ?? "").trim() || "--");
     const clienteShown = (String(match["CLIENTE"] ?? "").trim() || "--");
-    const headerText = `${clienteShown} / ${parteShown}`;
+    const headerText = `${tDisplay(clienteShown)} / ${tDisplay(parteShown)}`;
 
     // Render de tabla
     const detalles = [
@@ -244,7 +244,7 @@ function iniciarEmpaque() {
         const headerCell = document.createElement("th");
         headerCell.colSpan = 2; // ocupa ambas columnas
         headerCell.className = "table-title";
-        headerCell.textContent = headerText;
+        headerCell.textContent = tDisplay(headerText);
         headerRow.appendChild(headerCell);
         tbody.appendChild(headerRow);
 
@@ -258,11 +258,11 @@ function iniciarEmpaque() {
     const th = document.createElement("th");
     th.scope = "row";
     th.className = "label-cell" + (emphasized.has(label) ? " is-emphasis" : "");
-    th.textContent = label;
+    th.textContent = tDisplay(label);
 
     const td = document.createElement("td");
     td.className = "value-cell" + (emphasized.has(label) ? " is-emphasis" : "");
-    td.textContent = (value ?? "--");
+    td.textContent = tDisplay(value ?? "--");
 
       tr.appendChild(th);
       tr.appendChild(td);
