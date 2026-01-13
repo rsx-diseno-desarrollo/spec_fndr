@@ -52,6 +52,8 @@ fillSelectFromExcel(
   "-- Seleccionar tipo --"
 );
 
+renderComponentSelects();
+
   // --- 0) Estado inicial: ocultar y limpiar imagen ---
   ocultarImagen(imgEl);
 
@@ -277,6 +279,29 @@ function renderCotas(match) {
 // ======================================================
 //  RENDER COMPONENTES (idioma)
 // ======================================================
+
+window.renderComponentSelects = function () {
+  const tipoComp = document.getElementById("tipoComp");
+  if (!tipoComp) return;
+
+  const compData = (window.data && window.data.comp) ? window.data.comp : [];
+  const tiposES = [...new Set(compData.map(x => String(x["TIPO DE COMPONENTE"] ?? "").trim()))]
+                  .filter(Boolean)
+                  .sort();
+
+  // Limpia y vuelve a llenar usando helper que ya traduce el placeholder
+  fillSelectFromExcel(tiposES, tipoComp, "-- Seleccionar tipo --");
+
+  // Si quieres que se conserve la selección actual (si existía), vuelve a setear value:
+  // const prev = localStorage.getItem('tipoCompLast') ?? "";
+  // if (prev && tiposES.includes(prev)) tipoComp.value = prev;
+};
+
+// (Opcional) Guarda la última selección para restaurarla tras re-render
+document.getElementById("tipoComp")?.addEventListener("change", (e) => {
+  localStorage.setItem('tipoCompLast', String(e.target.value ?? ""));
+});
+
 window.renderComponentView = function () {
   const match = window._componentesMatch;
   if (!match) return;
