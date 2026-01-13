@@ -70,6 +70,7 @@
     if (typeof window.renderProductoSelects === 'function') window.renderProductoSelects();
     if (typeof window.renderEmpaqueTable === 'function')   window.renderEmpaqueTable();
     if (typeof window.renderComponentView === 'function')   window.renderComponentView();
+    if (typeof window.renderComponentSelects === 'function') window.renderComponentSelects()
   }
 
   // 5) Cambiar idioma (toggle)
