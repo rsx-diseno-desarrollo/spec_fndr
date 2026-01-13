@@ -35,21 +35,14 @@ async function cargarExcel() {
     });
 
     window.data = allData;
+    window._productoSpecs = allData.prod || [];
+    window._empaqueData  = allData.emp  || [];
     console.log("Datos cargados:", allData);
-
-//Función que lang.js espera
-window.renderProductoSelects = function () {
-  if (!window._productoSpecs.length) return;
-  initProducto(window._productoSpecs);
-};
     
   } catch (error) {
     console.error("Error al cargar el Excel:", error);
   }
 }
-// ----------------------------
-// PRODUCTO END
-// ----------------------------
 
 Promise.all([cargarExcel(), langReady]).then(() => {
   initProducto(window._productoSpecs);
@@ -118,6 +111,12 @@ function initProducto(specs) {
   clienteSelect.addEventListener("change", buscarProducto);
   nombreSelect.addEventListener("change", buscarProducto);
 }
+
+//Función que lang.js espera
+window.renderProductoSelects = function () {
+  if (!window._productoSpecs.length) return;
+  initProducto(window._productoSpecs);
+};
 
 // ----------------------------
 // CAMBIO DE SECCIONES
