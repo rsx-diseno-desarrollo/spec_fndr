@@ -4,16 +4,12 @@
 // ============================
 // ESTADO COMPONENTES (idioma)
 // ============================
+let unidadComp = localStorage.getItem("unidadComp") || "mm";
 window._componentesData = [];
 window._componentesMatch = null;
 
-window.addEventListener("load", () => {
-  // Esperar a que los datos ya estén cargados
-  const waitData = setInterval(() => {
-    if (!window.data) return;
-    clearInterval(waitData);
-    iniciarComponentes();
-  }, 200);
+Promise.all([langReady]).then(() => {
+  iniciarComponentes();
 });
 
 
@@ -29,19 +25,15 @@ function iniciarComponentes() {
   const unidadSelect = document.getElementById("comp-unidad"); // <select mm/in>
 
   // Unidad persistida (default mm)
-  let unidadComp = localStorage.getItem("unidadComp") || "mm";
-  if (unidadSelect) unidadSelect.value = unidadComp;
-  // Último resultado válido para re-render (al cambiar unidad)
-  let ultimoMatch = null;
-
   if (unidadSelect) {
-    unidadSelect.addEventListener("change", () => {
-      unidadComp = unidadSelect.value;
-      localStorage.setItem("unidadComp", unidadComp);
-      // Si ya hay un componente mostrado, re-renderizamos las cotas
-      if (ultimoMatch) renderCotas(ultimoMatch);
-    });
-  }
+  unidadSelect.value = unidadComp;
+  unidadSelect.addEventListener("change", () => {
+    unidadComp = unidadSelect.value;
+    localStorage.setItem("unidadComp", unidadComp);
+    if (window._componentesMatch) renderCotas(window._componentesMatch);
+  });
+}
+
   
   if (!tipoComp || !codigoInput || !autocompleteList || !btnBuscarComp || !resultsComp || !imgEl) return;
 
@@ -49,6 +41,9 @@ function iniciarComponentes() {
   // Llenar selector de tipos
   // ------------------------------------------------------
   window._componentesData = compData;
+  console.log("Componentes cargados:", compData.length);
+  console.log("Ejemplo fila:", compData[0]);
+
 fillSelectFromExcel(
   [...new Set(compData.map(x => String(x["TIPO DE COMPONENTE"] ?? "").trim()))]
     .filter(Boolean)
@@ -104,22 +99,59 @@ fillSelectFromExcel(
       autocompleteList.innerHTML = "";
     }
   });
-  
-  function convertirValor(valorMm) {
-    // Evitar que "" se convierta a 0
-    if (valorMm === "" || valorMm === null || valorMm === undefined) return "--";
-    const num = Number(valorMm);
-    if (!isFinite(num)) return valorMm ?? "--";
-  
-    if (unidadComp === "in") {
-      const pulgadas = num / 25.4;
-      return `${pulgadas.toFixed(3)}`; // 3 decimales en pulgadas
-    }
-    // mm: entero si es exacto, si no 2 decimales
-    return Number.isInteger(num) ? `${num}` : `${num.toFixed(2)}`;
-  }
+  // ------------------------------------------------------
+  // Acción del botón "Buscar"
+  // ------------------------------------------------------
+  btnBuscarComp.addEventListener("click", () => {
+    const tipo = String(tipoComp.value ?? "");
+    const codigo = String(codigoInput.value ?? "").trim();
 
-  
+    if (!tipo || !codigo) {
+      showMessage(tDisplay("Seleccione tipo y escriba un código."), "warn");
+      ocultarImagen(imgEl);
+      // Limpiar cotas si no hay datos
+      resultsComp.querySelector("#cotas-list")?.replaceChildren();
+      return;
+    }
+
+    const match = compData.find(row =>
+      String(row["TIPO DE COMPONENTE"] ?? "") === tipo &&
+      String(row["CODIGO COMPONENTES"] ?? "") === codigo
+    );
+
+    if (!match) {
+      showMessage("No se encontró el componente.", "empty");
+      ocultarImagen(imgEl);
+      return;
+    }
+
+    // 1) Encabezado arriba
+    const header = resultsComp.querySelector("#comp-header");
+    if (header) {
+      const numeroDibujo = String(match["NO. DE DIBUJO/PARTE"] ?? "").trim();
+      const nombreDocumento = String(match["NOMBRE DE DOCUMENTO"] ?? "").trim();
+
+      const numeroDibujoShown = numeroDibujo || "--";
+      const nombreDocumentoShown = nombreDocumento || "--";
+
+      header.textContent = `${numeroDibujoShown} / ${nombreDocumentoShown}`;
+    }
+
+    // 2) Imagen (cambiar y mostrar solo cuando cargue)
+    const src = imagenPorTipo[tipo]; // sin default para no mostrar si no existe
+    if (!src) {
+      showMessage(`No hay imagen registrada para tipo: ${tipo}`, "warn");
+      ocultarImagen(imgEl);
+    } else {
+      mostrarImagenCuandoCargue(imgEl, src, `Imagen del componente ${tipo}`);
+    }
+
+    // 3) Cotas (guardar último match y render)
+    window._componentesMatch = match;
+    renderComponentView();
+  });
+}
+
 // Convierte un número en mm a texto en la unidad seleccionada
 function convertirNumero(numMm) {
   if (!isFinite(numMm)) return "--";
@@ -172,9 +204,42 @@ function convertirValorO_Rango(raw) {
   return str;
 }
 
-  
+function showMessage(text, kind = "info") {
+  const resultsComp = document.getElementById("results-comp");
+  if (!resultsComp) return;
+
+  const header = resultsComp.querySelector("#comp-header");
+  if (!header) return;
+
+  const msgClass = kind === "warn" ? "msg-warn"
+                : kind === "empty" ? "msg-empty"
+                : kind === "error" ? "msg-error"
+                : "msg-info";
+
+  header.innerHTML = `<span class="${msgClass}">${text}</span>`;
+}
+
+function ocultarImagen(img) {
+    img.classList.remove("is-visible");
+    img.removeAttribute("src");
+    img.alt = "Imagen del componente";
+  }
+
+  function mostrarImagenCuandoCargue(img, src, alt) {
+    img.classList.remove("is-visible"); // ocultar mientras carga
+    img.alt = alt || "Imagen del componente";
+    img.onload = () => img.classList.add("is-visible");
+    img.onerror = () => {
+      showMessage("No se pudo cargar la imagen del componente.", "error");
+      img.classList.remove("is-visible");
+      img.removeAttribute("src");
+    };
+    img.src = src;
+  }
+
 function renderCotas(match) {
-  const cotasList = resultsComp.querySelector("#cotas-list");
+  const resultsComp = document.getElementById("results-comp");
+  const cotasList = resultsComp?.querySelector("#cotas-list");
   if (!cotasList) return;
 
   const cotas = {
@@ -206,93 +271,6 @@ function renderCotas(match) {
   });
 }
 
-
-  // ------------------------------------------------------
-  // Acción del botón "Buscar"
-  // ------------------------------------------------------
-  btnBuscarComp.addEventListener("click", () => {
-    const tipo = String(tipoComp.value ?? "");
-    const codigo = String(codigoInput.value ?? "").trim();
-
-    if (!tipo || !codigo) {
-      showMessage(tDisplay("Seleccione tipo y escriba un código."), "warn");
-      ocultarImagen(imgEl);
-      // Limpiar cotas si no hay datos
-      resultsComp.querySelector("#cotas-list")?.replaceChildren();
-      return;
-    }
-
-    const match = compData.find(row =>
-      String(row["TIPO DE COMPONENTE"] ?? "") === tipo &&
-      String(row["CODIGO COMPONENTES"] ?? "") === codigo
-    );
-
-    if (!match) {
-      showMessage("No se encontró el componente.", "empty");
-      ocultarImagen(imgEl);
-      return;
-    }
-
-    // 1) Encabezado arriba
-    const header = resultsComp.querySelector("#comp-header");
-    if (header) {
-      const numeroDibujo = String(match["NO. DE DIBUJO/PARTE"] ?? "").trim();
-      const nombreDocumento = String(match["NOMBRE DE DOCUMENTO"] ?? "").trim();
-
-      const numeroDibujoShown = numeroDibujo || "--";
-      const nombreDocumentoShown = nombreDocumento || "--";
-
-      header.textContent = `${numeroDibujoShown} / ${nombreDocumentoShown}`;
-    }
-
-    // 2) Imagen (cambiar y mostrar solo cuando cargue)
-    const src = imagenPorTipo[tipo]; // sin default para no mostrar si no existe
-    if (!src) {
-      showMessage(`No hay imagen registrada para tipo: ${tipo}`, "warn");
-      ocultarImagen(imgEl);
-    } else {
-      mostrarImagenCuandoCargue(imgEl, src, `Imagen del componente ${tipo}`);
-    }
-
-    // 3) Cotas (guardar último match y render)
-    window._componentesMatch = match;
-    renderComponentView();
-  });
-
-  // ------------------------------------------------------
-  // Utilidades
-  // ------------------------------------------------------
-  function showMessage(text, kind = "info") {
-    const msgClass = kind === "warn" ? "msg-warn"
-                  : kind === "empty" ? "msg-empty"
-                  : kind === "error" ? "msg-error"
-                  : "msg-info";
-
-    const header = resultsComp.querySelector("#comp-header");
-    if (header) {
-      header.innerHTML = `<span class="${msgClass}">${text}</span>`;
-    }
-  }
-
-  function ocultarImagen(img) {
-    img.classList.remove("is-visible");
-    img.removeAttribute("src");
-    img.alt = "Imagen del componente";
-  }
-
-  function mostrarImagenCuandoCargue(img, src, alt) {
-    img.classList.remove("is-visible"); // ocultar mientras carga
-    img.alt = alt || "Imagen del componente";
-    img.onload = () => img.classList.add("is-visible");
-    img.onerror = () => {
-      showMessage("No se pudo cargar la imagen del componente.", "error");
-      img.classList.remove("is-visible");
-      img.removeAttribute("src");
-    };
-    img.src = src;
-  }
-}
-
 // ======================================================
 //  COMPONENTES END
 
@@ -316,8 +294,8 @@ window.renderComponentView = function () {
   const tipo = match["TIPO DE COMPONENTE"];
   const imagenPorTipo = {
     "TORNILLO": "img/tornillo_plantilla.png",
-    "TUERCA":   "img/tuerca_plantilla.png",
-    "LAINA":    "img/laina_plantilla.png"
+   // "TUERCA":   "img/tuerca_plantilla.png",
+   // "LAINA":    "img/laina_plantilla.png"
   };
 
   const src = imagenPorTipo[tipo];
