@@ -1,6 +1,12 @@
 //  COMPONENTES
 // ======================================================
 
+// ============================
+// ESTADO COMPONENTES (idioma)
+// ============================
+window._componentesData = [];
+window._componentesMatch = null;
+
 window.addEventListener("load", () => {
   // Esperar a que los datos ya estén cargados
   const waitData = setInterval(() => {
@@ -42,13 +48,14 @@ function iniciarComponentes() {
   // ------------------------------------------------------
   // Llenar selector de tipos
   // ------------------------------------------------------
-  const tipos = [...new Set(compData.map(x => String(x["TIPO DE COMPONENTE"] ?? "").trim()))].filter(t => t);
-  tipos.sort().forEach(t => {
-    const opt = document.createElement("option");
-    opt.value = t;
-    opt.textContent = t;
-    tipoComp.appendChild(opt);
-  });
+  window._componentesData = compData;
+fillSelectFromExcel(
+  [...new Set(compData.map(x => String(x["TIPO DE COMPONENTE"] ?? "").trim()))]
+    .filter(Boolean)
+    .sort(),
+  tipoComp,
+  "-- Seleccionar tipo --"
+);
 
   // --- 0) Estado inicial: ocultar y limpiar imagen ---
   ocultarImagen(imgEl);
@@ -192,7 +199,7 @@ function renderCotas(match) {
     const item = document.createElement("div");
     item.className = "cota-item";
     item.innerHTML = `
-      <span class="cota-label">${label}:</span>
+      <span class="cota-label">${tDisplay(label)}:</span>
       <span class="cota-value">${mostrado}</span>
     `;
     cotasList.appendChild(item);
@@ -208,7 +215,7 @@ function renderCotas(match) {
     const codigo = String(codigoInput.value ?? "").trim();
 
     if (!tipo || !codigo) {
-      showMessage("Selecciona tipo y escribe un código.", "warn");
+      showMessage(tDisplay("Seleccione tipo y escriba un código."), "warn");
       ocultarImagen(imgEl);
       // Limpiar cotas si no hay datos
       resultsComp.querySelector("#cotas-list")?.replaceChildren();
@@ -248,8 +255,8 @@ function renderCotas(match) {
     }
 
     // 3) Cotas (guardar último match y render)
-    ultimoMatch = match;
-    renderCotas(match);
+    window._componentesMatch = match;
+    renderComponentView();
   });
 
   // ------------------------------------------------------
@@ -288,3 +295,40 @@ function renderCotas(match) {
 
 // ======================================================
 //  COMPONENTES END
+
+// ======================================================
+//  RENDER COMPONENTES (idioma)
+// ======================================================
+window.renderComponentView = function () {
+  const match = window._componentesMatch;
+  if (!match) return;
+
+  const resultsComp = document.getElementById("results-comp");
+  const imgEl = resultsComp.querySelector("#comp-img");
+  const header = resultsComp.querySelector("#comp-header");
+
+  // Encabezado
+  const numero = String(match["NO. DE DIBUJO/PARTE"] ?? "").trim() || "--";
+  const nombre = String(match["NOMBRE DE DOCUMENTO"] ?? "").trim() || "--";
+  header.textContent = `${numero} / ${nombre}`;
+
+  // Imagen
+  const tipo = match["TIPO DE COMPONENTE"];
+  const imagenPorTipo = {
+    "TORNILLO": "img/tornillo_plantilla.png",
+    "TUERCA":   "img/tuerca_plantilla.png",
+    "LAINA":    "img/laina_plantilla.png"
+  };
+
+  const src = imagenPorTipo[tipo];
+  if (src) {
+    mostrarImagenCuandoCargue(
+      imgEl,
+      src,
+      tDisplay("Imagen del componente")
+    );
+  }
+
+  // Cotas
+  renderCotas(match);
+};
