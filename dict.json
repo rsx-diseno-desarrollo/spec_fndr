@@ -64,6 +64,28 @@
 
   "Código": { "es": "Código", "en": "Code" },
   "No. de Parte": { "es": "No. de Parte", "en": "Part Number" },
-  "Nombre": { "es": "Nombre", "en": "Name" }
+  "Nombre": { "es": "Nombre", "en": "Name" },
+
+  "TORNILLO": { "es": "TORNILLO", "en": "BOLT" },
+
+  "Seleccione tipo y escriba un código.": {
+  "es": "Seleccione tipo y escriba un código.",
+  "en": "Select a type and enter a code."
+},
+"No se encontró el componente.": {
+  "es": "No se encontró el componente.",
+  "en": "Component not found."
+},
+"No hay imagen registrada para tipo": {
+  "es": "No hay imagen registrada para tipo",
+  "en": "No image registered for type"
+},
+"No se pudo cargar la imagen del componente.": {
+  "es": "No se pudo cargar la imagen del componente.",
+  "en": "Component image could not be loaded."
+},
+"RADIO": { "es": "RADIO", "en": "RADIUS" },
+"CUERDA": { "es": "CUERDA", "en": "THREAD" },
+"GRADO DE DUREZA": { "es": "GRADO DE DUREZA", "en": "HARDNESS GRADE" }
 
 }
