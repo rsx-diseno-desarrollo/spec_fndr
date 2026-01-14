@@ -71,6 +71,7 @@
     if (typeof window.renderEmpaqueTable === 'function')   window.renderEmpaqueTable();
     if (typeof window.renderComponentView === 'function')   window.renderComponentView();
     if (typeof window.renderComponentSelects === 'function') window.renderComponentSelects()
+    if (typeof window.renderTstsSelects === 'function') window.renderTstsSelects();
   }
 
   // 5) Cambiar idioma (toggle)
@@ -99,6 +100,7 @@
   langReady.then(() => {
     if (typeof renderEmpaqueSelects === 'function') renderEmpaqueSelects();
     if (typeof renderEmpaqueTable === 'function')   renderEmpaqueTable();
+    if (typeof renderTstsSelects === 'function') renderTstsSelects();
     // Agrega aquí otros renders iniciales que dependan de tDisplay()
   });
 
