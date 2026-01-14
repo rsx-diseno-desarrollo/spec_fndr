@@ -36,6 +36,7 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
     <li><a href="#" data-section="seccion-producto" data-text="Producto">Producto</a></li>
     <li><a href="#" data-section="seccion-empaque" data-text="Empaque">Empaque</a></li>
     <li><a href="#" data-section="seccion-componentes" data-text="Componentes">Componentes</a></li>
+	<li><a href="#" data-section="seccion-tsts" data-text="TsTs: Plantillas">TsTs: Plantillas</a></li>
   </ul>
 </nav>
 <!-- Menu END -->
@@ -147,6 +148,25 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
     </div>
 </div>
   <!-- SECCION COMPONENENTES END -->
+
+
+<!--  SECCIÓN TsTs -->
+<div id="seccion-tsts" class="seccion">
+  <h3 data-text="Plantillas TsTs">Plantillas TsTs</h3><br>
+  <!-- Buscador -->
+  <div class="buscador">
+    <input type="text" id="tsts-parte" placeholder="Número de parte" data-placeholder="Número de parte">
+    <select id="tsts-cliente">
+      <option value="" data-text="-- Seleccionar cliente --">-- Seleccionar cliente --</option>
+    </select>
+    <!-- Botón Buscar -->
+    <button id="tsts-btn-buscar" class="btn btn-buscar" type="button" data-text="Buscar">Buscar</button>
+  </div>
+  <!-- Resultados -->
+  <div id="tsts-results">
+  </div>
+</div>
+<!-- SECCIÓN TsTs END -->
   
   <!-- Tu archivo JS externo -->
     <script src="script.js"></script>
