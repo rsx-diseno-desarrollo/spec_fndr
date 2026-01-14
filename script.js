@@ -37,6 +37,7 @@ async function cargarExcel() {
     window.data = allData;
     window._productoSpecs = allData.prod || [];
     window._empaqueData  = allData.emp  || [];
+    window._tstsData = allData.tsts || [];
     console.log("Datos cargados:", allData);
     
   } catch (error) {
@@ -47,6 +48,7 @@ async function cargarExcel() {
 Promise.all([cargarExcel(), langReady]).then(() => {
   initProducto(window._productoSpecs);
   initEmpaque(window._empaqueData);
+  initTsts(window._tstsData);
 });
 
 // ======================================================
@@ -291,4 +293,128 @@ function clearEmpaque(tbody, resultsRoot) {
 window.renderEmpaqueSelects = function () {
   if (!window._empaqueData.length) return;
   initEmpaque(window._empaqueData);
+};
+
+
+// ======================================================
+// TsTs: PLANTILLAS (con soporte de idioma)
+// ======================================================
+function initTsts(tstsData) {
+  window._tstsData = tstsData;
+
+  // Referencias a la UI de la sección TsTs
+  const selCliente   = document.getElementById("tsts-cliente");
+  const inputParte   = document.getElementById("tsts-parte");
+  const autoList     = document.getElementById("tsts-autocomplete");
+  const btnBuscar    = document.getElementById("tsts-btn-buscar");
+  const resultsRoot  = document.getElementById("tsts-results");
+
+  // Si no existe la sección en el DOM, no prosigue (igual que haces en Empaque)
+  if (!selCliente || !inputParte || !btnBuscar || !resultsRoot) return;
+
+  // ------- CLIENTES (select traducible) -------
+  const clientes = [...new Set(tstsData.map(x => String(x["CLIENTE"] ?? "").trim()))]
+                    .filter(Boolean)
+                    .sort();
+  // Usa tu helper existente para traducibles y placeholder:
+  fillSelectFromExcel(clientes, selCliente, "-- Seleccionar cliente --");
+
+  // ------- AUTOCOMPLETE por No. de Parte (filtrado opcional por cliente) -------
+  inputParte.addEventListener("input", () => {
+    const texto = inputParte.value.toLowerCase().trim();
+    autoList.innerHTML = "";
+    if (!texto) return;
+
+    const clienteSel = selCliente.value;
+    let fuente = tstsData;
+    if (clienteSel) {
+      fuente = fuente.filter(row => String(row["CLIENTE"]) === clienteSel);
+    }
+
+    // Únicos por parte en la fuente filtrada:
+    const partesUnicas = [...new Set(fuente.map(r => String(r["NO. DE PARTE"] ?? "")))]
+                          .filter(Boolean);
+
+    partesUnicas
+      .filter(p => p.toLowerCase().includes(texto))
+      .slice(0, 12) // límite de sugerencias
+      .forEach(p => {
+        const div = document.createElement("div");
+        div.className = "autocomplete-item";
+        div.textContent = p;
+        div.onclick = () => {
+          inputParte.value = p;
+          autoList.innerHTML = "";
+        };
+        autoList.appendChild(div);
+      });
+  });
+
+  // ------- BOTÓN BUSCAR -------
+  btnBuscar.addEventListener("click", buscarTsts);
+
+  function buscarTsts() {
+    const cliente = selCliente.value;
+    const parte    = inputParte.value.trim();
+
+    // Limpia resultados
+    resultsRoot.innerHTML = "";
+
+    // Validaciones
+    if (!cliente || !parte) {
+      resultsRoot.innerHTML = `<span class="msg-warn">${tDisplay("Seleccione CLIENTE y escriba un Número de pieza.")}</span>`;
+      return;
+    }
+
+    // Filtrado exacto (CLIENTE + NO. DE PARTE)
+    const matchRows = tstsData.filter(row =>
+      String(row["CLIENTE"])      === cliente &&
+      String(row["NO. DE PARTE"]) === parte
+    );
+
+    if (!matchRows.length) {
+      resultsRoot.innerHTML = `<span class="msg-empty">${tDisplay("No se encontraron plantillas para ese cliente y número de parte.")}</span>`;
+      return;
+    }
+
+    // Según tu requerimiento: encabezados arriba
+    const tipoPlantilla = String(matchRows[0]["TIPO DE PLANTILLA"] ?? "--");
+
+    // Encabezado superior (No. de Parte + Tipo de Plantilla)
+    let html = `
+      <h4><strong>${tDisplay("No. de Parte")}:</strong> ${parte}</h4>
+      <h4><strong>${tDisplay("Tipo de Plantilla")}:</strong> ${tipoPlantilla}</h4>
+      <br>
+    `;
+
+    // Tabla (usa los estilos ya definidos en styles.css)
+    html += `
+      <table class="emp-table">
+        <thead>
+          <tr class="table-title">
+            <th>${tDisplay("N° HOJA")}</th>
+            <th>${tDisplay("PLANTILLA")}</th>
+            <th>${tDisplay("MUESTRA")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${matchRows.map(row => `
+            <tr>
+              <td class="value-cell">${row["NO. DE HOJA"] ?? "--"}</td>
+              <td class="value-cell">${row["NO. DE PLANTILLA"] ?? "--"}</td>
+              <td class="value-cell">${row["NO. DE MUESTRA"] ?? "--"}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
+
+    resultsRoot.innerHTML = html;
+  }
+}
+
+// ------- Hooks para idioma, igual que Producto/Empaque -------
+window.renderTstsSelects = function () {
+  if (!window._tstsData?.length) return;
+  initTsts(window._tstsData);
 };
