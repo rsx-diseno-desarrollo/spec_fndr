@@ -74,6 +74,13 @@
 },
 "RADIO": { "es": "RADIO", "en": "RADIUS" },
 "CUERDA": { "es": "CUERDA", "en": "THREAD" },
-"GRADO DE DUREZA": { "es": "GRADO DE DUREZA", "en": "HARDNESS GRADE" }
+"GRADO DE DUREZA": { "es": "GRADO DE DUREZA", "en": "HARDNESS GRADE" },
+
+"Plantillas TsTs": { "es": "Plantillas TsTs", "en": "TsTs Templates" },
+"Número de parte": { "es": "Número de parte", "en": "Part number" },
+"Tipo de Plantilla": { "es": "Tipo de Plantilla", "en": "Template Type" } 
+"N° HOJA": { "es": "N° HOJA", "en": "Sheet #" },
+"PLANTILLA": { "es": "PLANTILLA", "en": "Template" },
+"MUESTRA": { "es": "MUESTRA", "en": "Sample" }
 
 }
