@@ -8,10 +8,6 @@ let unidadComp = localStorage.getItem("unidadComp") || "mm";
 window._componentesData = [];
 window._componentesMatch = null;
 
-Promise.all([langReady]).then(() => {
-  iniciarComponentes();
-});
-
 
 (function initComponentesDesdeSupabase() {
   const sb = window.supabaseClient;
