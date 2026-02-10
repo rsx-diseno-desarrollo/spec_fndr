@@ -13,146 +13,93 @@ Promise.all([langReady]).then(() => {
 });
 
 
-function iniciarComponentes() {
-  const compData = (window.data && window.data.comp) ? window.data.comp : [];
-
-  const tipoComp = document.getElementById("tipoComp");
-  const codigoInput = document.getElementById("codigoComp");
-  const autocompleteList = document.getElementById("autocomplete-list");
+(function initComponentesDesdeSupabase() {
+  const sb = window.supabaseClient;
+  const tipoComp      = document.getElementById("tipoComp");
+  const codigoInput   = document.getElementById("codigoComp");
+  const autocomplete  = document.getElementById("autocomplete-list");
   const btnBuscarComp = document.getElementById("btnBuscarComp");
-  const resultsComp = document.getElementById("results-comp");
-  const imgEl = resultsComp.querySelector("#comp-img");
-  const unidadSelect = document.getElementById("comp-unidad"); // <select mm/in>
 
-  // Unidad persistida (default mm)
-  if (unidadSelect) {
-  unidadSelect.value = unidadComp;
-  unidadSelect.addEventListener("change", () => {
-    unidadComp = unidadSelect.value;
-    localStorage.setItem("unidadComp", unidadComp);
-    if (window._componentesMatch) renderCotas(window._componentesMatch);
-  });
-}
+  if (!tipoComp || !codigoInput || !autocomplete || !btnBuscarComp) return;
 
-  
-  if (!tipoComp || !codigoInput || !autocompleteList || !btnBuscarComp || !resultsComp || !imgEl) return;
+  // 1) Tipos activos (comp_tipo.nombre)
+  (async () => {
+    const { data } = await sb.from('comp_tipo').select('nombre').eq('activo', true).order('nombre', { ascending: true });
+    const tipos = (data ?? []).map(r => String(r.nombre)).filter(Boolean);
+    fillSelectFromExcel(tipos, tipoComp, "-- Seleccionar tipo --");
+  })();
 
-  // ------------------------------------------------------
-  // Llenar selector de tipos
-  // ------------------------------------------------------
-  window._componentesData = compData;
-  console.log("Componentes cargados:", compData.length);
-  console.log("Ejemplo fila:", compData[0]);
+  // 2) Autocomplete por código filtrando por tipo (v_comp)
+  codigoInput.addEventListener("input", async () => {
+    const texto = (codigoInput.value || "").trim().toLowerCase();
+    autocomplete.innerHTML = "";
+    if (!texto || !tipoComp.value) return;
 
-fillSelectFromExcel(
-  [...new Set(compData.map(x => String(x["TIPO DE COMPONENTE"] ?? "").trim()))]
-    .filter(Boolean)
-    .sort(),
-  tipoComp,
-  "-- Seleccionar tipo --"
-);
+    const { data } = await sb
+      .from('v_comp')
+      .select('codigo')
+      .eq('tipo', tipoComp.value)
+      .ilike('codigo', `%${texto}%`)
+      .limit(10);
 
-renderComponentSelects();
-
-  // --- 0) Estado inicial: ocultar y limpiar imagen ---
-  ocultarImagen(imgEl);
-
-  // --- Mapa centralizado ---
-  const imagenPorTipo = {
-     "TORNILLO": "img/tornillo_plantilla.png",
-    "TUERCA":   "img/tuerca_plantilla.png",
-    "LAINA":    "img/laina_plantilla.png",
-    // "ARANDELA": "img/arandela_plantilla.png",
-    // "PASADOR":  "img/pasador_plantilla.png",
-  };
-
-  // ------------------------------------------------------
-  // Autocompletar por código
-  // ------------------------------------------------------
-  codigoInput.addEventListener("input", () => {
-    const texto = codigoInput.value.toLowerCase().trim();
-    autocompleteList.innerHTML = "";
-    if (texto.length < 1) return;
-
-    const tipoSel = String(tipoComp.value ?? "");
-    let fuente = compData;
-    if (tipoSel) {
-      fuente = fuente.filter(row => String(row["TIPO DE COMPONENTE"] ?? "") === tipoSel);
-    }
-
-    const filtrados = fuente.filter(row =>
-      String(row["CODIGO COMPONENTES"] ?? "").toLowerCase().includes(texto)
-    );
-
-    filtrados.slice(0, 10).forEach(row => {
+    [...new Set((data ?? []).map(r => r.codigo))].forEach(code => {
       const div = document.createElement("div");
       div.classList.add("autocomplete-item");
-      div.textContent = row["CODIGO COMPONENTES"];
-      div.addEventListener("click", () => {
-        codigoInput.value = row["CODIGO COMPONENTES"];
-        autocompleteList.innerHTML = "";
-      });
-      autocompleteList.appendChild(div);
+      div.textContent = code;
+      div.onclick = () => { codigoInput.value = code; autocomplete.innerHTML = ""; };
+      autocomplete.appendChild(div);
     });
   });
-  
-    document.addEventListener("click", (e) => {
-    if (e.target !== codigoInput && !autocompleteList.contains(e.target)) {
-      autocompleteList.innerHTML = "";
-    }
-  });
-  // ------------------------------------------------------
-  // Acción del botón "Buscar"
-  // ------------------------------------------------------
-  btnBuscarComp.addEventListener("click", () => {
-    const tipo = String(tipoComp.value ?? "");
-    const codigo = String(codigoInput.value ?? "").trim();
 
+  // 3) Buscar 1 componente y render
+  btnBuscarComp.addEventListener("click", async () => {
+    const tipo   = tipoComp.value || "";
+    const codigo = (codigoInput.value || "").trim();
     if (!tipo || !codigo) {
       showMessage(tDisplay("Seleccione tipo y escriba un código."), "warn");
-      ocultarImagen(imgEl);
-      // Limpiar cotas si no hay datos
-      resultsComp.querySelector("#cotas-list")?.replaceChildren();
+      const imgEl = document.getElementById("comp-img");
+      imgEl?.removeAttribute("src");
+      document.getElementById("cotas-list")?.replaceChildren();
       return;
     }
 
-    const match = compData.find(row =>
-      String(row["TIPO DE COMPONENTE"] ?? "") === tipo &&
-      String(row["CODIGO COMPONENTES"] ?? "") === codigo
-    );
-
+    const { data } = await sb.from('v_comp').select('*')
+      .eq('tipo', tipo).eq('codigo', codigo).limit(1);
+    const match = (data ?? [])[0];
     if (!match) {
       showMessage("No se encontró el componente.", "empty");
-      ocultarImagen(imgEl);
       return;
     }
 
-    // 1) Encabezado arriba
-    const header = resultsComp.querySelector("#comp-header");
-    if (header) {
-      const numeroDibujo = String(match["NO. DE DIBUJO/PARTE"] ?? "").trim();
-      const nombreDocumento = String(match["NOMBRE DE DOCUMENTO"] ?? "").trim();
+    // Guarda el match en el formato que ya consume tu render actual
+    window._componentesMatch = {
+      "TIPO DE COMPONENTE": match.tipo,
+      "CODIGO COMPONENTES": match.codigo,
+      "NO. DE DIBUJO/PARTE": match.doc_codigo ?? "--",
+      "NOMBRE DE DOCUMENTO": match.nombre ?? "--",
+      // Cotas: si aún no tienes columnas A..J en DB, déjalas null/undefined
+      "A": match.a, "B": match.b, "C": match.c, "D": match.d,
+      "RADIO": match.e, "E": match.e, "F": match.f, "G": match.g, "H": match.h, "I": match.i, "J": match.j,
+      // img_key = nombre.png que viene de DB (ct.img_key)
+      "_img_key": match.img_key
+    };
 
-      const numeroDibujoShown = numeroDibujo || "--";
-      const nombreDocumentoShown = nombreDocumento || "--";
-
-      header.textContent = `${numeroDibujoShown} / ${nombreDocumentoShown}`;
-    }
-
-    // 2) Imagen (cambiar y mostrar solo cuando cargue)
-    const src = imagenPorTipo[tipo]; // sin default para no mostrar si no existe
-    if (!src) {
-      showMessage(`No hay imagen registrada para tipo: ${tipo}`, "warn");
-      ocultarImagen(imgEl);
+    // Imagen desde tu carpeta local del repo
+    const imgEl = document.getElementById("comp-img");
+    const src = window._componentesMatch._img_key
+      ? `img/${window._componentesMatch._img_key}`
+      : null;
+    if (src) {
+      mostrarImagenCuandoCargue(imgEl, src, tDisplay("Imagen del componente"));
     } else {
-      mostrarImagenCuandoCargue(imgEl, src, `Imagen del componente ${tipo}`);
+      showMessage("No hay imagen registrada para este tipo.", "warn");
+      imgEl?.removeAttribute("src");
     }
 
-    // 3) Cotas (guardar último match y render)
-    window._componentesMatch = match;
+    // Render encabezado + cotas
     renderComponentView();
   });
-}
+})();
 
 // Convierte un número en mm a texto en la unidad seleccionada
 function convertirNumero(numMm) {
@@ -310,26 +257,14 @@ window.renderComponentView = function () {
   const imgEl = resultsComp.querySelector("#comp-img");
   const header = resultsComp.querySelector("#comp-header");
 
-  // Encabezado
-  const numero = String(match["NO. DE DIBUJO/PARTE"] ?? "").trim() || "--";
-  const nombre = String(match["NOMBRE DE DOCUMENTO"] ?? "").trim() || "--";
+  const numero = String(match["NO. DE DIBUJO/PARTE"] ?? "--").trim();
+  const nombre = String(match["NOMBRE DE DOCUMENTO"] ?? "--").trim();
   header.textContent = `${numero} / ${nombre}`;
 
-  // Imagen
-  const tipo = match["TIPO DE COMPONENTE"];
-  const imagenPorTipo = {
-    "TORNILLO": "img/tornillo_plantilla.png",
-   // "TUERCA":   "img/tuerca_plantilla.png",
-   // "LAINA":    "img/laina_plantilla.png"
-  };
-
-  const src = imagenPorTipo[tipo];
+  // Imagen (preferimos la de DB -> 'img/<img_key>')
+  const src = match._img_key ? `img/${match._img_key}` : null;
   if (src) {
-    mostrarImagenCuandoCargue(
-      imgEl,
-      src,
-      tDisplay("Imagen del componente")
-    );
+    mostrarImagenCuandoCargue(imgEl, src, tDisplay("Imagen del componente"));
   }
 
   // Cotas
