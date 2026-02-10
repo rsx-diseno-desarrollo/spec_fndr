@@ -81,30 +81,6 @@ async function initProductoDesdeSupabase() {
   buscarProducto(); // primera ejecución
 }
 
-  function renderProductoResultados() {
-    resultsDiv.innerHTML = "";
-
-    window._productoFiltered.forEach(spec => {
-      const div = document.createElement("div");
-      div.className = "spec";
-
-      div.innerHTML = `
-        <strong>${spec["CLIENTE"]}</strong><br>
-        ${tDisplay("Código")}: ${spec["CODIGO"]}<br>
-        ${tDisplay("No. de Parte")}: ${spec["NO. PARTE"]}<br>
-        ${tDisplay("Nombre")}: ${spec["NOMBRE"]}<br>
-        <a href="${spec["LIGA"]}" target="_blank">${tDisplay("Abrir RMS")}</a>`;
-
-      resultsDiv.appendChild(div);
-    });
-  }
-
-  // Eventos
-  parteInput.addEventListener("input", buscarProducto);
-  clienteSelect.addEventListener("change", buscarProducto);
-  nombreSelect.addEventListener("change", buscarProducto);
-}
-
 //Función que lang.js espera
 window.renderProductoSelects = function () {
   if (!window._productoSpecs.length) return;
