@@ -48,6 +48,15 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
   <button type="button" id="btn-en">EN</button>
 </div>
 </header>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const { createClient } = window.supabase;
+  window.supabaseClient = createClient(
+    'https://nsnxvwnwdnwbozihpetj.supabase.co',
+    'sb_publishable_wNXLJ-CGAfIZg1dGbIO5Rw_wLo7QK9x'   // segura en frontend si RLS está bien configurado
+  );
+</script>
   
 <!-- SheetJS y lenguage -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
