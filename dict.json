@@ -44,7 +44,13 @@
   "CAMAS": { "es": "CAMAS", "en": "LAYERS" },
   "MUELLES x TARIMA": { "es": "MUELLES x TARIMA", "en": "SPRINGS/PALLET" },
   "PESO NETO EMPAQUE (Kg)": { "es": "PESO NETO EMPAQUE (Kg)", "en": "NET PACKING WEIGHT (Kg)" },
+  "PESO BRUTO EMPAQUE (Kg)": { "es": "PESO BRUTO EMPAQUE (Kg)", "en": "GROSS PACKING WEIGHT (Kg)" },
 
+  "RECICLADA": { "es": "RECICLADA", "en": "RECYCLED"},
+  "TELA": { "es": "TELA", "en": "TEXTILE"},
+  "METAL": { "es": "METAL", "en": "STEEL"},
+  "EMPLAYE": { "es": "EMPLAYE", "en": "SHRINK WRAPPING"},
+  "TACON": {"es": "TACON", "en": "SPACER"},
 
   "No se encontraron specs de empaque para ese cliente y número de parte.": { "es": "No se encontraron specs de empaque para ese cliente y número de parte.", "en": "No packaging specs found for that client and part number." },
   "Seleccione CLIENTE y escriba un Número de pieza.": { "es": "Seleccione CLIENTE y escriba un Número de pieza.", "en": "Select CLIENT and write a Part number." },
@@ -79,8 +85,10 @@
 "Plantillas TsTs": { "es": "Plantillas TsTs", "en": "TsTs Templates" },
 "Número de parte": { "es": "Número de parte", "en": "Part number" },
 "Tipo de Plantilla": { "es": "Tipo de Plantilla", "en": "Template Type" }, 
-"N° HOJA": { "es": "N° HOJA", "en": "Sheet #" },
+"N° HOJA": { "es": "N° HOJA", "en": "Leaf #" },
 "PLANTILLA": { "es": "PLANTILLA", "en": "Template" },
-"MUESTRA": { "es": "MUESTRA", "en": "Sample" }
+"MUESTRA": { "es": "MUESTRA", "en": "Sample" },
 
+"Bienvenido": {"es": "Bienvenido", "en": "Welcome"},
+"Selecciona una sección para empezar a buscar": {"es": "Selecciona una sección para empezar a buscar", "en": "Select a section to start searching"}
 }
