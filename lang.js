@@ -62,18 +62,22 @@
     document.getElementById('btn-es')?.classList.toggle('active', LANG === 'es');
     document.getElementById('btn-en')?.classList.toggle('active', LANG === 'en');
   }
-
-  // 4) Re-render de contenido que viene del Excel
-  //    Define estas funciones en tus scripts principales para regenerar selects/tablas usando tDisplay().
+  
   function rerenderExcelDrivenUI() {
-    if (typeof window.renderEmpaqueSelects === 'function') window.renderEmpaqueSelects();
-    if (typeof window.renderProductoSelects === 'function') window.renderProductoSelects();
-    if (typeof window.renderEmpaqueTable === 'function')   window.renderEmpaqueTable();
-    if (typeof window.renderComponentView === 'function')   window.renderComponentView();
-    if (typeof window.renderComponentSelects === 'function') window.renderComponentSelects()
-    if (typeof window.renderTstsSelects === 'function') window.renderTstsSelects();
-  }
+  // Producto
+  if (typeof window.renderProductoSelects === 'function') window.renderProductoSelects();
 
+  // Empaque
+  if (typeof window.renderEmpaqueSelects === 'function') window.renderEmpaqueSelects();
+  if (typeof window.renderEmpaqueTable === 'function') window.renderEmpaqueTable(); // Si no existe en tu script.js, bórrala.
+
+  // Componentes
+  if (typeof window.renderComponentView === 'function') window.renderComponentView();
+  if (typeof window.renderComponentSelects === 'function') window.renderComponentSelects();
+
+  // TsTs
+  if (typeof window.renderTstsSelects === 'function') window.renderTstsSelects();
+}
   // 5) Cambiar idioma (toggle)
   function setLanguage(lang) {
     LANG = lang;
@@ -94,18 +98,17 @@
     btnEN?.addEventListener('click', () => setLanguage('en'));
   });
 
-  // ---- OPCIONAL: ejemplos de helpers para tu app (puedes moverlos a script.js si prefieres) ----
-
-  // Esperar a que el diccionario esté listo para el primer render con datos del Excel:
   langReady.then(() => {
-    if (typeof renderEmpaqueSelects === 'function') renderEmpaqueSelects();
-    if (typeof renderEmpaqueTable === 'function')   renderEmpaqueTable();
-    if (typeof renderTstsSelects === 'function') renderTstsSelects();
-    // Agrega aquí otros renders iniciales que dependan de tDisplay()
-  });
+  if (typeof window.renderProductoSelects === 'function') window.renderProductoSelects();
+  if (typeof window.renderEmpaqueSelects === 'function') window.renderEmpaqueSelects();
+  if (typeof window.renderEmpaqueTable === 'function') window.renderEmpaqueTable();
+  if (typeof window.renderComponentSelects === 'function') window.renderComponentSelects();
+  if (typeof window.renderComponentView === 'function') window.renderComponentView();
+  if (typeof window.renderTstsSelects === 'function') window.renderTstsSelects();
+});
 
   // Llenar un <select> con valores desde Excel (valor ES interno, display traducido)
-  function fillSelectFromExcel(valuesES, selectEl, placeholderKey) {
+  function fillSelect(valuesES, selectEl, placeholderKey) {
     selectEl.innerHTML = '';
 
     const ph = document.createElement('option');
@@ -162,6 +165,6 @@
   window.applyTranslationsToDOM = applyTranslationsToDOM;
   window.langReady = langReady;
   // Exponer también los helpers opcionales
-  window.fillSelectFromExcel = fillSelectFromExcel;
+  window.fillSelect = fillSelect;
   window.renderEmpaqueTableFromRows = renderEmpaqueTableFromRows;
 })();
