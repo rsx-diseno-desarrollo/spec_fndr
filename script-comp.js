@@ -225,23 +225,19 @@ function renderCotas(match) {
 
 window.renderComponentSelects = function () {
   const tipoComp = document.getElementById("tipoComp");
-  if (!tipoComp) return;
-  const compData = (window.data && window.data.comp) ? window.data.comp : [];
-  const tiposES = [...new Set(compData.map(x => String(x["TIPO DE COMPONENTE"] ?? "").trim()))]
-    .filter(Boolean)
-    .sort();
-  fillSelect(tiposES, tipoComp, "-- Seleccionar tipo --");
-  const tipoComp = document.getElementById("tipoComp");
   if (!tipoComp || !window.supabaseClient) return;
+
   (async () => {
     const { data } = await window.supabaseClient
-      .from('comp_tipo')
-      .select('nombre')
-      .eq('activo', true)
-      .order('nombre', { ascending: true });
+      .from("comp_tipo")
+      .select("nombre")
+      .eq("activo", true)
+      .order("nombre", { ascending: true });
+
     const tipos = (data ?? []).map(r => String(r.nombre)).filter(Boolean);
     fillSelect(tipos, tipoComp, "-- Seleccionar tipo --");
   })();
+};
   
   document.getElementById("tipoComp")?.addEventListener("change", (e) => {
   localStorage.setItem('tipoCompLast', String(e.target.value ?? ""));
