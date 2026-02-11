@@ -22,7 +22,7 @@ window._componentesMatch = null;
   (async () => {
     const { data } = await sb.from('comp_tipo').select('nombre').eq('activo', true).order('nombre', { ascending: true });
     const tipos = (data ?? []).map(r => String(r.nombre)).filter(Boolean);
-    fillSelectFromExcel(tipos, tipoComp, "-- Seleccionar tipo --");
+    fillSelect(tipos, tipoComp, "-- Seleccionar tipo --");
   })();
 
   // 2) Autocomplete por código filtrando por tipo (v_comp)
@@ -233,7 +233,7 @@ window.renderComponentSelects = function () {
                   .sort();
 
   // Limpia y vuelve a llenar usando helper que ya traduce el placeholder
-  fillSelectFromExcel(tiposES, tipoComp, "-- Seleccionar tipo --");
+  fillSelect(tiposES, tipoComp, "-- Seleccionar tipo --");
 
   // Si quieres que se conserve la selección actual (si existía), vuelve a setear value:
   // const prev = localStorage.getItem('tipoCompLast') ?? "";
