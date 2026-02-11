@@ -41,11 +41,11 @@ async function initProductoDesdeSupabase() {
   // 1) Llenar selects (distinct cliente y tipo_prod) desde la vista v_prod_specs
   const { data: clientesData } = await sb.from('v_prod_specs').select('cliente').order('cliente', { ascending: true });
   const clientes = [...new Set((clientesData ?? []).map(r => r.cliente).filter(Boolean))];
-  fillSelectFromExcel(clientes, clienteSelect, "-- Seleccionar cliente --");
+  fillSelect(clientes, clienteSelect, "-- Seleccionar cliente --");
 
   const { data: tiposData } = await sb.from('v_prod_specs').select('tipo_prod').order('tipo_prod', { ascending: true });
   const tipos = [...new Set((tiposData ?? []).map(r => r.tipo_prod).filter(Boolean))];
-  fillSelectFromExcel(tipos, tipoSelect, "-- Seleccionar tipo --");
+  fillSelect(tipos, tipoSelect, "-- Seleccionar tipo --");
 
   // 2) Búsqueda reactiva
   async function buscarProducto() {
@@ -132,7 +132,7 @@ function initEmpaqueDesdeSupabase() {
   (async () => {
     const { data } = await sb.from('v_empaque').select('cliente').order('cliente', { ascending: true });
     const unique = [...new Set((data ?? []).map(r => r.cliente).filter(Boolean))];
-    fillSelectFromExcel(unique, selCliente, "-- Seleccionar cliente --");
+    fillSelect(unique, selCliente, "-- Seleccionar cliente --");
   })();
 
   // Autocomplete por parte (filtrable por cliente)
@@ -237,7 +237,7 @@ function initTstsDesdeSupabase() {
   (async () => {
     const { data } = await sb.from('v_tsts').select('cliente').order('cliente', { ascending: true });
     const unique = [...new Set((data ?? []).map(r => r.cliente).filter(Boolean))];
-    fillSelectFromExcel(unique, selCliente, "-- Seleccionar cliente --");
+    fillSelect(unique, selCliente, "-- Seleccionar cliente --");
   })();
 
   // Autocomplete por parte
