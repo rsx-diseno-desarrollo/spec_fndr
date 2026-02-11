@@ -26,6 +26,13 @@ Promise.all([langReady]).then(() => {
   initTstsDesdeSupabase();
 });
 
+function bindOnce(el, event, key, handler) {
+  const flag = `__bound_${key}`;
+  if (el[flag]) return;
+  el.addEventListener(event, handler);
+  el[flag] = true;
+}
+
 // ======================================================
 //  PRODUCTO (con soporte de idioma)
 // ======================================================
@@ -136,19 +143,18 @@ function initEmpaqueDesdeSupabase() {
   })();
 
   // Autocomplete por parte (filtrable por cliente)
-  inputParte.addEventListener("input", async () => {
+  bindOnce(inputParte, "input", "emp_autocomplete", async () => {
     const texto = (inputParte.value || "").trim().toLowerCase();
     autoList.innerHTML = "";
     if (!texto) return;
 
-    let q = sb.from('v_empaque')
-      .select('num_parte')
-      .ilike('num_parte', `%${texto}%`)
-      .limit(12);
+    let q = sb.from('v_empaque').select('num_parte')
+      .ilike('num_parte', `%${texto}%`).limit(25);
     if (selCliente.value) q = q.eq('cliente', selCliente.value);
 
     const { data } = await q;
-    [...new Set((data ?? []).map(r => r.num_parte))].forEach(p => {
++   const unique = [...new Set((data ?? []).map(r => String(r.num_parte).trim().toUpperCase()))];
++   unique.forEach(p => {
       const div = document.createElement("div");
       div.className = "autocomplete-item";
       div.textContent = p;
@@ -157,8 +163,9 @@ function initEmpaqueDesdeSupabase() {
     });
   });
 
+
   // Buscar y pintar
-  btnBuscar.addEventListener("click", async () => {
+  bindOnce(btnBuscar, "click", "emp_buscar", async () => {
     const cliente = selCliente.value;
     const parte   = (inputParte.value || "").trim();
     tbody.innerHTML = "";
@@ -178,12 +185,10 @@ function initEmpaqueDesdeSupabase() {
         `<span class="msg-empty">${tDisplay("No se encontraron specs de empaque para ese cliente y número de parte.")}</span>`;
       return;
     }
+   // Encabezado con link a RMS
+   results.querySelector("#emp-header").innerHTML =
+     `${match.cliente ?? "--"} / ${match.num_parte ?? "--"} — ${match.link_rms}${tDisplay("Abrir RMS")}</a>`;
 
-    // Encabezado
-    results.querySelector("#emp-header").textContent =
-      `${match.cliente ?? "--"} / ${match.num_parte ?? "--"}`;
-
-    // Tabla (mismo orden que usabas)
     const rows = [
       ["TARIMA", match.cod_tarima],
       ["LARGUEROS", match.largueros],
@@ -194,12 +199,6 @@ function initEmpaqueDesdeSupabase() {
       ["MUELLES x TARIMA", match.mxt],
       ["PESO NETO EMPAQUE (Kg)", match.peso_neto]
     ];
-    rows.forEach(([label, value]) => {
-      const tr = document.createElement("tr");
-      const th = document.createElement("th"); th.className = "label-cell"; th.textContent = tDisplay(label);
-      const td = document.createElement("td"); td.className = "value-cell"; td.textContent = value ?? "--";
-      tr.appendChild(th); tr.appendChild(td); tbody.appendChild(tr);
-    });
   });
 }
 
@@ -261,7 +260,7 @@ function initTstsDesdeSupabase() {
   });
 
   // Buscar y render
-  btnBuscar.addEventListener("click", async () => {
+  + bindOnce(btnBuscar, "click", "tsts_buscar", async () => {
     const cliente = selCliente.value;
     const parte   = (inputParte.value || "").trim();
     resultsRoot.innerHTML = "";
@@ -281,31 +280,42 @@ function initTstsDesdeSupabase() {
       resultsRoot.innerHTML = `<span class="msg-empty">${tDisplay("No se encontraron plantillas para ese cliente y número de parte.")}</span>`;
       return;
     }
+    
+ const r0 = rows[0];
+ const tipoHoja   = r0.tipo_hoja ?? "--";
+ const numMuestra = r0.num_muestra ?? "--";
+ const clienteTxt = r0.cliente ?? cliente;
+ let html = `
+   <h4><strong>${tDisplay("Cliente")}:</strong> ${clienteTxt}</h4>
+   <h4><strong>${tDisplay("No. de Parte")}:</strong> ${parte}</h4>
+   <h4><strong>${tDisplay("Tipo de Plantilla")}:</strong> ${tipoHoja}</h4>
+   <h4><strong>${tDisplay("Muestra")}:</strong> ${numMuestra}</h4>
+   <br>
+   <table class="emp-table">
+     <thead>
+       <tr class="table-title">
+         <th>${tDisplay("N° HOJA")}</th>
+         <th>${tDisplay("Tipo de pieza")}</th>
+         <th>${tDisplay("PLANTILLA")}</th>
+         <th>${tDisplay("Molde")}</th>
+         <th>${tDisplay("MUESTRA")}</th>
+         <th>${tDisplay("Muestra detalle")}</th>
+       </tr>
+     </thead>
+     <tbody>
+       ${rows.map(r => `
+         <tr>
+           <td class="value-cell">${r.no_hoja ?? "--"}</td>
+           <td class="value-cell">${r.tipo_pieza ?? "--"}</td>
+           <td class="value-cell">${r.no_plantilla ?? "--"}</td>
+           <td class="value-cell">${r.molde ?? "--"}</td>
+           <td class="value-cell">${numMuestra}</td>
+           <td class="value-cell">${r.muestra_detalle ?? "--"}</td>
+         </tr>
+       `).join("")}
+     </tbody>
+   </table>`;
 
-    const tipoHoja   = rows[0].tipo_hoja ?? "--";
-    const numMuestra = rows[0].num_muestra ?? "--";
-    let html = `
-      <h4><strong>${tDisplay("No. de Parte")}:</strong> ${parte}</h4>
-      <h4><strong>${tDisplay("Tipo de Plantilla")}:</strong> ${tipoHoja}</h4>
-      <br>
-      <table class="emp-table">
-        <thead>
-          <tr class="table-title">
-            <th>${tDisplay("N° HOJA")}</th>
-            <th>${tDisplay("PLANTILLA")}</th>
-            <th>${tDisplay("MUESTRA")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows.map(r => `
-            <tr>
-              <td class="value-cell">${r.no_hoja ?? "--"}</td>
-              <td class="value-cell">${r.no_plantilla ?? "--"}</td>
-              <td class="value-cell">${numMuestra}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>`;
     resultsRoot.innerHTML = html;
   });
 }
