@@ -63,27 +63,27 @@
     document.getElementById('btn-en')?.classList.toggle('active', LANG === 'en');
   }
   
-  function rerenderExcelDrivenUI() {
+  function rerenderDrivenUI() {
   // Producto
   if (typeof window.renderProductoSelects === 'function') window.renderProductoSelects();
 
   // Empaque
   if (typeof window.renderEmpaqueSelects === 'function') window.renderEmpaqueSelects();
-  if (typeof window.renderEmpaqueTable === 'function') window.renderEmpaqueTable(); // Si no existe en tu script.js, bórrala.
 
   // Componentes
-  if (typeof window.renderComponentView === 'function') window.renderComponentView();
   if (typeof window.renderComponentSelects === 'function') window.renderComponentSelects();
+  if (typeof window.renderComponentView === 'function') window.renderComponentView();
 
   // TsTs
   if (typeof window.renderTstsSelects === 'function') window.renderTstsSelects();
 }
+
   // 5) Cambiar idioma (toggle)
   function setLanguage(lang) {
     LANG = lang;
     localStorage.setItem('lang', lang);
     applyTranslationsToDOM();
-    rerenderExcelDrivenUI();
+    rerenderDrivenUI();
   }
 
   // 6) Bootstrap (cuando el DOM está listo)
@@ -101,7 +101,6 @@
   langReady.then(() => {
   if (typeof window.renderProductoSelects === 'function') window.renderProductoSelects();
   if (typeof window.renderEmpaqueSelects === 'function') window.renderEmpaqueSelects();
-  if (typeof window.renderEmpaqueTable === 'function') window.renderEmpaqueTable();
   if (typeof window.renderComponentSelects === 'function') window.renderComponentSelects();
   if (typeof window.renderComponentView === 'function') window.renderComponentView();
   if (typeof window.renderTstsSelects === 'function') window.renderTstsSelects();
