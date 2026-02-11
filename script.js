@@ -82,9 +82,9 @@ async function initProductoDesdeSupabase() {
 }
 
 //Función que lang.js espera
+
 window.renderProductoSelects = function () {
-  if (!window._productoSpecs.length) return;
-  initProducto(window._productoSpecs);
+initProductoDesdeSupabase();
 };
 
 // ----------------------------
@@ -215,8 +215,7 @@ function clearEmpaque(tbody, resultsRoot) {
 }
 
 window.renderEmpaqueSelects = function () {
-  if (!window._empaqueData.length) return;
-  initEmpaque(window._empaqueData);
+  initEmpaqueDesdeSupabase();
 };
 
 
@@ -313,6 +312,5 @@ function initTstsDesdeSupabase() {
 
 // ------- Hooks para idioma, igual que Producto/Empaque -------
 window.renderTstsSelects = function () {
-  if (!window._tstsData?.length) return;
-  initTsts(window._tstsData);
+  initTstsDesdeSupabase();
 };
