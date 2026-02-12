@@ -187,7 +187,7 @@ function initEmpaqueDesdeSupabase() {
     }
    // Encabezado con link a RMS
    results.querySelector("#emp-header").innerHTML =
-     `${match.cliente ?? "--"} / ${match.num_parte ?? "--"} — ${match.link_rms}${tDisplay("Abrir RMS")}</a>`;
+     `${match.cliente ?? "--"} / ${match.num_parte ?? "--"} — <a href="${match.link_rms}" target="_blank">${tDisplay("Abrir RMS")}</a>`;;
 
     const rows = [
       ["TARIMA", match.cod_tarima],
