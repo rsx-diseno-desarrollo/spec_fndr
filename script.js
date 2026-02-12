@@ -187,7 +187,7 @@ function initEmpaqueDesdeSupabase() {
     }
    // Encabezado con link a RMS
    results.querySelector("#emp-header").innerHTML =
-     `${match.cliente ?? "--"} / ${match.num_parte ?? "--"} — <a href="${match.link_rms}" target="_blank">${tDisplay("Abrir RMS")}</a>`;;
+     `${match.cliente ?? "--"} / ${match.num_parte ?? "--"} — <a href="${match.link_rms}" target="_blank">${tDisplay("Abrir RMS")}</a>`;
 
     const rows = [
       ["TARIMA", match.cod_tarima],
@@ -298,7 +298,6 @@ function initTstsDesdeSupabase() {
          <th>${tDisplay("Tipo de pieza")}</th>
          <th>${tDisplay("PLANTILLA")}</th>
          <th>${tDisplay("Molde")}</th>
-         <th>${tDisplay("MUESTRA")}</th>
          <th>${tDisplay("Muestra detalle")}</th>
        </tr>
      </thead>
@@ -309,7 +308,6 @@ function initTstsDesdeSupabase() {
            <td class="value-cell">${r.tipo_pieza ?? "--"}</td>
            <td class="value-cell">${r.no_plantilla ?? "--"}</td>
            <td class="value-cell">${r.molde ?? "--"}</td>
-           <td class="value-cell">${numMuestra}</td>
            <td class="value-cell">${r.muestra_detalle ?? "--"}</td>
          </tr>
        `).join("")}
