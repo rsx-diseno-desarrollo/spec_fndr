@@ -55,31 +55,54 @@ async function initProductoDesdeSupabase() {
   fillSelect(tipos, tipoSelect, "-- Seleccionar tipo --");
 
   // 2) Búsqueda reactiva
-  async function buscarProducto() {
-    const parte   = (parteInput.value || "").trim();
-    const cliente = clienteSelect.value || "";
-    const tipo    = tipoSelect.value || "";
+  
+async function buscarProducto() {
+  const parte   = (parteInput.value || "").trim();
+  const cliente = clienteSelect.value || "";
+  const tipo    = tipoSelect.value || "";
 
-    let q = sb.from('v_prod_specs').select('*').limit(200);
-    if (parte)   q = q.ilike('num_parte', `%${parte}%`); // ilike: filtro texto libre
-    if (cliente) q = q.eq('cliente', cliente);
-    if (tipo)    q = q.eq('tipo_prod', tipo);           // <--- usamos tipo_prod
+  let q = sb.from('v_prod_specs').select('*').limit(500);
 
-    const { data, error } = await q;
-    resultsDiv.innerHTML = "";
+  if (parte)   q = q.ilike('num_parte', `%${parte}%`);
+  if (cliente) q = q.eq('cliente', cliente);
+  if (tipo)    q = q.eq('tipo_prod', tipo);
 
-    (data ?? []).forEach(row => {
-      const div = document.createElement("div");
-      div.className = "spec";
-      div.innerHTML = `
-        <strong>${row.cliente}</strong><br>
-        ${tDisplay("Código")}: ${row.codigo}<br>
-        ${tDisplay("No. de Parte")}: ${row.num_parte}<br>
-        ${tDisplay("Nombre")}: ${row.tipo_prod ?? "--"}<br>
-        <a href="${row.link_rms}" target="_blank">${tDisplay("Abrir RMS")}</a>`;
-      resultsDiv.appendChild(div);
-    });
+  const { data } = await q;
+  resultsDiv.innerHTML = "";
+
+  // AGRUPAR POR CODIGO
+  const grouped = new Map();
+
+  (data ?? []).forEach(r => {
+    if (!grouped.has(r.codigo)) {
+      grouped.set(r.codigo, {
+        cliente: r.cliente,
+        codigo:  r.codigo,
+        tipo:    r.tipo_prod,
+        link:    r.link_rms,
+        partes:  new Set()
+      });
+    }
+    grouped.get(r.codigo).partes.add(r.num_parte);
+  });
+
+  // Pintar las cards
+  for (const item of grouped.values()) {
+    const card = document.createElement("div");
+    card.className = "spec";
+
+    const partesTxt = [...item.partes].join(", ");
+
+    card.innerHTML = `
+      <strong>${item.cliente}</strong><br>
+      ${tDisplay("Código")}: ${item.codigo}<br>
+      ${tDisplay("No. de Parte")}: ${partesTxt}<br>
+      ${tDisplay("Nombre")}: ${item.tipo}<br>
+      <a href="${item.link}" target="_blank">${tDisplay("Abrir RMS")}</a>`;
+
+    resultsDiv.appendChild(card);
   }
+}
 
   parteInput.addEventListener("input",  buscarProducto);
   clienteSelect.addEventListener("change", buscarProducto);
@@ -189,17 +212,33 @@ function initEmpaqueDesdeSupabase() {
    results.querySelector("#emp-header").innerHTML =
      `${match.cliente ?? "--"} / ${match.num_parte ?? "--"} — <a href="${match.link_rms}" target="_blank">${tDisplay("Abrir RMS")}</a>`;
 
-    const rows = [
-      ["TARIMA", match.cod_tarima],
-      ["LARGUEROS", match.largueros],
-      ["POLIN SUP/INF", match.polin_sup_inf],
-      ["FLEJE", match.fleje],
-      ["MUELLES x CAMA", match.mxc],
-      ["CAMAS", match.camas],
-      ["MUELLES x TARIMA", match.mxt],
-      ["PESO NETO EMPAQUE (Kg)", match.peso_neto]
-    ];
-  });
+    
+const rows = [
+  ["TARIMA", match.cod_tarima],
+  ["LARGUEROS", match.largueros],
+  ["POLIN SUP/INF", match.polin_sup_inf],
+  ["FLEJE", match.fleje],
+  ["MUELLES x CAMA", match.mxc],
+  ["CAMAS", match.camas],
+  ["MUELLES x TARIMA", match.mxt],
+  ["PESO NETO EMPAQUE (Kg)", match.peso_neto]
+];
+
+// Pintar filas en la tabla
+rows.forEach(([label, value]) => {
+  const tr = document.createElement("tr");
+  const th = document.createElement("th");
+  th.className = "label-cell";
+  th.textContent = tDisplay(label);
+
+  const td = document.createElement("td");
+  td.className = "value-cell";
+  td.textContent = value ?? "--";
+
+  tr.appendChild(th);
+  tr.appendChild(td);
+  tbody.appendChild(tr);
+});
 }
 
 // ---- UTILIDADES ----
@@ -239,18 +278,21 @@ function initTstsDesdeSupabase() {
   })();
 
   // Autocomplete por parte
-  inputParte.addEventListener("input", async () => {
+  bindOnce(inputParte, "input", "tsts_autocomplete", async () => {
     const texto = (inputParte.value || "").trim().toLowerCase();
     autoList.innerHTML = "";
     if (!texto) return;
-
+  
     let q = sb.from('v_tsts').select('num_parte')
       .ilike('num_parte', `%${texto}%`)
       .limit(12);
     if (selCliente.value) q = q.eq('cliente', selCliente.value);
-
+  
     const { data } = await q;
-    [...new Set((data ?? []).map(r => r.num_parte))].forEach(p => {
+  
+    const unique = [...new Set((data ?? []).map(r => String(r.num_parte).trim().toUpperCase()))];
+  
+    unique.forEach(p => {
       const div = document.createElement("div");
       div.className = "autocomplete-item";
       div.textContent = p;
