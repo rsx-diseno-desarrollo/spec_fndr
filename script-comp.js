@@ -8,7 +8,6 @@ let unidadComp = localStorage.getItem("unidadComp") || "mm";
 window._componentesData = [];
 window._componentesMatch = null;
 
-
 (function initComponentesDesdeSupabase() {
   const sb = window.supabaseClient;
   const tipoComp      = document.getElementById("tipoComp");
@@ -20,18 +19,30 @@ window._componentesMatch = null;
 
   // 1) Tipos activos (comp_tipo.nombre)
   (async () => {
-    const { data } = await sb.from('comp_tipo').select('nombre').eq('activo', true).order('nombre', { ascending: true });
+    const { data } = await sb.from('comp_tipo')
+      .select('nombre')
+      .eq('activo', true)
+      .order('nombre', { ascending: true });
     const tipos = (data ?? []).map(r => String(r.nombre)).filter(Boolean);
     fillSelect(tipos, tipoComp, "-- Seleccionar tipo --");
   })();
 
   // 2) Autocomplete por código filtrando por tipo (v_comp)
-  codigoInput.addEventListener("input", async () => {
+  if (typeof bindOnce !== "function") {
+    window.bindOnce = function (el, event, key, handler) {
+      const flag = `__bound_${key}`;
+      if (el[flag]) return;
+      el.addEventListener(event, handler);
+      el[flag] = true;
+    };
+  }
+
+  bindOnce(codigoInput, "input", "comp_autocomplete", async () => {
     const texto = (codigoInput.value || "").trim().toLowerCase();
     autocomplete.innerHTML = "";
     if (!texto || !tipoComp.value) return;
 
-    const { data } = await sb
+    const { data } = await window.supabaseClient
       .from('v_comp')
       .select('codigo')
       .eq('tipo', tipoComp.value)
@@ -48,7 +59,7 @@ window._componentesMatch = null;
   });
 
   // 3) Buscar 1 componente y render
-  btnBuscarComp.addEventListener("click", async () => {
+  bindOnce(btnBuscarComp, "click", "comp_buscar", async () => {
     const tipo   = tipoComp.value || "";
     const codigo = (codigoInput.value || "").trim();
     if (!tipo || !codigo) {
@@ -73,10 +84,8 @@ window._componentesMatch = null;
       "CODIGO COMPONENTES": match.codigo,
       "NO. DE DIBUJO/PARTE": match.doc_codigo ?? "--",
       "NOMBRE DE DOCUMENTO": match.nombre ?? "--",
-      // Cotas: si aún no tienes columnas A..J en DB, déjalas null/undefined
-      "A": match.a, "B": match.b, "C": match.c, "D": match.d,
-      "RADIO": match.e, "E": match.e, "F": match.f, "G": match.g, "H": match.h, "I": match.i, "J": match.j,
-      // img_key = nombre.png que viene de DB (ct.img_key)
+      "A": match.a, "B": match.b, "C": match.c, "D": match.d, "E": match.e,
+      "F": match.f, "G": match.g, "H": match.h, "I": match.i, "J": match.j,
       "_img_key": match.img_key
     };
 
@@ -96,6 +105,29 @@ window._componentesMatch = null;
     renderComponentView();
   });
 })();
+
+// --- Escucha del selector de unidad (mm/in) y re-render de cotas ---
+{
+  const unidadSelect = document.getElementById("comp-unidad");
+  if (unidadSelect) {
+    unidadSelect.value = unidadComp;
+
+    if (typeof bindOnce !== "function") {
+      window.bindOnce = function (el, event, key, handler) {
+        const flag = `__bound_${key}`;
+        if (el[flag]) return;
+        el.addEventListener(event, handler);
+        el[flag] = true;
+      };
+    }
+
+    bindOnce(unidadSelect, "change", "comp_unidad", () => {
+      unidadComp = unidadSelect.value;
+      localStorage.setItem("unidadComp", unidadComp);
+      if (window._componentesMatch) renderCotas(window._componentesMatch);
+    });
+  }
+}
 
 // Convierte un número en mm a texto en la unidad seleccionada
 function convertirNumero(numMm) {
@@ -165,47 +197,35 @@ function showMessage(text, kind = "info") {
 }
 
 function ocultarImagen(img) {
+  img.classList.remove("is-visible");
+  img.removeAttribute("src");
+  img.alt = "Imagen del componente";
+}
+
+function mostrarImagenCuandoCargue(img, src, alt) {
+  img.classList.remove("is-visible"); // ocultar mientras carga
+  img.alt = alt || "Imagen del componente";
+  img.onload = () => img.classList.add("is-visible");
+  img.onerror = () => {
+    showMessage("No se pudo cargar la imagen del componente.", "error");
     img.classList.remove("is-visible");
     img.removeAttribute("src");
-    img.alt = "Imagen del componente";
-  }
-
-  function mostrarImagenCuandoCargue(img, src, alt) {
-    img.classList.remove("is-visible"); // ocultar mientras carga
-    img.alt = alt || "Imagen del componente";
-    img.onload = () => img.classList.add("is-visible");
-    img.onerror = () => {
-      showMessage("No se pudo cargar la imagen del componente.", "error");
-      img.classList.remove("is-visible");
-      img.removeAttribute("src");
-    };
-    img.src = src;
-  }
+  };
+  img.src = src;
+}
 
 function renderCotas(match) {
   const resultsComp = document.getElementById("results-comp");
   const cotasList = resultsComp?.querySelector("#cotas-list");
   if (!cotasList) return;
 
-  const cotas = {
-    A: match["A"],
-    B: match["B"],
-    C: match["C"],
-    D: match["D"],
-    E: match["RADIO"],          // si prefieres etiqueta "R", cambia la key a "R"
-    // NO convertir (texto/códigos):
-    "CUERDA": `1/2" - 20 UNF_2A`,
-    "GRADO DE DUREZA": `8° - 33-39 Rc.`
-  };
-
+  // Orden estándar A..J
+  const orden = ["A","B","C","D","E","F","G","H","I","J"];
   cotasList.innerHTML = "";
 
-    Object.entries(cotas).forEach(([label, rawValue]) => {
-    const esMetrica = ["A","B","C","D","E","R","RADIO"].includes(label.toUpperCase());
-    const mostrado  = esMetrica
-      ? convertirValorO_Rango(rawValue)           // <-- AQUÍ
-      : (rawValue ?? "--");
-
+  orden.forEach(label => {
+    const raw = match[label];          // A..J directamente
+    const mostrado = convertirValorO_Rango(raw);
     const item = document.createElement("div");
     item.className = "cota-item";
     item.innerHTML = `
@@ -214,10 +234,18 @@ function renderCotas(match) {
     `;
     cotasList.appendChild(item);
   });
-}
 
-// ======================================================
-//  COMPONENTES END
+  // Si en el futuro agregas un radio "R", puedes descomentar y usar:
+  // if (match.R != null) {
+  //   const rItem = document.createElement("div");
+  //   rItem.className = "cota-item";
+  //   rItem.innerHTML = `
+  //     <span class="cota-label">${tDisplay("R")}:</span>
+  //     <span class="cota-value">${convertirValorO_Rango(match.R)}</span>
+  //   `;
+  //   cotasList.appendChild(rItem);
+  // }
+}
 
 // ======================================================
 //  RENDER COMPONENTES (idioma)
@@ -238,8 +266,8 @@ window.renderComponentSelects = function () {
     fillSelect(tipos, tipoComp, "-- Seleccionar tipo --");
   })();
 };
-  
-  document.getElementById("tipoComp")?.addEventListener("change", (e) => {
+
+document.getElementById("tipoComp")?.addEventListener("change", (e) => {
   localStorage.setItem('tipoCompLast', String(e.target.value ?? ""));
 });
 
@@ -255,7 +283,6 @@ window.renderComponentView = function () {
   const nombre = String(match["NOMBRE DE DOCUMENTO"] ?? "--").trim();
   header.textContent = `${numero} / ${nombre}`;
 
-  // Imagen (preferimos la de DB -> 'img/<img_key>')
   const src = match._img_key ? `img/${match._img_key}` : null;
   if (src) {
     mostrarImagenCuandoCargue(imgEl, src, tDisplay("Imagen del componente"));
