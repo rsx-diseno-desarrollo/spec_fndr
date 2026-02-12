@@ -252,7 +252,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   margin: 12px 0;
-  background-color: var(--color-gris-oscuro);
+  background-color: #242424;
   border: 1px solid;
   border-radius: 10px;
 }
