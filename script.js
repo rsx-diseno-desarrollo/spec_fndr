@@ -153,8 +153,8 @@ function initEmpaqueDesdeSupabase() {
     if (selCliente.value) q = q.eq('cliente', selCliente.value);
 
     const { data } = await q;
-+   const unique = [...new Set((data ?? []).map(r => String(r.num_parte).trim().toUpperCase()))];
-+   unique.forEach(p => {
+    const unique = [...new Set((data ?? []).map(r => String(r.num_parte).trim().toUpperCase()))];
+    unique.forEach(p => {
       const div = document.createElement("div");
       div.className = "autocomplete-item";
       div.textContent = p;
@@ -260,7 +260,7 @@ function initTstsDesdeSupabase() {
   });
 
   // Buscar y render
-  + bindOnce(btnBuscar, "click", "tsts_buscar", async () => {
+    bindOnce(btnBuscar, "click", "tsts_buscar", async () => {
     const cliente = selCliente.value;
     const parte   = (inputParte.value || "").trim();
     resultsRoot.innerHTML = "";
