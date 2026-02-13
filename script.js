@@ -239,6 +239,9 @@ rows.forEach(([label, value]) => {
   tr.appendChild(td);
   tbody.appendChild(tr);
 });
+
+}); // ✅ CIERRE FALTANTE de bindOnce
+
 }
 
 // ---- UTILIDADES ----
