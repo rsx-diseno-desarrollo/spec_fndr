@@ -221,7 +221,7 @@ const rows = [
   ["MUELLES x CAMA", match.mxc],
   ["CAMAS", match.camas],
   ["MUELLES x TARIMA", match.mxt],
-  ["PESO NETO EMPAQUE (Kg)", match.peso_neto]
+  ["PESO NETO EMPAQUE (Kg)", match.peso_neto],
   ["PESO BRUTO EMPAQUE (Kg)", match.peso_bruto]
 ];
 
