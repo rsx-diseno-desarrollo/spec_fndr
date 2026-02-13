@@ -39,7 +39,7 @@ function bindOnce(el, event, key, handler) {
 async function initProductoDesdeSupabase() {
   const sb = window.supabaseClient;
   const clienteSelect = document.getElementById("cliente");
-  const tipoSelect    = document.getElementById("nombre");
+  const tipoSelect    = document.getElementById("nombre");   // aquí usamos tipo_prod
   const parteInput    = document.getElementById("parte");
   const resultsDiv    = document.getElementById("results-prod");
 
@@ -103,10 +103,10 @@ async function buscarProducto() {
     resultsDiv.appendChild(card);
   }
 }
- 
-bindOnce(parteInput,   "input",  "prod_input",  buscarProducto);
-bindOnce(clienteSelect,"change", "prod_cliente",buscarProducto);
-bindOnce(tipoSelect,   "change", "prod_tipo",   buscarProducto);
+
+  parteInput.addEventListener("input",  buscarProducto);
+  clienteSelect.addEventListener("change", buscarProducto);
+  tipoSelect.addEventListener("change",  buscarProducto);
 
   buscarProducto(); // primera ejecución
 }
@@ -221,10 +221,11 @@ const rows = [
   ["MUELLES x CAMA", match.mxc],
   ["CAMAS", match.camas],
   ["MUELLES x TARIMA", match.mxt],
-  ["PESO NETO EMPAQUE (Kg)", match.peso_neto],
+  ["PESO NETO EMPAQUE (Kg)", match.peso_neto]
   ["PESO BRUTO EMPAQUE (Kg)", match.peso_bruto]
 ];
 
+// Pintar filas en la tabla
 rows.forEach(([label, value]) => {
   const tr = document.createElement("tr");
   const th = document.createElement("th");
@@ -239,6 +240,8 @@ rows.forEach(([label, value]) => {
   tr.appendChild(td);
   tbody.appendChild(tr);
 });
+
+ );
 
 }
 
@@ -361,7 +364,7 @@ function initTstsDesdeSupabase() {
   });
 }
 
-// ------- Hooks para idioma -------
+// ------- Hooks para idioma, igual que Producto/Empaque -------
 window.renderTstsSelects = function () {
   initTstsDesdeSupabase();
 };
