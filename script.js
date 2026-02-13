@@ -222,7 +222,6 @@ const rows = [
   ["CAMAS", match.camas],
   ["MUELLES x TARIMA", match.mxt],
   ["PESO NETO EMPAQUE (Kg)", match.peso_neto]
-  ["PESO BRUTO EMPAQUE (Kg)", match.peso_bruto]
 ];
 
 // Pintar filas en la tabla
