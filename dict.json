@@ -85,5 +85,9 @@
 "MUESTRA": { "es": "MUESTRA", "en": "Sample" },
 
 "Bienvenido": {"es": "Bienvenido", "en": "Welcome"},
-"Selecciona una sección para empezar a buscar": {"es": "Selecciona una sección para empezar a buscar", "en": "Select a section to start searching"}
+"Selecciona una sección para empezar a buscar": {"es": "Selecciona una sección para empezar a buscar", "en": "Select a section to start searching"},
+
+"NOTA_EMPAQUE":{
+  "es": "NOTA: Se puede empacar una cantidad menor en la tarima según el requerimiento del cliente o saldos aprobados para envío, pero no debe excederse la cantidad asignada.",
+  "en": "NOTE: A lower quantity may be packed on the pallet according to customer requirements or approved shipment leftovers, but the assigned quantity must not be exceeded."}
 }
