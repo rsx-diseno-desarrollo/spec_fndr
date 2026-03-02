@@ -321,7 +321,7 @@ function initTstsDesdeSupabase() {
     const { data } = await sb.from('v_tsts').select('*')
       .eq('cliente', cliente)
       .eq('num_parte', parte)
-      .order('no_hoja', { ascending: true });
+      .order('no_hoja_num', { ascending: true });
 
     const rows = data ?? [];
     if (!rows.length) {
@@ -343,7 +343,6 @@ function initTstsDesdeSupabase() {
      <thead>
        <tr class="table-title">
          <th>${tDisplay("N° HOJA")}</th>
-         <th>${tDisplay("Tipo de pieza")}</th>
          <th>${tDisplay("PLANTILLA")}</th>
          <th>${tDisplay("Molde")}</th>
          <th>${tDisplay("Muestra detalle")}</th>
@@ -352,8 +351,7 @@ function initTstsDesdeSupabase() {
      <tbody>
        ${rows.map(r => `
          <tr>
-           <td class="value-cell">${r.no_hoja ?? "--"}</td>
-           <td class="value-cell">${r.tipo_pieza ?? "--"}</td>
+           <td class="value-cell">${r.no_tip_hoja ?? "--"}</td>
            <td class="value-cell">${r.no_plantilla ?? "--"}</td>
            <td class="value-cell">${r.molde ?? "--"}</td>
            <td class="value-cell">${r.muestra_detalle ?? "--"}</td>
