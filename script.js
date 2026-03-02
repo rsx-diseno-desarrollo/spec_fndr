@@ -344,8 +344,8 @@ function initTstsDesdeSupabase() {
        <tr class="table-title">
          <th>${tDisplay("N° HOJA")}</th>
          <th>${tDisplay("PLANTILLA")}</th>
-         <th>${tDisplay("Molde")}</th>
-         <th>${tDisplay("Muestra detalle")}</th>
+         <th>${tDisplay("MOLDE")}</th>
+         <th>${tDisplay("N° MUESTRA")}</th>
        </tr>
      </thead>
      <tbody>
