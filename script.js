@@ -39,7 +39,7 @@ function bindOnce(el, event, key, handler) {
 async function initProductoDesdeSupabase() {
   const sb = window.supabaseClient;
   const clienteSelect = document.getElementById("cliente");
-  const tipoSelect    = document.getElementById("nombre");   // aquí usamos tipo_prod
+  const tipoSelect    = document.getElementById("nombre");
   const parteInput    = document.getElementById("parte");
   const resultsDiv    = document.getElementById("results-prod");
 
@@ -61,7 +61,8 @@ async function buscarProducto() {
   const cliente = clienteSelect.value || "";
   const tipo    = tipoSelect.value || "";
 
-  let q = sb.from('v_prod_specs').select('*').limit(500);
+ // let q = sb.from('v_prod_specs').select('*').limit(500);
+  let q = sb.from('v_prod_specs').select('cliente,codigo,tipo_prod, num_parte,link_rms').limit(500);
 
   if (parte)   q = q.ilike('num_parte', `%${parte}%`);
   if (cliente) q = q.eq('cliente', cliente);
@@ -86,22 +87,23 @@ async function buscarProducto() {
     grouped.get(r.codigo).partes.add(r.num_parte);
   });
 
-  // Pintar las cards
-  for (const item of grouped.values()) {
-    const card = document.createElement("div");
-    card.className = "spec";
+// Pintar como máximo 21 cards
+const MAX_CARDS = 21;
+const top = Array.from(grouped.values()).slice(0, MAX_CARDS);
 
-    const partesTxt = [...item.partes].join(", ");
-
-    card.innerHTML = `
-      <strong>${item.cliente}</strong><br>
-      ${tDisplay("Código")}: ${item.codigo}<br>
-      ${tDisplay("No. de Parte")}: ${partesTxt}<br>
-      ${tDisplay("Nombre")}: ${item.tipo}<br>
-      <a href="${item.link}" target="_blank">${tDisplay("Abrir RMS")}</a>`;
-
-    resultsDiv.appendChild(card);
-  }
+top.forEach(item => {
+  const card = document.createElement("div");
+  card.className = "spec";
+  const partesTxt = [...item.partes].join(", ");
+  card.innerHTML = `
+    <strong>${item.cliente}</strong><br>
+    ${tDisplay("Código")}: ${item.codigo}<br>
+    ${tDisplay("No. de Parte")}: ${partesTxt}<br>
+    ${tDisplay("Nombre")}: ${item.tipo}<br>
+    <a href="${item.link}" target="_blank">${tDisplay("Abrir RMS")}</a>`;
+  
+  resultsDiv.appendChild(card);
+});
 }
 
   parteInput.addEventListener("input",  buscarProducto);
