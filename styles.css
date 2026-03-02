@@ -1,7 +1,7 @@
 /* -------- PALETA Y TOKENS -------- */
 :root {
   /* Marca */
-  --color-naranja: #f57c00; /* NO CAMBIAR: naranja principal */
+  --color-naranja: #f57c00;
 
   /* Derivados del naranja (solo para estados) */
   --color-naranja-700: #e56f00; /* hover/active */
@@ -21,7 +21,7 @@
   --color-text:    var(--color-negro);
   --color-text-muted: #666870;
 
-  /* Acento secundario (cuando se requiera algún aviso) */
+  /* Acento secundario (cuando se requiera avisos) */
   --color-secondary: #FF9800;
 }
 
@@ -177,7 +177,7 @@ input:focus, select:focus {
 .field.with-autocomplete { position: relative; }
 .field.with-autocomplete .autocomplete-items {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(74%);
   left: 0; right: 0;
   background: var(--color-surface);
   border-radius: 6px;
@@ -250,10 +250,10 @@ input:focus, select:focus {
   transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, color 160ms ease;
 }
 .spec:hover {
-  background-color: #f0f0f0;
-  color: var(--color-text);
+  background-color: #000;
+  color: var(--color-blanco);
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+  box-shadow: 0 6px 18px var(--color-naranja-50);
 }
 
 /* -------- VINCULOS GENERALES (ya definido arriba) -------- */
@@ -348,7 +348,7 @@ input:focus, select:focus {
   font-weight: 700;
 }
 
-/* énfasis (una sola definición coherente) */
+/* énfasis */
 .emp-table .is-emphasis {
   font-weight: 900;
   color: var(--color-naranja);
