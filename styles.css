@@ -256,9 +256,6 @@ input:focus, select:focus {
   box-shadow: 0 6px 18px var(--color-naranja-50);
 }
 
-/* -------- VINCULOS GENERALES (ya definido arriba) -------- */
-/* a { ... } */
-
 /* -------- VISTA DE COTAS DINÁMICAS -------- */
 .viewer-comp {
   display: flex;
