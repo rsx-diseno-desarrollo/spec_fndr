@@ -354,3 +354,63 @@ input:focus, select:focus {
 /* -------- MENSAJES -------- */
 .msg-warn { color: var(--color-secondary); font-weight: bold; }
 .msg-empty { color: var(--color-text-muted); font-style: italic; }
+
+/* ============================
+   Encabezado de tabla (Empaque) como <caption>
+   ============================ */
+
+.emp-table {
+  caption-side: top;
+}
+
+.emp-table caption#emp-cap {
+  padding: 10px 12px;
+  background: var(--color-naranja-50);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.emp-cap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap; /* para que en móvil se acomode en dos líneas */
+}
+
+.emp-cap-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-negro);
+  letter-spacing: .2px;
+}
+
+.emp-cap-title span {
+  color: var(--color-text-muted);
+  padding: 0 4px;
+}
+
+.emp-cap-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--color-blanco);
+  background: var(--color-naranja);
+  border-radius: 6px;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,.12);
+  transition: background .2s ease, transform .15s ease, box-shadow .2s ease;
+}
+
+.emp-cap-link:hover {
+  background: var(--color-naranja-700);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,.14);
+}
+
+.emp-cap-link:active {
+  transform: translateY(0);
+}
+
