@@ -210,10 +210,26 @@ function initEmpaqueDesdeSupabase() {
         `<span class="msg-empty">${tDisplay("No se encontraron specs de empaque para ese cliente y número de parte.")}</span>`;
       return;
     }
-   // Encabezado con link a RMS
-   results.querySelector("#emp-header").innerHTML =
-     `${match.cliente ?? "--"} / ${match.num_parte ?? "--"} — <a href="${match.link_rms}" target="_blank">${tDisplay("Abrir RMS")}</a>`;
-
+    // Encabezado dentro de la tabla como <caption>
+    const table = document.getElementById("emp-table");
+    let cap = table.querySelector("caption#emp-cap");
+    if (!cap) {
+      cap = document.createElement("caption");
+      cap.id = "emp-cap";
+      table.prepend(cap); // coloca el caption como primer hijo de la tabla
+    }
+    cap.innerHTML = `
+      <div class="emp-cap">
+        <div class="emp-cap-title">
+          ${match.cliente ?? "--"} <span>/</span> ${match.num_parte ?? "--"}
+        </div>
+        <a class="emp-cap-link" href="${match.link_rms}" target="_blank" rel="noopener">${tDisplay("Abrir RMS")}</a>
+      </div>
+    `;
+    
+    // (opcional) limpia el viejo header si existiera:
+    const oldHeader = results.querySelector("#emp-header");
+    if (oldHeader) oldHeader.innerHTML = "";
     
 const rows = [
   ["TARIMA", match.cod_tarima],
