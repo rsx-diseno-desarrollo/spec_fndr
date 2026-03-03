@@ -253,7 +253,7 @@ input:focus, select:focus {
   background-color: #000;
   color: var(--color-blanco);
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px var(--color-naranja-50);
+  box-shadow: 0 6px 18px var(--color-naranja-700);
 }
 
 /* -------- VISTA DE COTAS DINÁMICAS -------- */
