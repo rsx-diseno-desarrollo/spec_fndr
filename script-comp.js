@@ -150,10 +150,9 @@ function aNumeroSeguro(s) {
 // Convierte un valor que puede ser número o rango "a-b"
 function convertirValorO_Rango(raw) {
   if (raw === "" || raw === null || raw === undefined) return "--";
-
   const str = String(raw).trim();
 
-// 1) Detectar rango "a - b" con guion normal, en-dash o em-dash
+  // Soporte: "-", "–", "—"
   const rangoRegex = /^([+-]?\d+(?:[.,]\d+)?)\s*[-–—]\s*([+-]?\d+(?:[.,]\d+)?)$/;
   const m = str.match(rangoRegex);
   if (m) {
@@ -163,20 +162,16 @@ function convertirValorO_Rango(raw) {
       const convA = convertirNumero(a);
       const convB = convertirNumero(b);
       const sufijo = (unidadComp === "in" ? " in" : " mm");
-      // usa un en-dash (–) para legibilidad en rangos
       return `${convA}–${convB}${sufijo}`;
     }
-    // si no se pudo convertir, devuelve tal cual
-    return str;
+    return str; // si no parsea, muéstralo tal cual
   }
-
-  // 2) No es rango: intenta numero simple
+  // Número simple
   const n = aNumeroSeguro(str);
   if (isFinite(n)) {
     return `${convertirNumero(n)}${unidadComp === "in" ? " in" : " mm"}`;
   }
-
-  // 3) Valor no numérico (p.ej. "M8 x 1.25", "Ø12"): déjalo tal cual
+  // Texto técnico
   return str;
 }
 
@@ -225,6 +220,7 @@ function renderCotas(match) {
   orden.forEach(label => {
     const raw = match[label];          // A..J directamente
     const mostrado = convertirValorO_Rango(raw);
+    if (!mostrado || mostrado === "--") return;
     const item = document.createElement("div");
     item.className = "cota-item";
     item.innerHTML = `
@@ -234,7 +230,7 @@ function renderCotas(match) {
     cotasList.appendChild(item);
   });
 
-  // Si en el futuro agregas un radio "R", puedes descomentar y usar:
+  // Si en el futuro un radio "R"
   // if (match.R != null) {
   //   const rItem = document.createElement("div");
   //   rItem.className = "cota-item";
@@ -278,15 +274,35 @@ window.renderComponentView = function () {
   const imgEl = resultsComp.querySelector("#comp-img");
   const header = resultsComp.querySelector("#comp-header");
 
-  const numero = String(match["NO. DE DIBUJO/PARTE"] ?? "--").trim();
-  const nombre = String(match["NOMBRE DE DOCUMENTO"] ?? "--").trim();
-  header.textContent = `${numero} / ${nombre}`;
+  const docCodigo = String(match["NO. DE DIBUJO/PARTE"] ?? "--").trim();
+  const nombreDoc = String(match["NOMBRE DE DOCUMENTO"] ?? "--").trim();
+  const linkRms   = String(match.link_rms ?? "").trim();
 
+  // Utilidad: escapar contenido de texto para evitar HTML accidental
+  const esc = (s) => s.replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+
+  // Si el link viene sin protocolo pero es una URL válida para tu entorno,
+  // puedes anteponer "https://" si aplica. Aquí solo validamos y lo usamos tal cual.
+  const isHttpLike = /^https?:\/\//i.test(linkRms);
+  const href = linkRms ? (isHttpLike ? linkRms : linkRms) : "";
+
+  // Armamos el encabezado: Nombre (línea 1) + Documento (línea 2)
+  // Si no hay link, mostramos solo el código como texto.
+  const docHtml = href
+    ? `Documento: <a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(docCodigo)}</a>`
+    : `Documento: ${esc(docCodigo)}`;
+
+  header.innerHTML = `
+    <div class="comp-title">${esc(nombreDoc)}</div>
+    <div class="comp-doc">${docHtml}</div>
+  `;
+  // Imagen
   const src = match._img_key ? `img/${match._img_key}` : null;
   if (src) {
     mostrarImagenCuandoCargue(imgEl, src, tDisplay("Imagen del componente"));
   }
-
   // Cotas
   renderCotas(match);
 };
