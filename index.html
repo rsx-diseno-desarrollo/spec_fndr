@@ -58,6 +58,16 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
     <img src="img/spec-finder-logo.jpg" alt="Logo Spec Finder"/>
     <h2 data-text="Busqueda de especificaciones">Busqueda de especificaciones</h2><br>
   </div>
+	
+<!-- BIENVENIDA (overlay por sesión) -->
+<div id="welcome-overlay" class="welcome-overlay" hidden aria-hidden="true" role="dialog" aria-labelledby="welcome-title" aria-describedby="welcome-desc">
+  <div class="welcome-card">
+    <img src="img/spec-finder-logo.jpg" alt="Logo Spec Finder" class="welcome-logo">
+    <h2 id="welcome-title">¡Bienvenido!</h2>
+    <p id="welcome-desc">Selecciona una sección para empezar a buscar especificaciones.</p>
+    <button id="welcome-cta" class="btn btn-buscar" data-text="Empezar">Empezar</button>
+  </div>
+</div>
 
   <!-- SECCION PRODUCTO -->
   <div id="seccion-producto" class="seccion activa">
@@ -182,5 +192,53 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
   <!-- Tu archivo JS externo -->
     <script src="script.js"></script>
 	<script src="script-comp.js"></script>
+
+	<script>
+(() => {
+  const FLAG = "seenWelcomeSession";
+  const overlay = document.getElementById("welcome-overlay");
+  const btn = document.getElementById("welcome-cta");
+
+  function showOverlay() {
+    overlay.hidden = false;
+    overlay.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden"; // Evita scroll atrás
+  }
+
+  function hideOverlay() {
+    overlay.hidden = true;
+    overlay.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+  }
+
+  // Mostrar si no se ha visto en esta sesión
+  if (!sessionStorage.getItem(FLAG)) {
+    showOverlay();
+  }
+
+  // Botón para cerrar
+  btn?.addEventListener("click", () => {
+    sessionStorage.setItem(FLAG, "1");
+    hideOverlay();
+  });
+
+  // Click fuera de la tarjeta cierra también
+  overlay?.addEventListener("click", (ev) => {
+    if (ev.target === overlay) {
+      sessionStorage.setItem(FLAG, "1");
+      hideOverlay();
+    }
+  });
+
+  // ESC para cerrar
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape" && !overlay.hidden) {
+      sessionStorage.setItem(FLAG, "1");
+      hideOverlay();
+    }
+  });
+
+})();
+</script>
 </body>
 </html>
