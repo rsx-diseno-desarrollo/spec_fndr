@@ -84,8 +84,8 @@ window._componentesMatch = null;
       "CODIGO COMPONENTES": match.codigo,
       "NO. DE DIBUJO/PARTE": match.doc_codigo ?? "--",
       "NOMBRE DE DOCUMENTO": match.nombre ?? "--",
-      "A": match.a, "B": match.b, "C": match.c, "D": match.d, "E": match.e,
-      "F": match.f, "G": match.g, "H": match.h, "I": match.i, "J": match.j,
+      "A": match["A"], "B": match["B"], "C": match["C"], "D": match["D"], "E": match["E"],
+      "F": match["F"], "G": match["G"], "H": match["H"], "I": match["I"], "J": match["J"],
       "_img_key": match.img_key
     };
 
@@ -153,8 +153,7 @@ function convertirValorO_Rango(raw) {
 
   const str = String(raw).trim();
 
-  // 1) Detectar rango "a - b" con guion normal, largo o en-dash
-  //    admite espacios alrededor del separador
+// 1) Detectar rango "a - b" con guion normal, en-dash o em-dash
   const rangoRegex = /^([+-]?\d+(?:[.,]\d+)?)\s*[-–—]\s*([+-]?\d+(?:[.,]\d+)?)$/;
   const m = str.match(rangoRegex);
   if (m) {
