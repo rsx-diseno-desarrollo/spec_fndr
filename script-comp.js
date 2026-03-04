@@ -86,7 +86,7 @@ window._componentesMatch = null;
       "NOMBRE DE DOCUMENTO": match.nombre ?? "--",
       "A": match["A"], "B": match["B"], "C": match["C"], "D": match["D"], "E": match["E"],
       "F": match["F"], "G": match["G"], "H": match["H"], "I": match["I"], "J": match["J"],
-      "_img_key": match.img_key
+      "_img_key": match.img_key, "link_rms": match.link_rms
     };
 
     // Imagen desde tu carpeta local del repo
@@ -208,19 +208,41 @@ function mostrarImagenCuandoCargue(img, src, alt) {
   img.src = src;
 }
 
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function toSafeHref(url) {
+  if (!url) return "";
+  const u = String(url).trim();
+
+  // Permitir http(s) y rutas relativas internas
+  if (/^https?:\/\//i.test(u) || u.startsWith("/")) return u;
+
+  // Permitir hosts de intranet sin esquema, ej: "rsx-sviis1/rms/..."
+  if (/^[a-z0-9._-]+(?:\:[0-9]+)?\//i.test(u)) return "http://" + u;
+
+  // Rechazar esquemas no permitidos (javascript:, data:, etc.)
+  return "";
+}
+
 function renderCotas(match) {
   const resultsComp = document.getElementById("results-comp");
   const cotasList = resultsComp?.querySelector("#cotas-list");
   if (!cotasList) return;
 
-  // Orden estándar A..J
   const orden = ["A","B","C","D","E","F","G","H","I","J"];
   cotasList.innerHTML = "";
 
   orden.forEach(label => {
-    const raw = match[label];          // A..J directamente
+    const raw = match[label]; // A..J directamente
     const mostrado = convertirValorO_Rango(raw);
+
+    // Si no hay valor usable, no renderizar el item
     if (!mostrado || mostrado === "--") return;
+
     const item = document.createElement("div");
     item.className = "cota-item";
     item.innerHTML = `
@@ -229,17 +251,6 @@ function renderCotas(match) {
     `;
     cotasList.appendChild(item);
   });
-
-  // Si en el futuro un radio "R"
-  // if (match.R != null) {
-  //   const rItem = document.createElement("div");
-  //   rItem.className = "cota-item";
-  //   rItem.innerHTML = `
-  //     <span class="cota-label">${tDisplay("R")}:</span>
-  //     <span class="cota-value">${convertirValorO_Rango(match.R)}</span>
-  //   `;
-  //   cotasList.appendChild(rItem);
-  // }
 }
 
 // ======================================================
@@ -276,33 +287,29 @@ window.renderComponentView = function () {
 
   const docCodigo = String(match["NO. DE DIBUJO/PARTE"] ?? "--").trim();
   const nombreDoc = String(match["NOMBRE DE DOCUMENTO"] ?? "--").trim();
-  const linkRms   = String(match.link_rms ?? "").trim();
 
-  // Utilidad: escapar contenido de texto para evitar HTML accidental
-  const esc = (s) => s.replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+  // IMPORTANTE: 'link_rms' debe estar disponible dentro de _componentesMatch.
+  // Si no lo has añadido aún, ve al punto 5) de esta guía.
+  const linkRmsRaw = String(match.link_rms ?? "").trim();
+  const href = toSafeHref(linkRmsRaw);
 
-  // Si el link viene sin protocolo pero es una URL válida para tu entorno,
-  // puedes anteponer "https://" si aplica. Aquí solo validamos y lo usamos tal cual.
-  const isHttpLike = /^https?:\/\//i.test(linkRms);
-  const href = linkRms ? (isHttpLike ? linkRms : linkRms) : "";
-
-  // Armamos el encabezado: Nombre (línea 1) + Documento (línea 2)
-  // Si no hay link, mostramos solo el código como texto.
-  const docHtml = href
+  const lineaDoc = href
     ? `Documento: <a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(docCodigo)}</a>`
     : `Documento: ${esc(docCodigo)}`;
 
   header.innerHTML = `
     <div class="comp-title">${esc(nombreDoc)}</div>
-    <div class="comp-doc">${docHtml}</div>
+    <div class="comp-doc">${lineaDoc}</div>
   `;
+
   // Imagen
   const src = match._img_key ? `img/${match._img_key}` : null;
   if (src) {
     mostrarImagenCuandoCargue(imgEl, src, tDisplay("Imagen del componente"));
+  } else {
+    ocultarImagen(imgEl);
   }
+
   // Cotas
   renderCotas(match);
 };
