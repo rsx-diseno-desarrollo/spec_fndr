@@ -286,10 +286,12 @@ input:focus, select:focus {
 .cota-label {
   color: var(--color-naranja);
   font-weight: 600;
+  font-size: 1.5rem;
   margin-right: 6px;
 }
 .cota-value {
   color: var(--color-gris-oscuro);
+  font-size: 1.3rem;
 }
 
 /* Selector de unidad */
@@ -308,10 +310,10 @@ input:focus, select:focus {
 
 .emp-table {
   width: 100%;
-  border-collapse: collapse;
-  background: var(--color-surface);
+  //border-collapse: collapse;
+  //background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  //border-radius: 8px;
   overflow: hidden; /* para que el radio aplique a thead/tbody */
 }
 
@@ -341,8 +343,9 @@ input:focus, select:focus {
   color: var(--color-negro);
   text-align: center;
   font-family: monospace;
+  font-size: 1rem;
   word-break: break-word;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* énfasis */
