@@ -320,7 +320,7 @@ input:focus, select:focus {
 .emp-table thead .table-title {
   text-align: center;
   font-weight: 800;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--color-negro);
   background: var(--color-naranja);
 }
