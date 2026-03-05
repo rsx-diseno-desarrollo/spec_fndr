@@ -60,7 +60,7 @@ a:focus-visible {
 
 /* -------- HEADER -------- */
 .header img {
-  max-width: 150px;
+  max-width: 12rem;
   width: 100%;  /* Se adapta al contenedor */
   height: auto; /* Mantiene proporción */
   display: block;
