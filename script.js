@@ -34,7 +34,7 @@ function bindOnce(el, event, key, handler) {
 }
 
 // ======================================================
-//  PRODUCTO (con soporte de idioma)
+//  PRODUCTO
 // ======================================================
 async function initProductoDesdeSupabase() {
   const sb = window.supabaseClient;
@@ -191,74 +191,96 @@ function initEmpaqueDesdeSupabase() {
 
   // Buscar y pintar
   bindOnce(btnBuscar, "click", "emp_buscar", async () => {
-    const cliente = selCliente.value;
-    const parte   = (inputParte.value || "").trim();
-    tbody.innerHTML = "";
-    results.querySelector("#emp-header").innerHTML = "";
+  const cliente = selCliente.value;
+  const parte = (inputParte.value || "").trim();
 
-    if (!cliente || !parte) {
-      results.querySelector("#emp-header").innerHTML =
-        `<span class="msg-warn">${tDisplay("Seleccione CLIENTE y escriba un Número de pieza.")}</span>`;
-      return;
-    }
+  tbody.innerHTML = "";
+  const empHeaderEl = results.querySelector("#emp-header");
+  if (empHeaderEl) empHeaderEl.innerHTML = "";
 
-    const { data } = await sb.from('v_empaque').select('*')
-      .eq('cliente', cliente).eq('num_parte', parte).limit(1);
-    const match = (data ?? [])[0];
-    if (!match) {
-      results.querySelector("#emp-header").innerHTML =
-        `<span class="msg-empty">${tDisplay("No se encontraron specs de empaque para ese cliente y número de parte.")}</span>`;
-      return;
-    }
-    // Encabezado dentro de la tabla como <caption>
-    const table = document.getElementById("emp-table");
-    let cap = table.querySelector("caption#emp-cap");
-    if (!cap) {
-      cap = document.createElement("caption");
-      cap.id = "emp-cap";
-      table.prepend(cap); // coloca el caption como primer hijo de la tabla
-    }
-    cap.innerHTML = `
-      <div class="emp-cap">
-        <div class="emp-cap-title">
-          ${match.cliente ?? "--"} <span>/</span> ${match.num_parte ?? "--"}
-        </div>
-        <a class="emp-cap-link" href="${match.link_rms}" target="_blank" rel="noopener">${tDisplay("Abrir RMS")}</a>
-      </div>
-    `;
-    
-    // (opcional) limpia el viejo header si existiera:
-    const oldHeader = results.querySelector("#emp-header");
-    if (oldHeader) oldHeader.innerHTML = "";
-    
-const rows = [
-  ["TARIMA", match.cod_tarima],
-  ["LARGUEROS", match.largueros],
-  ["POLIN SUP/INF", match.polin_sup_inf],
-  ["FLEJE", match.fleje],
-  ["MUELLES x CAMA", match.mxc],
-  ["CAMAS", match.camas],
-  ["MUELLES x TARIMA", match.mxt],
-  ["PESO NETO EMPAQUE (Kg)", match.peso_neto],
-  ["PESO BRUTO EMPAQUE (Kg)", match.peso_bruto]
-];
+  if (!cliente || !parte) {
+    if (empHeaderEl) empHeaderEl.innerHTML =
+      `<span class="msg-warn">${tDisplay("Seleccione CLIENTE y escriba un Número de pieza.")}</span>`;
+    return;
+  }
 
-// Pintar filas en la tabla
-rows.forEach(([label, value]) => {
-  const tr = document.createElement("tr");
-  const th = document.createElement("th");
-  th.className = "label-cell";
-  th.textContent = tDisplay(label);
+  const { data } = await sb.from('v_empaque').select(`
+    cliente,
+    num_parte,
+    cod_tarima, largueros, polin_sup_inf, fleje, mxc, camas, mxt, peso_neto, peso_bruto,
+    doc_codigo,
+    link_rms
+  `)
+  .eq('cliente', cliente)
+  .eq('num_parte', parte)
+  .limit(1);
 
-  const td = document.createElement("td");
-  td.className = "value-cell";
-  td.textContent = value ?? "--";
+  const match = (data ?? [])[0];
+  if (!match) {
+    if (empHeaderEl) empHeaderEl.innerHTML =
+      `<span class="msg-empty">${tDisplay("No se encontraron specs de empaque para ese cliente y número de parte.")}</span>`;
+    return;
+  }
 
-  tr.appendChild(th);
-  tr.appendChild(td);
-  tbody.appendChild(tr);
-});
+  // --- Encabezado IN-TABLE (igual estilo que Plantillas, reusando .comp-title/.comp-doc) ---
+  const clienteTxt  = String(match.cliente ?? "").trim();
+  const parteTxt    = String(match.num_parte ?? "").trim();
+  const docCodigo   = String(match.doc_codigo ?? "--").trim();
+  const href        = toSafeHref(String(match.link_rms ?? "").trim());
 
+  const docHtml = href
+    ? `${esc(href)}${esc(docCodigo)}</a>`
+    : `${esc(docCodigo)}`;
+
+  const table = document.getElementById("emp-table");
+
+  // Limpia cualquier <thead> previo
+  let thead = table.querySelector("thead");
+  if (thead) thead.remove();
+
+  // Construye el thead con una sola fila-title que contiene el bloque (2 líneas)
+  thead = document.createElement("thead");
+  const trTitle = document.createElement("tr");
+  trTitle.className = "table-title";
+  const thTitle = document.createElement("th");
+  thTitle.colSpan = 2;
+  thTitle.innerHTML = `
+    <div class="comp-title">${esc(clienteTxt)} / ${esc(parteTxt)}</div>
+    <div class="comp-doc">Documento: ${docHtml}</div>
+  `;
+  trTitle.appendChild(thTitle);
+  thead.appendChild(trTitle);
+  table.prepend(thead);
+
+  // (opcional) deja vacío el caption si existe para no duplicar encabezados
+  const cap = table.querySelector("caption#emp-cap");
+  if (cap) cap.innerHTML = "";
+
+  // --- Filas de datos (como ya lo hacías) ---
+  const rows = [
+    ["TARIMA", match.cod_tarima],
+    ["LARGUEROS", match.largueros],
+    ["POLIN SUP/INF", match.polin_sup_inf],
+    ["FLEJE", match.fleje],
+    ["MUELLES x CAMA", match.mxc],
+    ["CAMAS", match.camas],
+    ["MUELLES x TARIMA", match.mxt],
+    ["PESO NETO EMPAQUE (Kg)", match.peso_neto],
+    ["PESO BRUTO EMPAQUE (Kg)", match.peso_bruto]
+  ];
+
+  rows.forEach(([label, value]) => {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.className = "label-cell";
+    th.textContent = tDisplay(label);
+    const td = document.createElement("td");
+    td.className = "value-cell";
+    td.textContent = value ?? "--";
+    tr.appendChild(th);
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  });
 });
 
 }
@@ -273,6 +295,24 @@ function clearEmpaque(tbody, resultsRoot) {
   tbody.innerHTML = "";
   setEmpHeader(resultsRoot, "");
 }
+
+// --- Utilidades compartidas para encabezados (Componentes/Empaque) ---
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function toSafeHref(url) {
+  if (!url) return "";
+  const u = String(url).trim();
+  // http/https o rutas relativas
+  if (/^https?:\/\//i.test(u) || u.startsWith("/")) return u;
+  // host de intranet sin esquema (rsx-sviis1/rms/...)
+  if (/^[a-z0-9._-]+(?:\:[0-9]+)?\//i.test(u)) return "http://" + u;
+  return "";
+}
+
 
 window.renderEmpaqueSelects = function () {
   initEmpaqueDesdeSupabase();
