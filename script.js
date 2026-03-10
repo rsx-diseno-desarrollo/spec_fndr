@@ -229,7 +229,7 @@ function initEmpaqueDesdeSupabase() {
   const href        = toSafeHref(String(match.link_rms ?? "").trim());
 
   const docHtml = href
-    ? `${esc(href)}${esc(docCodigo)}</a>`
+    ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(docCodigo)}</a>`
     : `${esc(docCodigo)}`;
 
   const table = document.getElementById("emp-table");
@@ -245,7 +245,7 @@ function initEmpaqueDesdeSupabase() {
   const thTitle = document.createElement("th");
   thTitle.colSpan = 2;
   thTitle.innerHTML = `
-    <div class="comp-title">${esc(clienteTxt)} / ${esc(parteTxt)}</div>
+    <div class="comp-title">${esc(clienteTxt)} - ${esc(parteTxt)}</div>
     <div class="comp-doc">Documento: ${docHtml}</div>
   `;
   trTitle.appendChild(thTitle);
