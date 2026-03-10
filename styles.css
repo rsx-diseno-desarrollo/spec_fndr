@@ -325,6 +325,10 @@ input:focus, select:focus {
   background: var(--color-naranja);
 }
 
+.emp-table thead .table-title a {
+  color: var(--color-blanco);
+}
+
 .emp-table th,
 .emp-table td {
   border-bottom: 1px solid var(--color-border);
@@ -332,7 +336,7 @@ input:focus, select:focus {
   vertical-align: top;
 }
 
-.emp-table tbody tr:nth-child(even) { background: var(--color-gris-claro); }
+.emp-table tbody tr:nth-child(even) { background: var(--color-naranja-50); }
 
 .emp-table .label-cell {
   font-weight: 600;
