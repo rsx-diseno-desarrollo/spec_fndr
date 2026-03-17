@@ -120,7 +120,7 @@ a:focus-visible {
 }
 .menu ul li:hover {
   cursor: pointer;
-  background-color: #5a5a5a;
+  background-color: var(--color-naranja-700);
 }
 .menu ul li a {
   display: block;
