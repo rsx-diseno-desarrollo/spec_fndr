@@ -222,14 +222,6 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
     hideOverlay();
   });
 
-  // Click fuera de la tarjeta cierra también
-  overlay?.addEventListener("click", (ev) => {
-    if (ev.target === overlay) {
-      sessionStorage.setItem(FLAG, "1");
-      hideOverlay();
-    }
-  });
-
   // ESC para cerrar
   document.addEventListener("keydown", (ev) => {
     if (ev.key === "Escape" && !overlay.hidden) {
