@@ -31,7 +31,8 @@
   "TIPO DE COMPONENTE": { "es": "TIPO DE COMPONENTE", "en": "COMPONENT TYPE" },
   "CODIGO COMPONENTES": { "es": "CODIGO COMPONENTES", "en": "COMPONENT CODE" },
   "Especificación de tornillo central para parte de repuesto": { "es": "Especificación de tornillo central para parte de repuesto", "en": "Center Bolt Specification for Spare Part" },
-  "TORNILLO": { "es": "TORNILLO", "en": "BOLT" },
+  
+  "TORNILLO DE CENTRO": { "es": "TORNILLO DE CENTRO", "en": "CENTER BOLT" },
 
   "TARIMA": { "es": "TARIMA", "en": "PALLET CODE" },
   "LARGUEROS": { "es": "LARGUEROS", "en": "STRINGERS" },
@@ -73,9 +74,6 @@
   "es": "No se pudo cargar la imagen del componente.",
   "en": "Component image could not be loaded."
 },
-"RADIO": { "es": "RADIO", "en": "RADIUS" },
-"CUERDA": { "es": "CUERDA", "en": "THREAD" },
-"GRADO DE DUREZA": { "es": "GRADO DE DUREZA", "en": "HARDNESS GRADE" },
 
 "Plantillas TsTs": { "es": "Plantillas TsTs", "en": "TsTs Templates" },
 "Número de parte": { "es": "Número de parte", "en": "Part number" },
