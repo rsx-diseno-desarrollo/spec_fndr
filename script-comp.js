@@ -294,12 +294,15 @@ window.renderComponentView = function () {
   const href = toSafeHref(linkRmsRaw);
 
   const lineaDoc = href
-    ? `Documento: <a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(docCodigo)}</a>`
-    : `Documento: ${esc(docCodigo)}`;
+    ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(docCodigo)}</a>`
+    : `${esc(docCodigo)}`;
 
   header.innerHTML = `
     <div class="comp-title">${esc(nombreDoc)}</div>
-    <div class="comp-doc">${lineaDoc}</div>
+    <div class="comp-doc">
+    <div data-text="Documento:">Documento:</div>
+    <div> ${lineaDoc}</div>
+    </div>
   `;
 
   // Imagen
