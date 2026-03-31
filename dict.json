@@ -1,38 +1,32 @@
 {
+  "Bienvenido": {"es": "Bienvenido", "en": "Welcome"},
+  "Selecciona una sección para empezar a buscar especificaciones.": {"es": "Selecciona una sección para empezar a buscar especificaciones.", "en": "Select a section to start searching specs"},
+  "Empezar": {"es": "Empezar", "en": "Start"},
+  
+  "Logo Spec Finder": { "es": "Logo Spec Finder", "en": "Spec Finder logo" },
+  "Busqueda de especificaciones": { "es": "Busqueda de especificaciones", "en": "Specifications Lookup" },
+  
   "Producto": { "es": "Producto", "en": "Product" },
   "Empaque": { "es": "Empaque", "en": "Packing" },
   "Componentes": { "es": "Componentes", "en": "Components" },
-
-  "Logo Spec Finder": { "es": "Logo Spec Finder", "en": "Spec Finder logo" },
-  "Busqueda de especificaciones": { "es": "Busqueda de especificaciones", "en": "Specifications Lookup" },
 
   "Especificaciones de producto": { "es": "Especificaciones de producto", "en": "Product specs" },
   "Número de parte sin guión": { "es": "Número de parte sin guión", "en": "Part number (without hyphen)" },
   "-- Seleccionar cliente --": { "es": "-- Seleccionar cliente --", "en": "-- Select client --" },
   "-- Seleccionar tipo --": { "es": "-- Seleccionar tipo --", "en": "-- Select type --" },
 
-  "Especificaciones de empaque": { "es": "Especificaciones de empaque", "en": "Packing specs" },
-  "Número de parte": { "es": "Número de parte", "en": "Part number" },
-  "Buscar": { "es": "Buscar", "en": "Search" },
-
-  "Especificaciones de componentes": { "es": "Especificaciones de componentes", "en": "Component specs" },
-  "Código sin guiones": { "es": "Código sin guiones", "en": "Code without hyphens" },
-
-  "Imagen del componente": { "es": "Imagen del componente", "en": "Component image" },
-
-  "Unidad:": { "es": "Unidad:", "en": "Unit:" },
-
   "HOJA DE ESPECIFICACION COMPLETA": { "es": "HOJA DE ESPECIFICACION COMPLETA", "en": "FULL SPECIFICATION SHEET" },
   "HOJA DE ESPECIFICACION OPERACIONES PREVIAS": { "es": "HOJA DE ESPECIFICACION OPERACIONES PREVIAS", "en": "PRE-PRODUCTION OPERATIONS SPECIFICATION SHEET" },
   "HOJA DE ESPECIFICACION OPERACIONES FINALES": { "es": "HOJA DE ESPECIFICACION OPERACIONES FINALES", "en": "FINAL OPERATIONS SPECIFICATION SHEET" },
 
-  "NO. DE DIBUJO/PARTE": { "es": "NO. DE DIBUJO/PARTE", "en": "DRAWING/PART NO." },
-  "NOMBRE DE DOCUMENTO": { "es": "NOMBRE DE DOCUMENTO", "en": "DOCUMENT NAME" },
-  "TIPO DE COMPONENTE": { "es": "TIPO DE COMPONENTE", "en": "COMPONENT TYPE" },
-  "CODIGO COMPONENTES": { "es": "CODIGO COMPONENTES", "en": "COMPONENT CODE" },
-  "Especificación de tornillo central para parte de repuesto": { "es": "Especificación de tornillo central para parte de repuesto", "en": "Center Bolt Specification for Spare Part" },
-  
-  "TORNILLO DE CENTRO": { "es": "TORNILLO DE CENTRO", "en": "CENTER BOLT" },
+  "Código": { "es": "Código", "en": "Code" },
+  "No. de Parte": { "es": "No. de Parte", "en": "Part Number" },
+  "Nombre": { "es": "Nombre", "en": "Name" },
+  "Abrir RMS": { "es": "Abrir RMS", "en": "Open RMS" },
+
+  "Especificaciones de empaque": { "es": "Especificaciones de empaque", "en": "Packing specs" },
+  "Buscar": { "es": "Buscar", "en": "Search" },
+  "Documento:": {"es": "Documento:", "en": "File:"},
 
   "TARIMA": { "es": "TARIMA", "en": "PALLET CODE" },
   "LARGUEROS": { "es": "LARGUEROS", "en": "STRINGERS" },
@@ -50,13 +44,27 @@
   "EMPLAYE": { "es": "EMPLAYE", "en": "SHRINK WRAPPING"},
   "TACON": {"es": "TACON", "en": "SPACER"},
 
+  "Especificaciones de componentes": { "es": "Especificaciones de componentes", "en": "Component specs" },
+  "Código sin guiones": { "es": "Código sin guiones", "en": "Code without hyphens" },
+
+  "Imagen del componente": { "es": "Imagen del componente", "en": "Component image" },
+
+  "Unidad:": { "es": "Unidad:", "en": "Unit:" },
+  
+  "TORNILLO DE CENTRO": { "es": "TORNILLO DE CENTRO", "en": "CENTER BOLT" },
+
+"Plantillas TsTs": { "es": "Plantillas TsTs", "en": "TsTs Templates" },
+"Cliente"{ "es": "Cliente", "en": "Client"},
+"Número de parte": { "es": "Número de parte", "en": "Part number" },
+"Tipo de Plantilla": { "es": "Tipo de Plantilla", "en": "Template Type" },
+"Muestra": { "es": "Muestra", "en": "Sample" },
+"N° HOJA": { "es": "N° HOJA", "en": "Leaf #" },
+"PLANTILLA": { "es": "PLANTILLA", "en": "Template" },
+"MOLDE": { "es": "MOLDE", "en": "FORMING DIE"},
+"Muestra": { "es": "Muestra", "en": "Sample" },
+
   "No se encontraron specs de empaque para ese cliente y número de parte.": { "es": "No se encontraron specs de empaque para ese cliente y número de parte.", "en": "No packaging specs found for that client and part number." },
   "Seleccione CLIENTE y escriba un Número de pieza.": { "es": "Seleccione CLIENTE y escriba un Número de pieza.", "en": "Select CLIENT and write a Part number." },
-  "Abrir RMS": { "es": "Abrir RMS", "en": "Open RMS" },
-
-  "Código": { "es": "Código", "en": "Code" },
-  "No. de Parte": { "es": "No. de Parte", "en": "Part Number" },
-  "Nombre": { "es": "Nombre", "en": "Name" },
 
   "Seleccione tipo y escriba un código.": {
   "es": "Seleccione tipo y escriba un código.",
@@ -74,16 +82,6 @@
   "es": "No se pudo cargar la imagen del componente.",
   "en": "Component image could not be loaded."
 },
-
-"Plantillas TsTs": { "es": "Plantillas TsTs", "en": "TsTs Templates" },
-"Número de parte": { "es": "Número de parte", "en": "Part number" },
-"Tipo de Plantilla": { "es": "Tipo de Plantilla", "en": "Template Type" }, 
-"N° HOJA": { "es": "N° HOJA", "en": "Leaf #" },
-"PLANTILLA": { "es": "PLANTILLA", "en": "Template" },
-"MUESTRA": { "es": "MUESTRA", "en": "Sample" },
-
-"Bienvenido": {"es": "Bienvenido", "en": "Welcome"},
-"Selecciona una sección para empezar a buscar": {"es": "Selecciona una sección para empezar a buscar", "en": "Select a section to start searching"},
 
 "NOTA_EMPAQUE":{
   "es": "NOTA: Se puede empacar una cantidad menor en la tarima según el requerimiento del cliente o saldos aprobados para envío, pero no debe excederse la cantidad asignada.",
