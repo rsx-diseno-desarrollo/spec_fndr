@@ -298,7 +298,7 @@ window.renderComponentView = function () {
     : `${esc(docCodigo)}`;
 
   header.innerHTML = `
-    <div class="comp-title">${esc(nombreDoc)}</div>
+    <div class="comp-title">${esc(tDisplay(nombreDoc))}</div>
     <div class="comp-doc">
     <div data-text="Documento:">Documento:</div>
     <div> ${lineaDoc}</div>
