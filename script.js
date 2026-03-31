@@ -246,7 +246,10 @@ function initEmpaqueDesdeSupabase() {
   thTitle.colSpan = 2;
   thTitle.innerHTML = `
     <div class="comp-title">${esc(clienteTxt)} - ${esc(parteTxt)}</div>
-    <div class="comp-doc">Documento: ${docHtml}</div>
+    <div class="comp-doc">
+    <div data-text="Documento:">Documento:</div>
+    <div>${docHtml}</div>
+    </div>
   `;
   trTitle.appendChild(thTitle);
   thead.appendChild(trTitle);
