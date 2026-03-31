@@ -99,7 +99,7 @@ top.forEach(item => {
     <strong>${item.cliente}</strong><br>
     ${tDisplay("Código")}: ${item.codigo}<br>
     ${tDisplay("No. de Parte")}: ${partesTxt}<br>
-    ${tDisplay("Nombre")}: ${item.tipo}<br>
+    ${tDisplay("Nombre")}: ${tDisplay(item.tipo)}<br>
     <a href="${item.link}" target="_blank">${tDisplay("Abrir RMS")}</a>`;
   
   resultsDiv.appendChild(card);
