@@ -153,15 +153,12 @@ a:focus-visible {
 .seccion { display: none; }
 .seccion.activa { display: block; }
 
-
-.menu-divider {
-  border-top: 1px solid #777;
-  margin: 15px 0;
+.menu-admin{
+  background: black;
 }
 
-.menu-admin a {
-  color: #ffb347;
-  font-weight: bold;
+.spacer{
+  height: 60vh;
 }
 
 /* -------- INPUTS Y SELECTS -------- */
