@@ -7,7 +7,7 @@ Proyecto: Sitio de Especificaciones Técnicas
 Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernández.
 -->
   <meta charset="UTF-8">
-  <title>SpecFinder BETA</title>
+  <title>SpecFinder PROT. DE PRUEBAS</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="img/favicon.ico">
   <!-- PWA Manifest -->
@@ -36,7 +36,13 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
     <li><a href="#" data-section="seccion-producto" data-text="Producto">Producto</a></li>
     <li><a href="#" data-section="seccion-empaque" data-text="Empaque">Empaque</a></li>
     <li><a href="#" data-section="seccion-componentes" data-text="Componentes">Componentes</a></li>
-	<li><a href="#" data-section="seccion-tsts" data-text="TsTs: Plantillas">TsTs: Plantillas</a></li>
+    <li><a href="#" data-section="seccion-tsts" data-text="TsTs: Plantillas">TsTs: Plantillas</a></li>
+    <li class="menu-divider"></li>
+	<li class="menu-admin">
+  	<a href="#" data-section="seccion-admin">
+    	⚙️ Admin
+  	</a>
+    </li>
   </ul>
 </nav>
 <!-- Menu END -->
@@ -68,6 +74,7 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
     <button id="welcome-cta" class="btn btn-buscar" data-text="Empezar">Empezar</button>
   </div>
 </div>
+<!-- BIENVENIDA (overlay por sesión) END -->
 
   <!-- SECCION PRODUCTO -->
   <div id="seccion-producto" class="seccion activa">
@@ -181,6 +188,39 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
 </div>
 <!-- SECCIÓN TsTs END -->
 
+<!-- SECCIÓN ADMIN -->
+<div id="seccion-admin" class="seccion">
+
+  <!-- OVERLAY ADMIN -->
+  <div id="admin-overlay" class="admin-overlay">
+    <div class="welcome-card">
+
+      <h2>Acceso restringido</h2>
+      <p>Ingresa la contraseña</p>
+
+      <input type="password" id="admin-pass" placeholder="Contraseña">
+
+      <br><br>
+
+      <button id="admin-login" class="btn btn-buscar">
+        Entrar
+      </button><br>
+
+      <button id="admin-cancel" class="btn">
+        Regresar
+      </button>
+
+    </div>
+  </div>
+
+  <!-- CONTENIDO REAL -->
+  <div id="admin-content" style="display:none;">
+    C H A M B E A N D I N G ... :)
+  </div>
+
+</div>
+<!-- SECCIÓN ADMIN END -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const { createClient } = window.supabase;
@@ -192,6 +232,7 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
   <!-- Tu archivo JS externo -->
     <script src="script.js"></script>
 	<script src="script-comp.js"></script>
+		<script src="admin.js"></script>
 
 	<script>
 (() => {
