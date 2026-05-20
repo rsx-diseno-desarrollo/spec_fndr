@@ -32,7 +32,6 @@ function bindOnce(el, event, key, handler) {
   el.addEventListener(event, handler);
   el[flag] = true;
 }
-
 // ======================================================
 //  PRODUCTO
 // ======================================================
@@ -125,14 +124,63 @@ initProductoDesdeSupabase();
 document.querySelectorAll('.menu a').forEach(link => {
   link.addEventListener('click', e => {
     e.preventDefault();
-    const target = link.dataset.section;
 
-    document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
+    const target = link.dataset.section;
+    const seccionActual = document.querySelector('.seccion.activa')?.id;
+
+    //  SI ESTÁ EN ADMIN Y QUIERE SALIR
+    if (seccionActual === "seccion-admin" && target !== "seccion-admin") {
+
+      const confirmar = confirm("¿Seguro que quieres salir del área de administración?");
+
+      if (!confirmar) return;
+
+      //  bloquear admin otra vez
+      sessionStorage.removeItem("adminUnlocked");
+
+      // ocultar contenido admin
+      document.getElementById("admin-content").style.display = "none";
+
+      // mostrar overlay para próxima vez
+      const overlay = document.getElementById("admin-overlay");
+      if (overlay) overlay.style.display = "flex";
+    }
+
+    //  ACCESO A ADMIN
+    if (target === "seccion-admin") {
+
+	
+const actual = document.querySelector('.seccion.activa')?.id;
+
+  if (actual && actual !== "seccion-admin") {
+    sessionStorage.setItem("lastSection", actual); // guardar anterior
+  }
+
+      document.querySelector('.menu').classList.remove('abierto');
+
+      document.querySelectorAll('.seccion')
+        .forEach(sec => sec.classList.remove('activa'));
+
+      document.getElementById("seccion-admin").classList.add('activa');
+
+      if (!sessionStorage.getItem("adminUnlocked")) {
+        window.showAdminOverlay();
+        document.getElementById("admin-content").style.display = "none";
+      }
+
+      localStorage.setItem('seccionActiva', target);
+      return;
+    }
+
+    //  navegación normal
+    document.querySelectorAll('.seccion')
+      .forEach(sec => sec.classList.remove('activa'));
+
     document.getElementById(target).classList.add('activa');
 
     localStorage.setItem('seccionActiva', target);
 
-    menu.classList.remove('abierto'); // cerrar menú
+    document.querySelector('.menu').classList.remove('abierto');
   });
 });
 
