@@ -38,25 +38,51 @@ window._componentesMatch = null;
   }
 
   bindOnce(codigoInput, "input", "comp_autocomplete", async () => {
-    const texto = (codigoInput.value || "").trim().toLowerCase();
-    autocomplete.innerHTML = "";
-    if (!texto || !tipoComp.value) return;
 
-    const { data } = await window.supabaseClient
-      .from('v_comp')
-      .select('codigo')
-      .eq('tipo', tipoComp.value)
-      .ilike('codigo', `%${texto}%`)
-      .limit(10);
+  const texto = (codigoInput.value || "").trim().toLowerCase();
+  autocomplete.innerHTML = "";
 
-    [...new Set((data ?? []).map(r => r.codigo))].forEach(code => {
-      const div = document.createElement("div");
-      div.classList.add("autocomplete-item");
-      div.textContent = code;
-      div.onclick = () => { codigoInput.value = code; autocomplete.innerHTML = ""; };
-      autocomplete.appendChild(div);
-    });
+  //  ocultar si no hay condiciones
+  if (!texto || !tipoComp.value) {
+    autocomplete.classList.remove("active");
+    return;
+  }
+
+  const { data } = await window.supabaseClient
+    .from('v_comp')
+    .select('codigo')
+    .eq('tipo', tipoComp.value)
+    .ilike('codigo', `%${texto}%`)
+    .limit(10);
+
+  const unique = [...new Set((data ?? []).map(r => r.codigo))];
+
+  //  ocultar si no hay resultados
+  if (unique.length === 0) {
+    autocomplete.classList.remove("active");
+    return;
+  }
+
+  //  mostrar
+  autocomplete.classList.add("active");
+
+  unique.forEach(code => {
+
+    const div = document.createElement("div");
+    div.classList.add("autocomplete-item");
+    div.textContent = code;
+
+    div.onclick = () => {
+      codigoInput.value = code;
+      autocomplete.innerHTML = "";
+      autocomplete.classList.remove("active"); //  cerrar
+    };
+
+    autocomplete.appendChild(div);
+
   });
+
+});
 
   // 3) Buscar 1 componente y render
   bindOnce(btnBuscarComp, "click", "comp_buscar", async () => {
@@ -316,3 +342,16 @@ window.renderComponentView = function () {
   // Cotas
   renderCotas(match);
 };
+
+document.addEventListener("click", (e) => {
+
+  document.querySelectorAll(".autocomplete-items").forEach(list => {
+
+    if (!list.contains(e.target)) {
+      list.innerHTML = "";
+      list.classList.remove("active");
+    }
+
+  });
+
+});
