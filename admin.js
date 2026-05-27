@@ -92,4 +92,74 @@ if (e.key === "Escape" && overlay.style.display !== "none") {
 }
   });
 
+// ============================
+// TABS ADMIN
+// ============================
+
+const tabButtons = document.querySelectorAll("[data-admin-tab]");
+const panels = document.querySelectorAll(".admin-panel");
+
+function activarTab(tab) {
+
+  // Quitar activo en botones
+  tabButtons.forEach(btn => btn.classList.remove("activo"));
+
+  // Ocultar panels
+  panels.forEach(p => p.style.display = "none");
+
+  // Activar botón
+  document
+    .querySelector(`[data-admin-tab="${tab}"]`)
+    ?.classList.add("activo");
+
+  // Mostrar panel
+  const panel = document.getElementById(`admin-tab-${tab}`);
+  if (panel) panel.style.display = "block";
+}
+
+// click tabs
+tabButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    activarTab(btn.dataset.adminTab);
+  });
+});
+
+//  TAB INICIAL
+activarTab("prod");
+
+let modoProducto = "nuevo";
+
+const btnNuevo = document.getElementById("btn-modo-nuevo");
+const btnEditar = document.getElementById("btn-modo-editar");
+
+btnNuevo?.addEventListener("click", () => {
+  modoProducto = "nuevo";
+
+  btnNuevo.classList.add("activo");
+  btnEditar.classList.remove("activo");
+
+  limpiarFormulario();
+});
+
+btnEditar?.addEventListener("click", () => {
+  modoProducto = "editar";
+
+  btnEditar.classList.add("activo");
+  btnNuevo.classList.remove("activo");
+
+  // después aquí buscador
+});
+
+function limpiarFormulario() {
+  document.getElementById("form-producto").reset();
+
+  // dejar solo una parte
+  const container = document.getElementById("partes-container");
+  container.innerHTML = `
+    <div class="parte-item">
+      <input type="text" class="prod-parte" placeholder="Número de parte sin guión" required>
+    </div>
+  `;
+}
+
 });
