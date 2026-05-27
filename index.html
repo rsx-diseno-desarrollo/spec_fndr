@@ -7,7 +7,7 @@ Proyecto: Sitio de Especificaciones Técnicas
 Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernández.
 -->
   <meta charset="UTF-8">
-  <title>SpecFinder PROT. DE PRUEBAS</title>
+  <title>SpecFinder BETA</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="img/favicon.ico">
   <!-- PWA Manifest -->
@@ -212,7 +212,143 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
 
   <!-- CONTENIDO REAL -->
   <div id="admin-content" style="display:none;">
-    C H A M B E A N D I N G ... :)
+<h3>Panel de Administración</h3>
+
+    <!--  Tabs principales -->
+    <div class="admin-tabs">
+      <button data-admin-tab="prod">Producto</button>
+      <button data-admin-tab="emp">Empaque</button>
+      <button data-admin-tab="comp">Componentes</button>
+      <button data-admin-tab="tsts">TsTs</button>
+    </div>
+
+    <!--  Contenedores -->
+    <div id="admin-tab-prod" class="admin-panel">
+	<h4>Registro de especificaciones de producto</h4>
+
+<div class="prod-modo">
+  <button id="btn-modo-nuevo" class="activo">Nuevo</button>
+  <button id="btn-modo-editar">Editar</button>
+</div>
+<!-- ========================= -->
+<!-- MODO EDITAR -->
+<!-- ========================= -->
+
+<div id="modo-editar-container" style="display:none;">
+
+  <!--  BUSCADOR -->
+  <div class="buscador-editar">
+    
+<div class="field with-autocomplete">
+
+  <input type="text" id="buscar-doc" placeholder="Buscar por código" autocomplete="off">
+
+  <div id="autocomplete-docs" class="autocomplete-items"></div>
+
+</div>
+    <button id="btn-buscar-doc" class="btn" style="background: var(--color-naranja-50);">
+      Buscar
+    </button>
+  </div>
+
+  <br>
+
+  <!--  RESULTADOS -->
+  <div id="resultado-doc" style="display:none;">
+
+    <p><strong>Código:</strong> <span id="res-codigo"></span></p>
+    <p><strong>Cliente:</strong> <span id="res-cliente"></span></p>
+    <p><strong>Tipo:</strong> <span id="res-tipo"></span></p>
+    <p><strong>Números de parte:</strong></p>
+    <ul id="res-partes"></ul>
+
+  </div>
+
+  <br>
+
+  <!--  EDICIÓN -->
+  <div id="editar-doc" style="display:none;">
+
+    <label>Link RMS (editable)</label>
+    <input type="text" id="edit-link">
+
+    <br><br>
+
+
+<label>Agregar nuevas partes (opcional)</label>
+
+<div id="edit-partes-container"></div>
+
+<button type="button" id="add-edit-parte" class="btn" style="background: var(--color-naranja-50);">
+  + Agregar parte
+</button>
+
+<br><br>
+
+    <button id="btn-guardar-edicion" class="btn btn-buscar">
+      Guardar cambios
+    </button>
+
+  </div>
+
+</div>
+<form id="form-producto">
+
+  <!-- CLIENTE -->
+  <label>Cliente</label>
+  <select id="prod-cliente" required>
+    <option value="">Seleccionar cliente</option>
+  </select>
+
+<!-- CODIGO DOCUMENTO -->
+  <label>Código de documento</label>
+  <input type="text" id="prod-doc" placeholder="RX-PD.../H-###" required>
+
+  <!-- NUMERO DE PARTE -->
+  <label>Número(s) de parte</label>
+
+<div id="partes-container">
+
+  <div class="parte-item">
+    <input type="text" class="prod-parte" placeholder="Número de parte sin guión" required>
+  </div>
+
+</div>
+
+<button type="button" id="add-parte" class="btn" style="background:var(--color-naranja-50);">
+  + Agregar otra parte
+</button>
+
+  <!-- TIPO SPEC -->
+  <label>Tipo de Spec</label>
+  <select id="prod-tipo" required>
+    <option value="">Seleccionar tipo</option>
+    <option value="HOJA DE ESPECIFICACION COMPLETA">
+      HOJA DE ESPECIFICACION COMPLETA
+    </option>
+    <option value="HOJA DE ESPECIFICACION OPERACIONES PREVIAS">
+      HOJA DE ESPECIFICACION OPERACIONES PREVIAS
+    </option>
+    <option value="HOJA DE ESPECIFICACION OPERACIONES FINALES">
+      HOJA DE ESPECIFICACION OPERACIONES FINALES
+    </option>
+  </select>
+
+  <!-- LINK RMS -->
+  <label>Link RMS</label>
+  <input type="text" id="prod-link" placeholder="http://rsx-sviis1..." required>
+
+  <br><br>
+
+  <button type="submit" class="btn btn-buscar">
+    Guardar Registro
+  </button>
+
+</form>
+    </div>
+    <div id="admin-tab-emp" class="admin-panel">Sección Empaque</div>
+    <div id="admin-tab-comp" class="admin-panel">Sección Componentes</div>
+    <div id="admin-tab-tsts" class="admin-panel">Sección TsTs</div>
   </div>
 
 </div>
@@ -230,6 +366,7 @@ Nota: Este sitio y su UI fueron desarrollados por Héctor Ulises Montes Hernánd
     <script src="script.js"></script>
 	<script src="script-comp.js"></script>
 		<script src="admin.js"></script>
+			<script src="admin-prod.js"></script>
 
 	<script>
 (() => {
