@@ -217,24 +217,45 @@ function initEmpaqueDesdeSupabase() {
 
   // Autocomplete por parte (filtrable por cliente)
   bindOnce(inputParte, "input", "emp_autocomplete", async () => {
-    const texto = (inputParte.value || "").trim().toLowerCase();
-    autoList.innerHTML = "";
-    if (!texto) return;
+  const texto = (inputParte.value || "").trim().toLowerCase();
+  autoList.innerHTML = "";
 
-    let q = sb.from('v_empaque').select('num_parte')
-      .ilike('num_parte', `%${texto}%`).limit(25);
-    if (selCliente.value) q = q.eq('cliente', selCliente.value);
+  if (!texto) {
+    autoList.classList.remove("active"); // ✅ ocultar
+    return;
+  }
 
-    const { data } = await q;
-    const unique = [...new Set((data ?? []).map(r => String(r.num_parte).trim().toUpperCase()))];
-    unique.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "autocomplete-item";
-      div.textContent = p;
-      div.onclick = () => { inputParte.value = p; autoList.innerHTML = ""; };
-      autoList.appendChild(div);
-    });
+  let q = sb.from('v_empaque').select('num_parte')
+    .ilike('num_parte', `%${texto}%`)
+    .limit(25);
+
+  if (selCliente.value) q = q.eq('cliente', selCliente.value);
+
+  const { data } = await q;
+
+  const unique = [...new Set((data ?? []).map(r => String(r.num_parte).trim().toUpperCase()))];
+
+  if (unique.length === 0) {
+    autoList.classList.remove("active"); //  ocultar si no hay resultados
+    return;
+  }
+
+  autoList.classList.add("active"); //  mostrar
+
+  unique.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "autocomplete-item";
+    div.textContent = p;
+
+    div.onclick = () => {
+      inputParte.value = p;
+      autoList.innerHTML = "";
+      autoList.classList.remove("active"); //  cerrar
+    };
+
+    autoList.appendChild(div);
   });
+});
 
 
   // Buscar y pintar
@@ -392,27 +413,46 @@ function initTstsDesdeSupabase() {
 
   // Autocomplete por parte
   bindOnce(inputParte, "input", "tsts_autocomplete", async () => {
-    const texto = (inputParte.value || "").trim().toLowerCase();
-    autoList.innerHTML = "";
-    if (!texto) return;
-  
-    let q = sb.from('v_tsts').select('num_parte')
-      .ilike('num_parte', `%${texto}%`)
-      .limit(12);
-    if (selCliente.value) q = q.eq('cliente', selCliente.value);
-  
-    const { data } = await q;
-  
-    const unique = [...new Set((data ?? []).map(r => String(r.num_parte).trim().toUpperCase()))];
-  
-    unique.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "autocomplete-item";
-      div.textContent = p;
-      div.onclick = () => { inputParte.value = p; autoList.innerHTML = ""; };
-      autoList.appendChild(div);
-    });
+  const texto = (inputParte.value || "").trim().toLowerCase();
+  autoList.innerHTML = "";
+
+  if (!texto) {
+    autoList.classList.remove("active");
+    return;
+  }
+
+  let q = sb.from('v_tsts')
+    .select('num_parte')
+    .ilike('num_parte', `%${texto}%`)
+    .limit(12);
+
+  if (selCliente.value) q = q.eq('cliente', selCliente.value);
+
+  const { data } = await q;
+
+  const unique = [...new Set((data ?? []).map(r => String(r.num_parte).trim().toUpperCase()))];
+
+  if (unique.length === 0) {
+    autoList.classList.remove("active");
+    return;
+  }
+
+  autoList.classList.add("active"); //  mostrar
+
+  unique.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "autocomplete-item";
+    div.textContent = p;
+
+    div.onclick = () => {
+      inputParte.value = p;
+      autoList.innerHTML = "";
+      autoList.classList.remove("active"); //  cerrar
+    };
+
+    autoList.appendChild(div);
   });
+});
 
   // Buscar y render
     bindOnce(btnBuscar, "click", "tsts_buscar", async () => {
@@ -475,3 +515,16 @@ function initTstsDesdeSupabase() {
 window.renderTstsSelects = function () {
   initTstsDesdeSupabase();
 };
+
+document.addEventListener("click", (e) => {
+
+  document.querySelectorAll(".autocomplete-items").forEach(list => {
+
+    if (!list.contains(e.target)) {
+      list.innerHTML = "";
+      list.classList.remove("active");
+    }
+
+  });
+
+});
