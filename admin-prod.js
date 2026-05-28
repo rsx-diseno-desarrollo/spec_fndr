@@ -198,7 +198,6 @@ btnAddEditParte?.addEventListener("click", () => {
   if (e.target.classList.contains("remove-parte")) {
     e.target.parentElement.remove();
   }
-
 });
 
 // =========================
@@ -434,15 +433,6 @@ const { data: partesExistentes, error: errorExistentes } = await window.supabase
 
 if (errorExistentes) throw errorExistentes;
 
-if (partesExistentes.length > 0) {
-
-  const existentes = partesExistentes.map(p => p.num_parte);
-
-  alert(`Estos números de parte ya existen:\n${existentes.join(", ")}`);
-
-  return;
-}
-
     // =========================
     // 1. OBTENER ID CLIENTE
     // =========================
@@ -475,33 +465,102 @@ if (partesExistentes.length > 0) {
     const docId = docData.id;
 
     // =========================
-    // 3. INSERTAR PARTES
-    // =========================
-    const partesInsert = partes.map(p => ({
-      num_parte: p,
-      cliente_id: clienteId
-    }));
-
-    const { data: partesData, error: partesError } = await window.supabaseClient
-      .from("partes")
-      .insert(partesInsert)
-      .select();
-
-    if (partesError) throw partesError;
-
-    // =========================
-// 4. RELACIONAR DOC + PARTES
+// 3. PROCESAR PARTES CORRECTO
 // =========================
-const relaciones = partesData.map(p => ({
-  parte_id: p.id,
-  doc_id: docId
-}));
 
-const { error: relError } = await window.supabaseClient
+// 1. Obtener partes existentes
+const { data: partesExistentesBD, error: errorPartesExistentes } = await window.supabaseClient
+  .from("partes")
+  .select("id, num_parte")
+  .in("num_parte", partes);
+
+if (errorPartesExistentes) throw errorPartesExistentes;
+
+const mapaExistentes = new Map(
+  partesExistentesBD.map(p => [p.num_parte, p.id])
+);
+
+// 2. Separar nuevas vs existentes
+const nuevas = [];
+const existentes = [];
+
+partes.forEach(p => {
+  if (mapaExistentes.has(p)) {
+    existentes.push({
+      num_parte: p,
+      id: mapaExistentes.get(p)
+    });
+  } else {
+    nuevas.push(p);
+  }
+});
+
+// =========================
+// 4. INSERTAR NUEVAS PARTES
+// =========================
+let partesInsertadas = [];
+
+if (nuevas.length > 0) {
+
+  const partesInsert = nuevas.map(p => ({
+    num_parte: p,
+    cliente_id: clienteId
+  }));
+
+  const { data, error } = await window.supabaseClient
+    .from("partes")
+    .insert(partesInsert)
+    .select();
+
+  if (error) throw error;
+
+  partesInsertadas = data;
+}
+
+// =========================
+// 5. UNIR TODAS LAS PARTES
+// =========================
+const todasPartes = [
+  ...partesInsertadas,
+  ...existentes.map(p => ({
+    id: p.id,
+    num_parte: p.num_parte
+  }))
+];
+
+// =========================
+// 6. VALIDAR RELACIONES EXISTENTES
+// =========================
+const { data: relacionesExistentes, error: errorRelaciones } = await window.supabaseClient
   .from("prod_docs_partes")
-  .insert(relaciones);
+  .select("parte_id")
+  .eq("doc_id", docId);
 
-if (relError) throw relError;
+if (errorRelaciones) throw errorRelaciones;
+
+const yaRelacionados = new Set(
+  relacionesExistentes.map(r => r.parte_id)
+);
+
+// =========================
+// 7. CREAR RELACIONES NUEVAS
+// =========================
+const relacionesFinales = todasPartes
+  .filter(p => !yaRelacionados.has(p.id))
+  .map(p => ({
+    parte_id: p.id,
+    doc_id: docId
+  }));
+
+if (relacionesFinales.length > 0) {
+
+  const { error: relError } = await window.supabaseClient
+    .from("prod_docs_partes")
+    .insert(relacionesFinales);
+
+  if (relError) throw relError;
+
+}
 
     //  TODO OK
     alert("Registro guardado correctamente ");
