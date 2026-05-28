@@ -314,15 +314,6 @@ if (nuevasPartes.length > 0) {
     return;
   }
 
-  if (partesExistentes.length > 0) {
-
-    const existentes = partesExistentes.map(p => p.num_parte);
-
-    alert(`Estas partes ya existen:\n${existentes.join(", ")}`);
-
-    return;
-  }
-
 }
 
   const { error } = await window.supabaseClient
@@ -331,45 +322,108 @@ if (nuevasPartes.length > 0) {
     .eq("id", window.docEditando);
 
 // =========================
+// PROCESAR PARTES (EDITAR)
+// =========================
+
+// 1. obtener partes existentes en BD
+const { data: partesExistentesBD, error: errorPartes } = await window.supabaseClient
+  .from("partes")
+  .select("id, num_parte")
+  .in("num_parte", nuevasPartes);
+
+if (errorPartes) {
+  console.error(errorPartes);
+  alert("Error validando partes");
+  return;
+}
+
+const mapaExistentes = new Map(
+  partesExistentesBD.map(p => [p.num_parte, p.id])
+);
+
+// 2. separar nuevas vs existentes
+const nuevas = [];
+const existentes = [];
+
+nuevasPartes.forEach(p => {
+  if (mapaExistentes.has(p)) {
+    existentes.push({
+      num_parte: p,
+      id: mapaExistentes.get(p)
+    });
+  } else {
+    nuevas.push(p);
+  }
+});
+
+// =========================
 // INSERTAR NUEVAS PARTES
 // =========================
-if (nuevasPartes.length > 0) {
+let partesInsertadas = [];
 
-  // 1. obtener cliente desde partes existentes
+if (nuevas.length > 0) {
+
   const { data: relData } = await window.supabaseClient
     .from("prod_docs_partes")
-    .select(`
-      partes (
-        cliente_id
-      )
-    `)
+    .select(`partes ( cliente_id )`)
     .eq("doc_id", window.docEditando)
     .limit(1);
 
   const clienteId = relData[0]?.partes?.cliente_id;
 
-  // 2. insertar nuevas partes
-  const partesInsert = nuevasPartes.map(p => ({
+  const partesInsert = nuevas.map(p => ({
     num_parte: p,
     cliente_id: clienteId
   }));
 
-  const { data: partesData, error: partesError } = await window.supabaseClient
+  const { data, error } = await window.supabaseClient
     .from("partes")
     .insert(partesInsert)
     .select();
 
-  if (partesError) throw partesError;
+  if (error) throw error;
 
-  // 3. crear relación
-  const relaciones = partesData.map(p => ({
+  partesInsertadas = data;
+}
+
+// =========================
+// UNIR TODAS LAS PARTES
+// =========================
+const todasPartes = [
+  ...partesInsertadas,
+  ...existentes.map(p => ({
+    id: p.id,
+    num_parte: p.num_parte
+  }))
+];
+
+// =========================
+// VALIDAR RELACIONES EXISTENTES
+// =========================
+const { data: relacionesExistentes } = await window.supabaseClient
+  .from("prod_docs_partes")
+  .select("parte_id")
+  .eq("doc_id", window.docEditando);
+
+const yaRelacionados = new Set(
+  relacionesExistentes.map(r => r.parte_id)
+);
+
+// =========================
+// CREAR RELACIONES NUEVAS
+// =========================
+const relacionesFinales = todasPartes
+  .filter(p => !yaRelacionados.has(p.id))
+  .map(p => ({
     parte_id: p.id,
     doc_id: window.docEditando
   }));
 
+if (relacionesFinales.length > 0) {
+
   const { error: relError } = await window.supabaseClient
     .from("prod_docs_partes")
-    .insert(relaciones);
+    .insert(relacionesFinales);
 
   if (relError) throw relError;
 
